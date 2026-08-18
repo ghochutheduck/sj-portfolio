@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lombardi Hotels, Shambhavi Jaipuriar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="design.css">
+<style>
+  /* Display face, locked 8 Aug: real static extra-condensed instance
+     (font-stretch 62.5%), weight fixed at 400 always, caps carry the
+     presence instead of extra weight. Self-hosted, not a CDN link. */
+  @font-face{
+    font-family:'Noto Serif Display Extra Condensed';
+    font-style:normal; font-weight:400; font-stretch:62.5%; font-display:swap;
+    src:url('Assets/fonts/NotoSerifDisplayExtraCondensed-400.woff2') format('woff2');
+  }
+  @font-face{
+    font-family:'Noto Serif Display Extra Condensed';
+    font-style:italic; font-weight:400; font-stretch:62.5%; font-display:swap;
+    src:url('Assets/fonts/NotoSerifDisplayExtraCondensed-400italic.woff2') format('woff2');
+  }
+  :root{
+    --paper:#F3F1EC; --ink:#111111; --muted:#767676;
+    --rule:#E0DDD3; --red:#D92E15; --stage:#EDEAE1;
+    --pad:72px;
+    --gut:10px;          /* mosaic gutter, deliberately tight */
+    --blue:#107EC1; --yellow:#FFCE40; --atlas:#64973C; --adriatico:#1CABB0; --rosa:#E8849D;
+    --display:'Noto Serif Display Extra Condensed', serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  h1,h2,.big,.tagline,.act h2,.ital{text-wrap:balance}
+  p,figcaption,.say p{text-wrap:pretty}
+  header .name a{color:inherit;text-decoration:none}
+  html{scroll-behavior:smooth}
+  html,body{overflow-x:hidden}
+  body{background:var(--paper);color:var(--ink);font-family:'Inter Tight',-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1440px;margin:0 auto;padding:0 var(--pad)}
+
+  header{display:flex;justify-content:space-between;align-items:baseline;padding:40px var(--pad) 0;max-width:1440px;margin:0 auto}
+  .name{font-size:14px;font-weight:600;letter-spacing:-.01em}
+  nav{display:flex;gap:36px}
+  nav a{font-size:14px;color:var(--ink);text-decoration:none}
+  nav a:hover{color:var(--red)}
+
+  h1{font-family:var(--display);font-weight:400;font-stretch:62.5%;text-transform:uppercase;font-size:clamp(52px,6.4vw,92px);letter-spacing:-.01em;line-height:.98;padding-top:80px}
+  .tagline{font-size:clamp(19px,1.7vw,24px);line-height:1.4;letter-spacing:-.015em;max-width:680px;padding-top:20px;color:var(--muted)}
+  .meta{display:flex;gap:24px 48px;padding-top:36px;flex-wrap:wrap}
+  .meta>div{display:flex;flex-direction:column;gap:6px;min-width:200px}
+  .meta .lbl{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:.06em}
+  .meta .val{font-size:14px;max-width:420px}
+
+  /* act markers — tighter than before */
+  .act{padding-top:120px;display:flex;align-items:baseline;gap:24px;border-bottom:1px solid var(--rule);padding-bottom:20px}
+  .act .num{font-size:12px;font-weight:500;color:var(--red);letter-spacing:.06em}
+  .act h2{font-family:var(--display);font-weight:400;font-stretch:62.5%;text-transform:uppercase;font-size:clamp(34px,4vw,57px);letter-spacing:0;line-height:1}
+
+  .say{display:flex;flex-direction:column;gap:18px}
+  .say p{font-size:17px;line-height:1.6}
+  .big{font-size:clamp(24px,2.5vw,35px);font-weight:900;letter-spacing:-.03em;line-height:1.15}
+  .micro{font-size:12px;color:var(--muted);line-height:1.5;padding-bottom:10px}
+
+  .ital{font-family:var(--display);font-stretch:62.5%;font-size:clamp(30px,3.2vw,44px);font-weight:400;letter-spacing:-.005em;line-height:1.2;font-style:italic}
+  .ital .en{display:block;font-family:'Inter Tight',sans-serif;font-size:16px;font-weight:500;font-style:normal;color:var(--muted);letter-spacing:0;padding-top:8px}
+
+  /* hero */
+  .hero{margin-top:40px;background:var(--stage)}
+  .hero img{display:block;width:100%;height:auto}
+
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  /* ---------- SPLIT: text one side, evidence the other ---------- */
+  .split{display:grid;grid-template-columns:minmax(0,46fr) minmax(0,54fr);gap:48px;align-items:start;margin-top:40px}
+  .split.rev{grid-template-columns:minmax(0,54fr) minmax(0,46fr)}
+
+  /* ---------- MOSAIC: the cell defines the shape, the image fills it ---------- */
+  .mosaic{display:grid;gap:var(--gut)}
+  .mosaic .t{overflow:hidden;background:var(--stage);position:relative}
+  .mosaic .t img{width:100%;height:100%;object-fit:cover;display:block}
+  .mosaic .t.fit img{object-fit:contain}
+
+  /* brief collage — square, tall cell left, two stacked right */
+  .collage{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;aspect-ratio:1/1}
+  .collage .tall{grid-row:1 / span 2}
+
+  /* application mosaic — wide on top, pair beneath */
+  .apps{grid-template-columns:1fr 1fr;grid-auto-rows:1fr}
+  .apps .wide{grid-column:1 / span 2;aspect-ratio:16/9}
+
+  .facts{display:flex;gap:22px 40px;padding-top:28px;flex-wrap:wrap}
+  .facts>div{display:flex;flex-direction:column;gap:5px;min-width:150px}
+  .facts .lbl{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:.06em}
+  .facts .val{font-size:14px;max-width:280px}
+
+  .quote{font-family:var(--display);font-stretch:62.5%;font-size:clamp(23px,2.4vw,31px);font-weight:400;font-style:italic;letter-spacing:-.005em;line-height:1.35;max-width:820px;padding:26px 0 0 26px;margin-top:40px;border-left:3px solid var(--red)}
+  .quote .src{display:block;font-family:'Inter Tight',sans-serif;font-size:12px;font-weight:500;font-style:normal;color:var(--muted);padding-top:12px}
+
+  /* founder portrait beside the vision statement */
+  .founder{display:grid;grid-template-columns:300px minmax(0,1fr);gap:40px;align-items:center;margin-top:44px}
+  .founder figcaption{padding-top:12px}
+
+  /* ---------- annotated diagrams ---------- */
+  .dia{width:100%;display:block}
+  .dia text{font-family:'Inter Tight',sans-serif;fill:var(--ink)}
+  .dia .ann{font-size:15px}
+  .dia .cap{font-size:12px;fill:var(--muted);letter-spacing:.06em}
+  .dia .lead{stroke:#9A9A9A;stroke-width:1;fill:none}
+  .dia .arrow{stroke:#9A9A9A;stroke-width:1.6;fill:none}
+  /* stacked fallback for narrow screens */
+  .dia-list{display:none;margin-top:20px;flex-direction:column;gap:14px}
+  .dia-list .row{display:flex;gap:12px;font-size:14px;line-height:1.5}
+  .dia-list .row b{flex:0 0 auto;font-weight:700}
+
+  /* ---------- colour bars: the swatch is its own label ---------- */
+  .bars{display:flex;flex-direction:column;gap:var(--gut);margin-top:var(--gut)}
+  .bar{display:flex;justify-content:space-between;align-items:center;padding:13px 18px;border-radius:3px;font-size:14px;font-weight:700;color:#fff}
+  .bar .hex{font-weight:500;letter-spacing:.04em;opacity:.92}
+  .core{display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--gut);margin-top:var(--gut)}
+  .core div{padding:26px 14px 13px;border-radius:3px;font-size:14px;font-weight:700;letter-spacing:.04em;text-align:center}
+
+  /* tiers */
+  .tiers{display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--gut);margin-top:var(--gut)}
+  .tier{border:1px solid var(--rule);border-radius:3px;padding:18px;display:flex;flex-direction:column;gap:8px}
+  .tier .sw{width:22px;height:22px;border-radius:50%}
+  .tier .nm{font-size:16px;font-weight:700;letter-spacing:-.01em}
+  .tier .lvl{font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+
+  .voice{display:flex;gap:10px;margin-top:24px;flex-wrap:wrap}
+  .voice span{font-size:14px;font-weight:700;letter-spacing:.03em;padding:9px 20px;border:1px solid var(--rule);border-radius:100px}
+
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:28px;margin-top:36px}
+  .stat .n{display:block;font-size:clamp(26px,3vw,40px);font-weight:900;letter-spacing:-.02em;line-height:1}
+  .stat .l{display:block;font-size:12px;color:var(--muted);padding-top:6px;line-height:1.4;max-width:170px}
+
+  /* proof-up-front strip, a compact echo of .stats shown before the brief
+     even starts, so the reader knows the identity worked before reading
+     how it was made */
+  .proof{display:flex;gap:36px;flex-wrap:wrap;margin-top:32px;padding-top:24px;border-top:1px solid var(--rule)}
+  .proof .n{font-family:'Inter Tight',sans-serif;font-size:22px;font-weight:900;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .proof .l{display:block;font-size:12px;color:var(--muted);padding-top:4px;max-width:160px;line-height:1.35}
+
+  /* campaign panels — transparent cut-outs on brand colour */
+  .panels{display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--gut);margin-top:var(--gut)}
+  .panel{aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;padding:14px;border-radius:3px}
+  .panel img{width:100%;height:100%;object-fit:contain;display:block}
+
+  figcaption{font-size:12px;color:var(--muted);padding-top:10px;max-width:760px}
+
+  /* legacy plain-footer rule removed: the shared .site-footer from design.css now supplies its own layout */
+
+  @media(max-width:1000px){
+    :root{--pad:24px}
+    .split,.split.rev{grid-template-columns:1fr;gap:28px}
+    .collage{aspect-ratio:4/3}
+    .core,.tiers,.panels{grid-template-columns:1fr}
+    .act{padding-top:80px}
+  }
+
+  /* ---------- in-project section nav ---------- */
+  [id^="sec-"]{scroll-margin-top:96px}
+
+  /* Outcome is this page's last ground and sits directly against the footer
+     in the markup, but the shared footer.site-footer{margin-top:var(--sp-xl)}
+     (design.css, sitewide) left a paper-coloured band between the yellow
+     ground and the footer's own background. Zeroed here, scoped to this
+     page's footer only. Same fix as BoopShaillyBoop, D-107. */
+  #site-footer{margin-top:0}
+
+  .pagenav{position:fixed;top:22px;left:50%;transform:translateX(-50%);z-index:100;
+           display:flex;align-items:center;gap:10px;max-width:calc(100% - 32px);
+           transition:top .35s cubic-bezier(.4,0,.2,1)}
+  .pagenav .back{width:40px;height:40px;border-radius:50%;background:#fff;border:1px solid var(--rule);
+                 display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--ink);
+                 font-size:16px;box-shadow:0 6px 20px rgba(0,0,0,.10);flex-shrink:0}
+  .pagenav .back:hover{background:var(--stage)}
+  .pagenav .links{display:flex;gap:2px;background:#fff;border:1px solid var(--rule);border-radius:100px;
+                  padding:6px;box-shadow:0 6px 20px rgba(0,0,0,.10);overflow-x:auto;max-width:100%;
+                  transition:padding .35s cubic-bezier(.4,0,.2,1),background-color .35s ease,
+                             backdrop-filter .35s ease,box-shadow .35s ease}
+  .pagenav .links a{font-family:'Inter Tight',sans-serif;font-size:12px;font-weight:500;color:var(--muted);
+                    text-decoration:none;padding:8px 16px;border-radius:100px;white-space:nowrap;
+                    transition:color .2s,background .2s;flex-shrink:0}
+  .pagenav .links a:hover{color:var(--ink)}
+  .pagenav .links a.active{color:var(--ink);background:var(--stage);font-weight:600}
+  /* on scroll-down past a small threshold, the pagenav shifts up and its
+     pill goes compact + translucent, toggled on <body> by shared JS at the
+     bottom of the page (the plain header is untouched by this) */
+  body.nav-compact .pagenav{top:14px}
+  body.nav-compact .pagenav .links{
+    padding:3px;
+    background:color-mix(in srgb, #fff 72%, transparent);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  }
+  body.nav-compact .pagenav .links a{padding:6px 12px}
+
+  @media(max-width:640px){
+    .pagenav .links a{padding:7px 12px;font-size:12px}
+    .pagenav{top:64px}
+    body.nav-compact .pagenav{top:38px}
+  }
+
+  /* ---------- tilt-in acts, DESIGN.md D-27/D-28/D-49 (this build): each
+     act after the first enters rotated 30deg about its bottom-left corner
+     and straightens as it scrolls up the viewport. Real scroll only, no
+     pinning -- pinning would desync the pagenav scroll-spy above. Colour
+     grounds per act (D-29) are applied via .has-ground in design.css: the
+     ground is a full-bleed pseudo-element inside the rotating section, so it
+     tilts in with its act. Grounds alternate with paper rather than colouring
+     every act, per D-64. ---------- */
+  [id^="sec-"]:not(#sec-overview){transform-origin:bottom left;will-change:transform}
+  @media(prefers-reduced-motion:reduce){ [id^="sec-"]{transform:none!important} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="name"><a href="index.html">Shambhavi Jaipuriar</a></div>
+  <nav><a href="index.html#work">Work</a><a href="about.html">About</a><a href="archive.html">Archive</a><a href="#site-footer">Contact</a></nav>
+</header>
+
+<nav class="pagenav" aria-label="Section navigation">
+  <a class="back" href="index.html" aria-label="Back to work">&larr;</a>
+  <div class="links">
+    <a href="#sec-overview" data-target="sec-overview">Overview</a>
+    <a href="#sec-problem" data-target="sec-problem">Problem</a>
+    <a href="#sec-identity" data-target="sec-identity">Identity</a>
+    <a href="#sec-campaign" data-target="sec-campaign">Campaign</a>
+    <a href="#sec-outcome" data-target="sec-outcome">Outcome</a>
+  </div>
+</nav>
+
+<div class="wrap" id="sec-overview">
+  <h1>Lombardi Hotels</h1>
+  <p class="tagline">Brand Identity + Social Media Campaign</p>
+  <div class="meta">
+    <div><span class="lbl">ROLE</span><span class="val">Brand Strategy · Identity · Campaign · Character Design</span></div>
+    <div><span class="lbl">TEAM</span><span class="val">Solo designer · Lombardi admin + hospitality staff</span></div>
+    <div><span class="lbl">WHEN &amp; WHERE</span><span class="val">Summer 2024 · Gabicce Mare, Italy</span></div>
+  </div>
+
+  <!-- proof up front, per the reference-site audit: lead with what happened,
+       not just what was made. Same numbers as the Outcome section below,
+       shown again here because a reader shouldn't have to reach the bottom
+       of the page to learn the identity actually worked. -->
+  <div class="proof reveal">
+    <div><span class="n">673</span><span class="l">Italian reservations</span></div>
+    <div><span class="n">3,003</span><span class="l">Italian room nights</span></div>
+    <div><span class="n">44.7%</span><span class="l">couples travelling together</span></div>
+  </div>
+</div>
+
+<!-- Alice is the cover. She is the campaign, so she opens the page. -->
+<div class="hero reveal">
+  <img src="Assets/Lombardi/alice-hero.png" alt="Alice, the Lombardi Hotels campaign mascot, floating in the Adriatic on a yellow ring float">
+</div>
+
+<!-- ============ 01 THE BRIEF ============ -->
+<div class="wrap has-ground on-light" id="sec-problem" style="--ground:#1CABB0">
+  <div class="act reveal"><span class="num">01</span><h2>The Brief</h2></div>
+
+  <div class="split reveal">
+    <div>
+      <p class="big">Lombardi needed to reach younger guests and unify three distinct property identities.</p>
+      <div class="say" style="padding-top:20px">
+        <p>Reservations had declined as the group relied on an established, older clientele. The brief was to rebuild awareness with new guests while creating one cohesive brand across the three properties.</p>
+      </div>
+      <div class="facts">
+        <div><span class="lbl">LOCATION</span><span class="val">Gabicce Mare, Adriatic Coast, Italy</span></div>
+        <div><span class="lbl">PRICE</span><span class="val">€40–200 / night, breakfast included</span></div>
+        <div><span class="lbl">POSITIONING</span><span class="val">Family-run, truly Italian</span></div>
+      </div>
+    </div>
+
+    <!-- Square collage: the tall cell takes the portrait shot uncropped, the two
+         landscape-ish shots stack beside it. Mixed dimensions, one clean edge. -->
+    <figure>
+      <div class="mosaic collage">
+        <div class="t tall"><img src="Assets/Lombardi/6-crop.png" alt="The harbour at Gabicce Mare at sunset, boats moored along the canal"></div>
+        <div class="t"><img src="Assets/Lombardi/7-crop.png" alt="Shambhavi on site in Gabicce Mare during the internship"></div>
+        <div class="t"><img src="Assets/Lombardi/onsite-oldtag.png" alt="Original Lombardi Hotels signage carrying the pre-redesign logo"></div>
+      </div>
+      <figcaption>On site, Gabicce Mare. The tag at bottom right still carries the identity this project replaced.</figcaption>
+    </figure>
+  </div>
+
+  <!-- The founder, against the vision. The abstract statement and the man who
+       started it, on one line. -->
+  <div class="founder reveal">
+    <figure>
+      <div class="mosaic" style="grid-template-columns:1fr">
+        <div class="t" style="aspect-ratio:3/4"><img src="Assets/Lombardi/5-crop.png" alt="Roberto Lombardi, founder of Lombardi Hotels, on a balcony above the Gabicce Mare beach"></div>
+      </div>
+      <figcaption><strong>Roberto Lombardi</strong>, who started it, above the beach his hotels look onto. His son Luca runs the group today.</figcaption>
+    </figure>
+    <div class="quote" style="margin-top:0">
+      &ldquo;We envision a world where people slow down and return to the sea as children of one united planet.&rdquo;
+      <span class="src">— Lombardi Hotels, brand vision</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 02 THE IDENTITY ============ -->
+<div class="wrap" id="sec-identity">
+  <div class="act reveal"><span class="num">02</span><h2>The Identity</h2></div>
+
+  <p class="big reveal" style="margin-top:40px">One mark, three properties.</p>
+  <div class="say reveal" style="padding-top:20px">
+    <p>One visual system brought Hotel Adriatico, Hotel Atlas and Residence Rosa together while keeping each property's colourway.</p>
+    <p>The mark draws from the Adriatic, summer and the character of the coast.</p>
+  </div>
+
+  <div class="split rev reveal">
+
+    <!-- Annotated diagram. Everything scales as one unit because the images, the
+         leader lines and the labels all live inside a single viewBox. -->
+    <div>
+      <svg class="dia" viewBox="0 0 700 500" role="img"
+           aria-label="The previous Lombardi Hotels logo alongside the redesigned mark, annotated to show the brushstroke arc, the wave, and the wordmark typeface.">
+        <!-- previous identity, on black because the old mark is white and red and
+             disappears entirely on a light ground -->
+        <rect x="0" y="20" width="110" height="110" fill="#111"/>
+        <image href="Assets/Lombardi/Untitled%20design.png" xlink:href="Assets/Lombardi/Untitled%20design.png" x="11" y="41" width="88" height="66"/>
+        <text class="cap" x="55" y="148" text-anchor="middle">PREVIOUS IDENTITY</text>
+
+        <!-- the redesigned lockup -->
+        <image href="Assets/Lombardi/Master%20Logo.png" xlink:href="Assets/Lombardi/Master%20Logo.png" x="210" y="120" width="330" height="248"/>
+
+        <!-- curved arrow, old to new -->
+        <defs>
+          <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#9A9A9A"/>
+          </marker>
+        </defs>
+        <path class="arrow" d="M118,112 C160,126 184,134 203,148" marker-end="url(#ah)"/>
+
+        <!-- 01 the constraint -->
+        <text class="ann" x="130" y="38">Client wanted the same mark,</text>
+        <text class="ann" x="130" y="55">redesigned with meaning</text>
+
+        <!-- 02 the arc -->
+        <path class="lead" d="M540,128 L438,151"/>
+        <text class="ann" x="548" y="120">Brushstroke arc -</text>
+        <text class="ann" x="548" y="137">the sun for summer</text>
+
+        <!-- 03 the wave -->
+        <path class="lead" d="M152,302 L308,306"/>
+        <text class="ann" x="0" y="294">Wave - the Adriatic,</text>
+        <text class="ann" x="0" y="311">minutes from the sea</text>
+
+        <!-- 04 the typeface -->
+        <path class="lead" d="M540,352 L378,352"/>
+        <text class="ann" x="548" y="344">Brother 1816 Book -</text>
+        <text class="ann" x="548" y="361">geometric and open,</text>
+        <text class="ann" x="548" y="378">never competing</text>
+
+        <!-- 05 what it adds up to -->
+        <text class="ann" x="210" y="424" font-weight="700">The mark now tells you where</text>
+        <text class="ann" x="210" y="441" font-weight="700">you are, and how it feels to be there.</text>
+      </svg>
+
+      <!-- narrow-screen equivalent -->
+      <div class="dia-list">
+        <div class="row"><b>Constraint</b><span>Client wanted the same mark, redesigned with meaning.</span></div>
+        <div class="row"><b>Arc</b><span>A brushstroke sun, for summer.</span></div>
+        <div class="row"><b>Wave</b><span>The Adriatic, minutes from every property.</span></div>
+        <div class="row"><b>Type</b><span>Brother 1816 Book, geometric and open, never competing with the mark.</span></div>
+      </div>
+    </div>
+
+    <!-- applications + palette, packed tight -->
+    <div>
+      <p class="micro">One identity across three properties, from vehicles and linen to social and guest-room details.</p>
+      <div class="mosaic apps">
+        <div class="t wide"><img src="Assets/Lombardi/19.png" alt="The redesigned mark on a Lombardi Hotels guest shuttle"></div>
+        <div class="t" style="aspect-ratio:1/1"><img src="Assets/Lombardi/15.png" alt="The monogram embroidered onto hotel towelling"></div>
+        <div class="t" style="aspect-ratio:1/1"><img src="Assets/Lombardi/17.png" alt="The Lombardi Hotels Instagram profile on a phone"></div>
+      </div>
+
+      <p class="micro" style="padding-top:26px">Core palette.</p>
+      <div class="core">
+        <div style="background:var(--blue);color:#fff">#107EC1</div>
+        <div style="background:#fff;color:var(--ink);border:1px solid var(--rule)">#FFFFFF</div>
+        <div style="background:var(--yellow);color:var(--ink)">#FFCE40</div>
+      </div>
+
+      <p class="micro" style="padding-top:26px">The three properties get three identities under one family.</p>
+      <div class="bars">
+        <div class="bar" style="background:var(--adriatico)"><span>Hotel Adriatico</span><span class="hex">#1CABB0</span></div>
+        <div class="bar" style="background:var(--atlas)"><span>Hotel Atlas</span><span class="hex">#64973C</span></div>
+        <div class="bar" style="background:var(--rosa)"><span>Residence Rosa</span><span class="hex">#E8849D</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- sub-brands in the world -->
+<div class="wrap">
+  <div class="split reveal" style="margin-top:56px">
+    <div>
+      <p class="big" style="font-size:clamp(16px,1.6vw,22px)">One mark, three colourways.</p>
+      <div class="tiers" style="grid-template-columns:1fr;margin-top:18px">
+        <div class="tier"><span class="sw" style="background:var(--adriatico)"></span><span class="nm">Hotel Adriatico</span></div>
+        <div class="tier"><span class="sw" style="background:var(--atlas)"></span><span class="nm">Hotel Atlas</span></div>
+        <div class="tier"><span class="sw" style="background:var(--rosa)"></span><span class="nm">Residence Rosa</span></div>
+      </div>
+      <div class="voice"><span>Cheerful</span><span>Warm</span><span>Familial</span></div>
+      <p class="micro" style="padding-top:26px;max-width:340px">A guest knows which property they're at without reading a sign, and Lombardi keeps one identity instead of three unrelated brands.</p>
+    </div>
+    <figure>
+      <div class="mosaic" style="grid-template-columns:1fr">
+        <div class="t" style="aspect-ratio:4/3"><img src="Assets/Lombardi/16.png" alt="Guest soap boxes for Residence Rosa, Hotel Atlas and Hotel Adriatico, each in its own colourway"></div>
+      </div>
+      <figcaption>The system in the room. Each property keeps its colour, all three keep the mark.</figcaption>
+    </figure>
+  </div>
+</div>
+
+<!-- ============ 03 MEET ALICE ============ -->
+<div class="wrap" id="sec-campaign">
+  <div class="act reveal"><span class="num">03</span><h2>Meet Alice</h2></div>
+
+  <div class="split rev reveal">
+    <div>
+      <svg class="dia" viewBox="0 0 700 434" role="img"
+           aria-label="Alice, the campaign mascot, cycling along the seafront, annotated with her character traits.">
+        <image href="Assets/Lombardi/20.png" xlink:href="Assets/Lombardi/20.png" x="126" y="14" width="448" height="336"/>
+
+        <path class="lead" d="M116,168 L270,172"/>
+        <text class="ann" x="0" y="160">Flowers, from the</text>
+        <text class="ann" x="0" y="177">admirers she has</text>
+        <text class="ann" x="0" y="194">all over town</text>
+
+        <path class="lead" d="M116,292 L301,258"/>
+        <text class="ann" x="0" y="284">Her bike - how</text>
+        <text class="ann" x="0" y="301">she gets around</text>
+
+        <path class="lead" d="M580,112 L378,110"/>
+        <text class="ann" x="588" y="104">Kind eyes,</text>
+        <text class="ann" x="588" y="121">childlike,</text>
+        <text class="ann" x="588" y="138">unbothered</text>
+
+        <text class="cap" x="350" y="394" text-anchor="middle">ALICE · 102 · GABICCE MARE</text>
+      </svg>
+
+      <div class="dia-list">
+        <div class="row"><b>Flowers</b><span>From the admirers she has all over town.</span></div>
+        <div class="row"><b>Bike</b><span>How she gets everywhere.</span></div>
+        <div class="row"><b>Eyes</b><span>Kind, childlike, unbothered by the rest of the world.</span></div>
+      </div>
+    </div>
+
+    <div>
+      <p class="big">She wasn't invented for the campaign. She was already in the research.</p>
+      <div class="say" style="padding-top:20px">
+        <p>Alice came from the audience research: an older traveller who values relaxation, authenticity and familiarity. At 102, she became the face of the campaign.</p>
+      </div>
+      <div class="quote" style="margin-top:28px">
+        &ldquo;The goal of the character is to welcome guests to the resort, be the face of the brand, and to be on all branding collaterals.&rdquo;
+        <span class="src">— mascot rationale</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- the original hand-drawn development sheet, before she was ever rendered. -->
+  <figure class="reveal" style="margin-top:44px">
+    <div class="mosaic" style="grid-template-columns:1fr">
+      <div class="t" style="aspect-ratio:16/9;background:#fff;border:1px solid var(--rule)">
+        <img src="Assets/Lombardi/1-crop.png" alt="The original hand-drawn Alice character sheet, annotated in red with her traits">
+      </div>
+    </div>
+    <figcaption>Where she started. The original character sheet, worked out by hand before a single version was rendered.</figcaption>
+  </figure>
+</div>
+
+<!-- ============ 04 THE CAMPAIGN ============ -->
+<div class="wrap">
+  <div class="act reveal"><span class="num">04</span><h2>The Campaign</h2></div>
+
+  <div class="split reveal">
+    <div>
+      <div class="ital">
+        L'estate dei Nostri Ricordi
+        <span class="en">The Summer of Our Memories</span>
+      </div>
+      <div class="say" style="padding-top:20px">
+        <p>During my stay in Gabicce Mare, I met a guest who had been returning for decades. That conversation became the starting point for a campaign about the summers people return to, year after year.</p>
+      </div>
+    </div>
+
+    <figure>
+      <div class="panels" style="grid-template-columns:1fr 1fr">
+        <div class="panel" style="background:var(--adriatico)"><img src="Assets/Lombardi/20.png" alt="Alice cycling the seafront with sunflowers in her basket"></div>
+        <div class="panel" style="background:var(--rosa)"><img src="Assets/Lombardi/21.png" alt="Alice raising a glass at a candlelit dinner table"></div>
+        <div class="panel" style="background:var(--blue);grid-column:1 / span 2;aspect-ratio:16/9"><img src="Assets/Lombardi/22.png" alt="Alice floating on a ring float"></div>
+      </div>
+      <figcaption>Alice as a cut-out, dropped onto any brand colour. One character, every touchpoint.</figcaption>
+    </figure>
+  </div>
+
+  <!-- the actual place. Mixed orientations, absorbed by the grid. -->
+  <figure class="reveal" style="margin-top:44px">
+    <!-- aspect on the CONTAINER, not the tiles, so all three share one row height
+         and the differing source ratios get absorbed by object-fit:cover -->
+    <div class="mosaic" style="grid-template-columns:2fr 1fr 1fr;aspect-ratio:24/9">
+      <div class="t"><img src="Assets/Lombardi/4-crop.png" alt="The breakfast buffet laid out at a Lombardi property"></div>
+      <div class="t"><img src="Assets/Lombardi/2-crop.png" alt="Fresh vongole at a Gabicce Mare market"></div>
+      <div class="t"><img src="Assets/Lombardi/3-crop.png" alt="Coffee and pastries on a table, overhead"></div>
+    </div>
+    <figcaption>The summer the campaign is actually about. Photographed on site, Gabicce Mare.</figcaption>
+  </figure>
+</div>
+
+<!-- ============ 05 THE OUTCOME ============ -->
+<div class="wrap has-ground on-light" id="sec-outcome" style="--ground:#FFCE40">
+  <div class="act reveal"><span class="num">05</span><h2>The Outcome</h2></div>
+
+  <div class="reveal" style="margin-top:40px">
+    <p class="big" style="max-width:760px">A season worth measuring.</p>
+    <div class="say" style="padding-top:20px">
+      <p>The identity and campaign launched in the same season as these booking figures.</p>
+    </div>
+    <div class="stats">
+      <div class="stat"><span class="n">673</span><span class="l">Italian reservations</span></div>
+      <div class="stat"><span class="n">3,003</span><span class="l">Italian room nights</span></div>
+      <div class="stat"><span class="n">44.7%</span><span class="l">of searches were couples travelling together</span></div>
+      <div class="stat"><span class="n">38.9%</span><span class="l">were families booking as a group</span></div>
+    </div>
+    <div class="say" style="padding-top:32px">
+      <p>The project gave Lombardi a cohesive identity across its properties and a campaign rooted in the people and place of Gabicce Mare.</p>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer" id="site-footer">
+  <div class="footer-content">
+    <p class="eyebrow">Contact</p>
+    <h2 style="font-family:var(--display);font-weight:400;font-stretch:62.5%;text-transform:uppercase;font-size:clamp(26px,3vw,38px);letter-spacing:-.01em">Let's talk</h2>
+    <p class="footer-open">I'm looking for a full-time design role: brand, identity, packaging, campaigns. I take on freelance alongside that, and I'm happy working remote or relocating for the right one. I've worked a summer in Italy and I run a business out of my own kitchen table, so distance has never been the difficult part.</p>
+    <div class="footer-grid">
+      <div class="footer-item"><span class="fact-label">Email</span><a class="val" href="mailto:shambhavijaipuriar.work@gmail.com">shambhavijaipuriar.work@gmail.com</a></div>
+      <div class="footer-item"><span class="fact-label">Instagram</span><a class="val" href="https://instagram.com/shambhavijaipuriar" target="_blank" rel="noopener">@shambhavijaipuriar</a></div>
+      <div class="footer-item"><span class="fact-label">Location</span><span class="val plain">Delhi / Gurugram, India</span></div>
+      <div class="footer-item"><span class="fact-label">Phone</span><span class="val plain">Available on request</span></div>
+    </div>
+  </div>
+  <div class="footer-legal">Selected work, 2024–26</div>
+</footer>
+
+<script>
+  
+  // ---------- tilt-in acts on scroll, real scroll only, no pinning ----------
+  (function(){
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) return;
+    var sections = [].slice.call(document.querySelectorAll(String.raw`[id^="sec-"]`)).slice(1);
+    function update(){
+      var vh = window.innerHeight;
+      sections.forEach(function(el){
+        var r = el.getBoundingClientRect();
+        var start = vh, end = vh * 0.25;
+        var p = (start - r.top) / (start - end);
+        p = Math.max(0, Math.min(1, p));
+        var rot = 30 * (1 - p);
+        el.style.transform = "rotate(" + rot.toFixed(2) + "deg)";
+      });
+    }
+    window.addEventListener("scroll", update, { passive: true });
+    update();
+  })();
+
+  const io = new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  },{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // section nav scroll-spy: highlights whichever section is crossing the
+  // vertical middle band of the viewport, independent of the pill's own
+  // left-to-right order, since content order and nav order don't have to match
+  (function(){
+    const navLinks = document.querySelectorAll('.pagenav .links a');
+    const byId = {};
+    navLinks.forEach(a => byId[a.dataset.target] = a);
+    const sections = [...navLinks].map(a => document.getElementById(a.dataset.target)).filter(Boolean);
+    const spy = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(a => a.classList.remove('active'));
+          const link = byId[entry.target.id];
+          if (link) link.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-35% 0px -55% 0px', threshold: 0 });
+    sections.forEach(s => spy.observe(s));
+  })();
+
+  (function () {
+    var lastY = window.scrollY, ticking = false;
+    var THRESH = 6, TOP_BUFFER = 40;
+    function update() {
+      var y = window.scrollY;
+      var delta = y - lastY;
+      if (Math.abs(delta) > THRESH) {
+        if (y < TOP_BUFFER) document.body.classList.remove('nav-compact');
+        else if (delta > 0) document.body.classList.add('nav-compact');
+        else document.body.classList.remove('nav-compact');
+        lastY = y;
+      }
+      ticking = false;
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { requestAnimationFrame(update); ticking = true; }
+    }, { passive: true });
+  })();
+</script>
+
+</body>
+</html>

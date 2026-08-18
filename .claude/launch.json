@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "portfolio",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["_server.js"],
+      "url": "http://localhost:8790",
+      "port": 8790
+    }
+  ]
+}

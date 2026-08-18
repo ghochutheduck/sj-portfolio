@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SANAT, Shambhavi Jaipuriar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="design.css">
+<style>
+  @font-face{
+    font-family:'Noto Serif Display Extra Condensed';
+    font-style:normal; font-weight:400; font-stretch:62.5%; font-display:swap;
+    src:url('Assets/fonts/NotoSerifDisplayExtraCondensed-400.woff2') format('woff2');
+  }
+  @font-face{
+    font-family:'Noto Serif Display Extra Condensed';
+    font-style:italic; font-weight:400; font-stretch:62.5%; font-display:swap;
+    src:url('Assets/fonts/NotoSerifDisplayExtraCondensed-400italic.woff2') format('woff2');
+  }
+  :root{
+    --paper:#F3F1EC; --ink:#111111; --muted:#767676;
+    --rule:#E0DDD3; --red:#D92E15; --stage:#EDEAE1;
+    --pad:72px;
+    --gut:10px;
+    --cocoa:#73411F; --mustard:#C8972A; --burnt:#D96704; --aqua:#91D5D9; --grey5:#EBEBEB;
+    --display:'Noto Serif Display Extra Condensed', serif;
+    /* spacing scale, replaces one-off inline padding/margin values */
+    --sp-xs:12px; --sp-s:20px; --sp-m:32px; --sp-l:56px; --sp-xl:96px;
+    /* type scale, golden ratio (1.618) steps down from h1 (92px), matching
+       the same chain used on the other three case-study pages */
+    --fs-1:57px; --fs-2:35px; --fs-3:17px; --fs-4:12px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  h1,h2,.big,.tagline,.act h2,.ital{text-wrap:balance}
+  p,figcaption,.say p{text-wrap:pretty}
+  header .name a{color:inherit;text-decoration:none}
+  html{scroll-behavior:smooth}
+  html,body{overflow-x:hidden}
+  body{background:var(--paper);color:var(--ink);font-family:'Inter Tight',-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1440px;margin:0 auto;padding:0 var(--pad)}
+
+  header{display:flex;justify-content:space-between;align-items:baseline;padding:40px var(--pad) 0;max-width:1440px;margin:0 auto}
+  .name{font-size:14px;font-weight:600;letter-spacing:-.01em}
+  nav{display:flex;gap:36px}
+  nav a{font-size:14px;color:var(--ink);text-decoration:none}
+  nav a:hover{color:var(--red)}
+
+  h1{font-family:var(--display);font-weight:400;font-stretch:62.5%;text-transform:uppercase;font-size:clamp(52px,6.4vw,92px);letter-spacing:-.01em;line-height:.98;padding-top:80px}
+  .tagline{font-size:clamp(19px,1.7vw,24px);line-height:1.4;letter-spacing:-.015em;max-width:680px;padding-top:20px;color:var(--muted)}
+  .meta{display:flex;gap:24px 48px;padding-top:36px;flex-wrap:wrap}
+  .meta>div{display:flex;flex-direction:column;gap:6px;min-width:200px}
+  .meta .lbl{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:.06em}
+  .meta .val{font-size:14px;max-width:420px}
+
+  .act{padding-top:120px;display:flex;align-items:baseline;gap:24px;border-bottom:1px solid var(--rule);padding-bottom:20px}
+  .act .num{font-size:12px;font-weight:500;color:var(--red);letter-spacing:.06em}
+  .act h2{font-family:var(--display);font-weight:400;font-stretch:62.5%;text-transform:uppercase;font-size:clamp(34px,4vw,var(--fs-1));letter-spacing:0;line-height:1}
+
+  .say{display:flex;flex-direction:column;gap:18px}
+  .say p{font-size:var(--fs-3);line-height:1.6}
+  .big{font-size:clamp(24px,2.5vw,var(--fs-2));font-weight:900;letter-spacing:-.03em;line-height:1.15}
+  .micro{font-size:var(--fs-4);color:var(--muted);line-height:1.5;padding-bottom:10px}
+
+  .ital{font-family:var(--display);font-stretch:62.5%;font-size:clamp(30px,3.2vw,44px);font-weight:400;letter-spacing:-.005em;line-height:1.2;font-style:italic}
+
+  .hero{margin-top:40px;background:var(--stage)}
+  .hero img{display:block;width:100%;height:auto}
+
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  .split{display:grid;grid-template-columns:minmax(0,46fr) minmax(0,54fr);gap:48px;align-items:start;margin-top:40px}
+  .split.rev{grid-template-columns:minmax(0,54fr) minmax(0,46fr)}
+
+  .mosaic{display:grid;gap:var(--gut)}
+  .mosaic .t{overflow:hidden;background:var(--stage);position:relative}
+  .mosaic .t img{width:100%;height:100%;object-fit:cover;display:block}
+  .mosaic .t.fit img{object-fit:contain}
+  .apps{grid-template-columns:1fr 1fr;grid-auto-rows:1fr}
+  .apps .wide{grid-column:1 / span 2;aspect-ratio:16/9}
+
+  /* one dominant image + five small supporting ones, inset from the column edge
+     so the block reads as evidence under the text, not a second hero */
+  .craft-mosaic{display:grid;grid-template-columns:repeat(5,1fr);gap:var(--gut);width:88%}
+  .craft-mosaic .t{overflow:hidden;background:var(--stage);position:relative;aspect-ratio:1/1}
+  .craft-mosaic .t img{width:100%;height:100%;object-fit:cover;display:block}
+  .craft-mosaic .anchor{grid-column:1 / -1;aspect-ratio:1.618/1}
+
+  .facts{display:flex;gap:22px 40px;padding-top:28px;flex-wrap:wrap}
+  .facts>div{display:flex;flex-direction:column;gap:5px;min-width:150px}
+  .facts .lbl{font-size:var(--fs-4);font-weight:500;color:var(--muted);letter-spacing:.06em}
+  .facts .val{font-size:var(--fs-3);max-width:320px}
+
+  .quote{font-family:var(--display);font-stretch:62.5%;font-size:clamp(23px,2.4vw,31px);font-weight:400;font-style:italic;letter-spacing:-.005em;line-height:1.35;max-width:820px;padding:26px 0 0 26px;margin-top:40px;border-left:3px solid var(--red)}
+  .quote .src{display:block;font-family:'Inter Tight',sans-serif;font-size:12px;font-weight:500;font-style:normal;color:var(--muted);padding-top:12px}
+
+  .founder{display:grid;grid-template-columns:300px minmax(0,1fr);gap:40px;align-items:center;margin-top:44px}
+  .founder figcaption{padding-top:12px}
+
+  .dia{width:100%;display:block}
+  .dia text{font-family:'Inter Tight',sans-serif;fill:var(--ink)}
+  .dia .ann{font-size:13px}
+  .dia .cap{font-size:12px;fill:var(--muted);letter-spacing:.06em}
+  .dia .lead{stroke:#9A9A9A;stroke-width:1;fill:none}
+  .dia-list{display:none;margin-top:20px;flex-direction:column;gap:14px}
+  .dia-list .row{display:flex;gap:12px;font-size:14px;line-height:1.5}
+  .dia-list .row b{flex:0 0 auto;font-weight:700}
+
+  .bars{display:flex;gap:14px;margin-top:var(--gut);flex-wrap:wrap}
+  .bar{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;width:76px;height:76px;padding:8px;border-radius:3px;font-size:10px;font-weight:700;color:#fff}
+  .bar .hex{font-size:9px}
+  .bar.light{color:var(--ink)}
+  .bar .hex{font-weight:500;letter-spacing:.04em;opacity:.92}
+
+  .names{display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--gut);margin-top:var(--gut)}
+  .names div{border:1px solid var(--rule);border-radius:3px;padding:16px;display:flex;flex-direction:column;gap:6px}
+  .names b{font-size:14px;letter-spacing:-.01em}
+  .names span{font-size:12px;color:var(--muted);line-height:1.55}
+  .names div.final{background:var(--ink);border-color:var(--ink)}
+  .names div.final b,.names div.final span{color:#fff}
+
+  .cards4{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gut);margin-top:var(--gut)}
+  .cards4 .p{border:1px solid var(--red);border-radius:3px;padding:18px;display:flex;flex-direction:column;gap:6px}
+  .cards4 .p .nm{font-size:14px;font-weight:700;letter-spacing:-.01em}
+  .cards4 .p .rl{font-size:12px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+  .cards4 .p .cn{font-size:14px;line-height:1.5;padding-top:6px}
+
+  /* naming decision matrix — the shortlist settled on stated criteria.
+     Built natively rather than dropped in as a slide image. */
+  .matrix{display:grid;grid-template-columns:minmax(0,150px) minmax(0,1fr) minmax(0,1fr);
+          gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:3px;overflow:hidden;margin-top:var(--gut)}
+  .matrix>div{background:var(--paper);padding:12px 14px}
+  .matrix .mh{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+  .matrix .mh.win{background:var(--cocoa);color:#fff}
+  .matrix .mc{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:.06em}
+  .matrix .mv{font-size:14px;line-height:1.5}
+  .matrix .mv.win{background:#fff;font-weight:500}
+
+  /* the building read floor by floor, bottom-up like the real thing */
+  /* DOM order is top floor first, so it stacks like the real building:
+     balcony at the top, shop on the street at the bottom */
+  .floors{display:flex;flex-direction:column;gap:1px;margin-top:26px;
+          border:1px solid var(--rule);border-radius:3px;overflow:hidden;background:var(--rule)}
+  .floors .fl{background:#fff;display:flex;align-items:baseline;gap:14px;padding:11px 16px}
+  .floors .fn{font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--cocoa);flex:0 0 auto}
+  .floors .fd{font-size:14px;color:var(--ink)}
+
+  /* the three packaging concepts, explored then narrowed to one */
+  .concepts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--gut);margin-top:var(--gut)}
+  .concepts .c{border:1px solid var(--rule);border-radius:3px;overflow:hidden;display:flex;flex-direction:column;background:#fff}
+  .concepts .c .im{aspect-ratio:4/3;overflow:hidden;background:#fff}
+  .concepts .c .im img{width:100%;height:100%;object-fit:cover;display:block}
+  .concepts .c .tx{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px}
+  .concepts .c .lb{font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
+  .concepts .c .ds{font-size:14px;line-height:1.5}
+  .concepts .c.chosen{border-color:var(--cocoa);border-width:2px}
+  .concepts .c.chosen .lb{color:var(--cocoa)}
+
+  .comps{display:flex;flex-direction:column;gap:0;margin-top:20px;border-top:1px solid var(--rule)}
+  .comps .row{display:grid;grid-template-columns:180px 1fr;gap:24px;padding:16px 0;border-bottom:1px solid var(--rule)}
+  .comps .row b{font-size:14px}
+  .comps .row span{font-size:12px;color:var(--muted);line-height:1.55}
+
+  .voice{display:flex;gap:8px;margin-top:24px;flex-wrap:wrap}
+  .voice span{font-size:13px;font-weight:700;letter-spacing:.02em;padding:8px 14px;border:1px solid var(--rule);border-radius:100px;white-space:nowrap}
+
+  /* Competitor grid: two columns, stacked, filling the split's second
+     column instead of running as one long line across the full page width.
+     Icons not supplied yet -- .chip-icon is sized and ready, empty until
+     real logos land, per CLAUDE.md (no stock icons). */
+  .comp-strip{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+  .comp-strip .chip{display:flex;align-items:center;gap:8px;padding:8px 16px;border:1px solid var(--rule);border-radius:var(--radius-pill);font-size:13px;font-weight:600}
+  .comp-strip .chip-icon{width:16px;height:16px;flex:0 0 auto;border-radius:3px;background:var(--stage)}
+  .comp-strip .chip-icon img{width:100%;height:100%;object-fit:contain;display:block}
+  @media(max-width:480px){ .comp-strip{grid-template-columns:1fr} }
+
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:28px;margin-top:36px}
+  .stat .n{display:block;font-size:clamp(22px,2.4vw,32px);font-weight:900;letter-spacing:-.02em;line-height:1}
+  .stat .l{display:block;font-size:12px;color:var(--muted);padding-top:6px;line-height:1.4;max-width:190px}
+
+  .proof{display:grid;grid-template-columns:repeat(4,1fr);gap:36px;margin-top:32px;padding-top:24px;border-top:1px solid var(--rule)}
+  @media(max-width:640px){ .proof{grid-template-columns:1fr 1fr} }
+  .proof .n{font-family:'Inter Tight',sans-serif;font-size:22px;font-weight:900;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .proof .l{display:block;font-size:12px;color:var(--muted);padding-top:4px;max-width:170px;line-height:1.35}
+
+  figcaption{font-size:var(--fs-4);color:var(--muted);padding-top:10px;max-width:760px}
+
+  /* legacy plain-footer rule removed: the shared .site-footer from design.css now supplies its own layout */
+
+  @media(max-width:1000px){
+    :root{--pad:24px}
+    .split,.split.rev{grid-template-columns:1fr;gap:28px}
+    .names,.cards4,.concepts{grid-template-columns:1fr 1fr}
+    .comps .row{grid-template-columns:1fr}
+    /* drop the empty corner cell and let the criterion span the full width as a
+       sub-heading, so each value stays under the right name instead of the
+       whole table collapsing into one ambiguous column */
+    .matrix{grid-template-columns:1fr 1fr}
+    .matrix .mh:first-child{display:none}
+    .matrix .mc{grid-column:1 / -1;background:var(--stage);font-weight:600;color:var(--ink)}
+    .act{padding-top:80px}
+    .dia{display:none}
+    .dia-list{display:flex}
+  }
+  @media(max-width:640px){
+    .names,.cards4,.concepts{grid-template-columns:1fr}
+  }
+
+  [id^="sec-"]{scroll-margin-top:96px}
+
+  .pagenav{position:fixed;top:22px;left:50%;transform:translateX(-50%);z-index:100;
+           display:flex;align-items:center;gap:10px;max-width:calc(100% - 32px);
+           transition:top .35s cubic-bezier(.4,0,.2,1)}
+  .pagenav .back{width:40px;height:40px;border-radius:50%;background:#fff;border:1px solid var(--rule);
+                 display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--ink);
+                 font-size:16px;box-shadow:0 6px 20px rgba(0,0,0,.10);flex-shrink:0}
+  .pagenav .back:hover{background:var(--stage)}
+  .pagenav .links{display:flex;gap:2px;background:#fff;border:1px solid var(--rule);border-radius:100px;
+                  padding:6px;box-shadow:0 6px 20px rgba(0,0,0,.10);overflow-x:auto;max-width:100%;
+                  transition:padding .35s cubic-bezier(.4,0,.2,1),background-color .35s ease,
+                             backdrop-filter .35s ease,box-shadow .35s ease}
+  .pagenav .links a{font-family:'Inter Tight',sans-serif;font-size:12px;font-weight:500;color:var(--muted);
+                    text-decoration:none;padding:8px 16px;border-radius:100px;white-space:nowrap;
+                    transition:color .2s,background .2s;flex-shrink:0}
+  .pagenav .links a:hover{color:var(--ink)}
+  .pagenav .links a.active{color:var(--ink);background:var(--stage);font-weight:600}
+  /* on scroll-down past a small threshold, the pagenav shifts up and its
+     pill goes compact + translucent, toggled on <body> by shared JS at the
+     bottom of the page (the plain header is untouched by this) */
+  body.nav-compact .pagenav{top:14px}
+  body.nav-compact .pagenav .links{
+    padding:3px;
+    background:color-mix(in srgb, #fff 72%, transparent);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  }
+  body.nav-compact .pagenav .links a{padding:6px 12px}
+  @media(max-width:640px){
+    .pagenav .links a{padding:7px 12px;font-size:12px}
+    /* below this width the plain header's name+links and the centred pagenav
+       pill occupy overlapping horizontal space (pre-existing on every page
+       that has both), so here the pagenav drops below the header instead */
+    .pagenav{top:64px}
+    body.nav-compact .pagenav{top:38px}
+  }
+
+  /* ---------- tilt-in acts, DESIGN.md D-27/D-28/D-49 (this build): each
+     act after the first enters rotated 30deg about its bottom-left corner
+     and straightens as it scrolls up the viewport. Real scroll only, no
+     pinning -- pinning would desync the pagenav scroll-spy above. Colour
+     grounds per act (D-29) are applied via .has-ground in design.css: the
+     ground is a full-bleed pseudo-element inside the rotating section, so it
+     tilts in with its act. Grounds alternate with paper rather than colouring
+     every act, per D-64. ---------- */
+  [id^="sec-"]:not(#sec-overview){transform-origin:bottom left;will-change:transform}
+  @media(prefers-reduced-motion:reduce){ [id^="sec-"]{transform:none!important} }
+
+  /* ---------- artisan carousel: stacked cards, ported from a pasted
+     React/shadcn/Motion component (structural donor only, per CLAUDE.md --
+     no React/Tailwind/shadcn adopted, no stock images, no lucide icons).
+     Kept: the fanned stack, rotation/scale falloff by distance from centre.
+     Continuous drag-follow dropped -- it lagged in the browser -- for plain
+     click-to-advance: two arrow buttons plus a click on any side card.
+     Radius and pill use the site's own tokens instead of the donor's
+     rounded-2xl. Sits on the base paper colour, not the section's aqua
+     ground, so it reads as its own component. Captions are each photo's
+     own existing alt text, trimmed. ---------- */
+  .carousel-wrap{background:var(--paper);border-radius:var(--radius);padding:var(--sp-m) 0;margin-top:var(--gut)}
+  .carousel{position:relative;width:100%;height:360px}
+  .carousel-card{
+    position:absolute;top:50%;left:50%;width:220px;height:300px;
+    border-radius:var(--radius);overflow:hidden;background:var(--stage);
+    box-shadow:0 18px 40px rgba(0,0,0,.18);cursor:pointer;
+    transition:transform .5s cubic-bezier(.22,1,.36,1),opacity .5s ease;
+    will-change:transform;
+  }
+  .carousel-card img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;-webkit-user-drag:none}
+  .carousel-card .scrim{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.78),rgba(0,0,0,.08) 55%,transparent)}
+  .carousel-card .badge{position:absolute;top:12px;right:12px;background:rgba(243,241,236,.95);color:var(--ink);
+    font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:5px 11px;border-radius:var(--radius-pill)}
+  .carousel-card .info{position:absolute;left:16px;right:16px;bottom:16px;color:var(--paper)}
+  .carousel-card .info p{font-size:12px;line-height:1.45}
+  .carousel-nav{display:flex;justify-content:center;gap:16px;padding-top:16px}
+  .carousel-nav button{
+    width:36px;height:36px;border-radius:50%;border:1px solid var(--rule);background:var(--paper);
+    color:var(--ink);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    transition:background .2s,border-color .2s;
+  }
+  .carousel-nav button:hover{background:var(--stage);border-color:var(--ink)}
+  @media(max-width:640px){
+    .carousel{height:280px}
+    .carousel-card{width:160px;height:220px}
+  }
+
+  /* ---------- how it's made: flow chart, five steps, arrow-connected ---------- */
+  .flow{display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap;padding-top:var(--sp-xs)}
+  .flow-step{flex:1;min-width:120px;display:flex;flex-direction:column;gap:4px}
+  .flow-step .lbl{font-size:11px;font-weight:500;color:var(--muted);letter-spacing:.06em}
+  .flow-step .val{font-size:13px;line-height:1.4;max-width:22ch}
+  .flow-arrow{flex:0 0 auto;color:var(--red);font-size:18px;padding-top:2px}
+  @media(max-width:800px){
+    .flow{flex-direction:column;gap:14px}
+    .flow-arrow{transform:rotate(90deg);padding:0 0 0 4px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="name"><a href="index.html">Shambhavi Jaipuriar</a></div>
+  <nav><a href="index.html#work">Work</a><a href="about.html">About</a><a href="archive.html">Archive</a><a href="#site-footer">Contact</a></nav>
+</header>
+
+<nav class="pagenav" aria-label="Section navigation">
+  <a class="back" href="index.html" aria-label="Back to work">&larr;</a>
+  <div class="links">
+    <a href="#sec-overview" data-target="sec-overview">Overview</a>
+    <a href="#sec-problem" data-target="sec-problem">Problem</a>
+    <a href="#sec-solution" data-target="sec-solution">Solution</a>
+    <a href="#sec-process" data-target="sec-process">Design Process</a>
+    <a href="#sec-outcome" data-target="sec-outcome">Outcome</a>
+  </div>
+</nav>
+
+<div class="wrap" id="sec-overview">
+  <h1>SANAT</h1>
+  <p class="tagline">A 400-year-old wood carving tradition, repackaged for today's audience.</p>
+  <div class="meta">
+    <div><span class="lbl">ROLE</span><span class="val">Branding Strategy · Visual Identity · Packaging Design</span></div>
+    <div><span class="lbl">SPONSOR</span><span class="val">Indian Institute of Packaging</span></div>
+    <div><span class="lbl">WHEN &amp; WHERE</span><span class="val">Graduation project · World University of Design, Sonepat · 2025</span></div>
+  </div>
+
+  <div class="proof reveal">
+    <div><span class="n">70%</span><span class="l">of India's wooden handicrafts made in Saharanpur</span></div>
+    <div><span class="n">5</span><span class="l">countries the craft already exports to</span></div>
+    <div><span class="n">2014</span><span class="l">GI tag awarded to the craft</span></div>
+    <div><span class="n">2018</span><span class="l">recognised under the UP Government's ODOP initiative</span></div>
+  </div>
+</div>
+
+<!-- Hero is a styled render, not a photograph, per Shailly's asset swap 10 Aug.
+     The real built-and-photographed prototype still appears and is named
+     honestly further down, in the Outcome section. -->
+<div class="hero reveal">
+  <img src="Assets/SANAT/hero-lifestyle-render.png" alt="A styled render of the SANAT packaging tower on a wooden table, printed with a Saharanpur artisan building">
+</div>
+
+<!-- ============ 01 THE CRAFT ============ -->
+<div class="wrap" id="sec-problem">
+  <div class="act reveal"><span class="num">01</span><h2>The Craft</h2></div>
+
+  <div class="split reveal">
+    <div>
+      <p class="big">Saharanpur's wood carving industry is losing its market.</p>
+      <div class="facts" style="padding-top:var(--sp-xs)">
+        <div><span class="lbl">WHY</span><span class="val">Mass-produced alternatives, no unified brand, and packaging that doesn't meet retail or export standards.</span></div>
+        <div><span class="lbl">WHO</span><span class="val">Second- and third-generation artisan families on Abdul Salam Road, many now discouraging their own children from the trade.</span></div>
+      </div>
+      <p class="micro" style="padding-top:var(--sp-s);max-width:320px">400 years old, GI-tagged, Mughal-influenced. Sheesham, Mango and Teak; jaali lattice work and Tarkashi brass inlay.</p>
+    </div>
+
+    <!-- one anchor image + five small supporting ones, not four equal-weight
+         tiles competing for attention -->
+    <figure>
+      <div class="craft-mosaic">
+        <div class="t anchor"><img src="Assets/SANAT/craft-hero-artisan.jpg" alt="Mr. Naved Shafiq, great-grandson of Abdul Salam, in his showroom of carved furniture and mirrors"></div>
+        <div class="t"><img src="Assets/SANAT/craft-shopfront.jpg" alt="Carved furniture and clocks displayed outside a shopfront on Abdul Salam Road"></div>
+        <div class="t"><img src="Assets/SANAT/craft-workshop-entrance.jpg" alt="An artisan inside a workshop, surrounded by turned table legs and fretwork panels"></div>
+        <div class="t"><img src="Assets/SANAT/craft-archway-detail.jpg" alt="An ornate painted archway on a heritage building in Saharanpur"></div>
+        <div class="t"><img src="Assets/SANAT/craft-tools-closeup.jpg" alt="Carving chisels and gouges laid across a half-finished panel, mid-carve"></div>
+        <div class="t"><img src="Assets/SANAT/craft-campus-sunset.jpg" alt="Sunset over the WUD campus, seen through a flowering tree"></div>
+      </div>
+      <figcaption><strong>Mr. Naved Shafiq</strong>, great-grandson of Abdul Salam, after whom the artisan street is named, in his showroom on Abdul Salam Road. During its prime this street was the pride of Saharanpur's wood carving industry; today, barely a dozen patrons visit all day.</figcaption>
+    </figure>
+  </div>
+
+  <!-- The making sequence and the shipping constraint, added from on-site
+       field notes taken in Saharanpur. Kept deliberately short: two things
+       only, per instruction, everything else from those notes held back. -->
+  <div class="wrap" style="padding:0;margin-top:var(--sp-l)">
+    <p class="micro">How it's made.</p>
+    <div class="flow">
+      <div class="flow-step"><span class="lbl">01 DRAWING</span><span class="val">Pattern drawn or traced by hand.</span></div>
+      <span class="flow-arrow">&rarr;</span>
+      <div class="flow-step"><span class="lbl">02 CUTTING</span><span class="val">Sheesham, mango and teak, cut to size.</span></div>
+      <span class="flow-arrow">&rarr;</span>
+      <div class="flow-step"><span class="lbl">03 CARVING</span><span class="val">Jaali and relief work, cut freehand.</span></div>
+      <span class="flow-arrow">&rarr;</span>
+      <div class="flow-step"><span class="lbl">04 FITTING</span><span class="val">Joints fitted, sanded, gaps closed.</span></div>
+      <span class="flow-arrow">&rarr;</span>
+      <div class="flow-step"><span class="lbl">05 POLISH</span><span class="val">Thinner and sealer, two to three coats.</span></div>
+    </div>
+
+    <div class="carousel-wrap">
+      <div class="carousel" id="artisanCarousel">
+        <div class="carousel-card">
+          <img src="Assets/SANAT/hr-artisan-elder.jpg" alt="A senior Saharanpur wood carving artisan interviewed during field research">
+          <div class="scrim"></div>
+          <span class="badge">Senior artisan</span>
+          <div class="info"><p>A senior Saharanpur wood carving artisan, interviewed during field research.</p></div>
+        </div>
+        <div class="carousel-card">
+          <img src="Assets/SANAT/hr-artisan-patternmaker.jpg" alt="A third-generation artisan beneath the hand-cut paper stencils he traces onto wood">
+          <div class="scrim"></div>
+          <span class="badge">Third-generation</span>
+          <div class="info"><p>Hand-cuts every stencil his own carving is traced from.</p></div>
+        </div>
+        <div class="carousel-card">
+          <img src="Assets/SANAT/hr-artisan-plaid.jpg" alt="An artisan seated in his workshop corridor, surrounded by carved cabinets">
+          <div class="scrim"></div>
+          <span class="badge">Workshop corridor</span>
+          <div class="info"><p>Seated in his workshop corridor, surrounded by carved cabinets.</p></div>
+        </div>
+        <div class="carousel-card">
+          <img src="Assets/SANAT/hr-artisan-smiling.jpg" alt="An artisan smiling, seated cross-legged with his carving tools">
+          <div class="scrim"></div>
+          <span class="badge">At his tools</span>
+          <div class="info"><p>Seated cross-legged with his carving tools.</p></div>
+        </div>
+        <div class="carousel-card">
+          <img src="Assets/SANAT/artisan-crouching.jpg" alt="An artisan hand-carving a wooden panel, chisel in hand, in a Saharanpur workshop">
+          <div class="scrim"></div>
+          <span class="badge">Hand-carving</span>
+          <div class="info"><p>Chisel in hand, hand-carving a wooden panel.</p></div>
+        </div>
+        <div class="carousel-card">
+          <img src="Assets/SANAT/craft-tools-closeup.jpg" alt="Carving chisels and gouges laid across a half-finished panel, mid-carve">
+          <div class="scrim"></div>
+          <span class="badge">His tools</span>
+          <div class="info"><p>Chisels and gouges, laid out mid-carve.</p></div>
+        </div>
+      </div>
+      <div class="carousel-nav">
+        <button type="button" id="carouselPrev" aria-label="Previous artisan">&larr;</button>
+        <button type="button" id="carouselNext" aria-label="Next artisan">&rarr;</button>
+      </div>
+    </div>
+    <div class="quote" style="margin-top:var(--sp-m)">
+      &ldquo;Despite local struggles, the industry has a strong export network.&rdquo;
+      <span class="src">— from artisan interviews, field research</span>
+    </div>
+
+    <div class="reveal" style="margin-top:var(--sp-l)">
+      <p class="micro">A constraint that turns up twice in this portfolio.</p>
+      <div class="say">
+        <p>Weight decides how a piece ships: by air under the limit, by road or sea over it. It's the same logic SANAT's own packaging runs on: the constraint decides the object.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 02 THE STRATEGY ============
+     Deliberately unpilled, same pattern as Lombardi's Campaign section, so the
+     five-pill nav stays identical across all four project pages. Split out of
+     Design Process on Shailly's instruction once that section got crowded. -->
+<div class="wrap">
+  <div class="act reveal"><span class="num">02</span><h2>The Strategy</h2></div>
+
+  <div class="split reveal">
+    <div>
+      <p class="big">SANAT is a heritage-rooted, artisan-first brand that brings Saharanpur's iconic woodcarving to life.</p>
+      <div class="say" style="padding-top:20px">
+        <p>Sustainable packaging, minimal yet culturally rich branding, and interactive storytelling tools that connect the maker to the modern conscious consumer, both in India and globally.</p>
+      </div>
+      <div class="voice" style="margin-top:26px">
+        <span>Preservation</span><span>Dignity</span><span>Revival</span><span>Cultural Continuity</span>
+      </div>
+    </div>
+    <div>
+      <p class="micro">Positioned against seven Indian craft and lifestyle brands.</p>
+      <p class="say" style="padding-top:8px;font-size:14px">Across all seven, SANAT reads as the more craft-rooted, story-led alternative.</p>
+      <div class="comp-strip">
+        <span class="chip"><span class="chip-icon"><img src="Assets/SANAT/comp-jaypore.jpg" alt="Jaypore logo"></span>Jaypore</span>
+        <span class="chip"><span class="chip-icon"><img src="Assets/SANAT/comp-gaatha.jpg" alt="Gaatha logo"></span>Gaatha</span>
+        <span class="chip"><span class="chip-icon"><img src="Assets/SANAT/comp-itokri.png" alt="iTokri logo"></span>iTokri</span>
+        <span class="chip"><span class="chip-icon"><img src="Assets/SANAT/comp-fabindia.png" alt="FabIndia logo"></span>FabIndia</span>
+        <span class="chip"><span class="chip-icon"><img src="Assets/SANAT/comp-etsy.jpg" alt="Etsy logo"></span>Etsy</span>
+        <span class="chip"><span class="chip-icon"><img src="Assets/SANAT/comp-worldartcommunity.jpg" alt="World Art Community logo"></span>World Art Community</span>
+        <span class="chip"><span class="chip-icon"><img src="Assets/SANAT/comp-indiacrafthouse.jpg" alt="The India Craft House logo"></span>The India Craft House</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap" style="padding:0;margin-top:56px">
+    <p class="micro">Who SANAT is for, condensed from four working personas.</p>
+    <div class="cards4">
+      <div class="p"><span class="nm">Aanya Rao</span><span class="rl">Ethical Urban Homemaker · Bangalore</span><span class="cn">Drawn to SANAT's artisan-first narrative and sustainable packaging; buys a carved Tree of Life panel as a housewarming gift.</span></div>
+      <div class="p"><span class="nm">Karan Patel</span><span class="rl">Design-Loving Collector · Ahmedabad</span><span class="cn">Sources custom pieces for a boutique stay; prefers Packaging Concept-I for client moodboards.</span></div>
+      <div class="p"><span class="nm">Eleanor Gray</span><span class="rl">Cultural Curator · London</span><span class="cn">Uses Trunk Tales as a teaching tool in workshops; orders the Mehraab Collection for a heritage exhibit.</span></div>
+      <div class="p"><span class="nm">Naira Khanna</span><span class="rl">Teen Gift Shopper · Mumbai</span><span class="cn">Buys a Haathi Mere Saathi gift box for a friend's birthday and posts an unboxing reel.</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 03 THE SOLUTION ============ -->
+<div class="wrap has-ground on-dark" id="sec-solution" style="--ground:#1E0F08">
+  <div class="act reveal"><span class="num">03</span><h2>The Solution</h2></div>
+
+  <div class="split reveal">
+    <div>
+      <p class="big">SA (Saharanpur) + NAT (Sannat) = SANAT.</p>
+      <div class="say" style="padding-top:20px">
+        <p>SA reflects the place of origin, Saharanpur, the historic heartland of wood carving in India. NAT is derived from Sannat (Urdu: صنعت), meaning craft, skill and trade, representing the artisan legacy passed down from Ustaad to Shaagird.</p>
+      </div>
+      <div class="dia-list" style="display:flex">
+        <div class="row"><b>Hindi / Sanskrit</b><span>Associated with Brahma, the creator.</span></div>
+        <div class="row"><b>Latin</b><span>Means &ldquo;heals.&rdquo;</span></div>
+        <div class="row"><b>Finnish</b><span>Means &ldquo;words.&rdquo;</span></div>
+      </div>
+    </div>
+
+    <svg class="dia" viewBox="0 0 700 420" role="img" aria-label="Diagram showing SANAT formed from SA, taken from Saharanpur, and NAT, taken from Sannat.">
+      <text class="ann" x="20" y="60" font-size="15" font-weight="700">SAHARANPUR</text>
+      <text class="cap" x="20" y="82">place of origin</text>
+      <path class="lead" d="M20,95 C110,95 186,150 186,195"/>
+
+      <text class="ann" x="20" y="180" font-size="15" font-weight="700">SANNAT (Urdu: صنعت)</text>
+      <text class="cap" x="20" y="202">craft · skill · trade · Ustaad&ndash;Shaagird</text>
+      <path class="lead" d="M20,215 C130,215 230,205 276,195"/>
+
+      <text x="230" y="330" font-family="var(--display)" font-size="90" font-weight="400" text-anchor="middle" style="text-transform:uppercase">SANAT</text>
+      <path class="lead" d="M186,195 L186,260"/>
+      <path class="lead" d="M276,195 L276,260"/>
+
+      <text class="ann" x="460" y="230" font-weight="700">A symbolic blend of</text>
+      <text class="ann" x="460" y="248">geography and</text>
+      <text class="ann" x="460" y="266">generational craftsmanship.</text>
+    </svg>
+  </div>
+
+  <div class="wrap" style="padding:0;margin-top:56px">
+    <p class="micro">Names explored and set aside before SANAT.</p>
+    <div class="names">
+      <div><b>NAKKASHI</b><span>A direct reference to carving/detailing. Beautifully rooted, but reads as a descriptor, not a brand.</span></div>
+      <div><b>HAATHI MERE SAATHI</b><span>Nostalgic, culturally familiar. Emotionally rich, but felt more like a collection name.</span></div>
+      <div><b>MEHRAAB</b><span>Mughal architecture, arched motifs. Elegant, but suited to a product range, not a master brand.</span></div>
+      <div><b>TRUNK TALES</b><span>Narrative-driven and quirky. Strong retail recall, but didn't capture the depth of artisan skill.</span></div>
+      <div><b>SANNAT</b><span>Urdu for craft, skill, trade. Deeply rooted, but needs a strong concept, as the meaning alone is vague.</span></div>
+      <div><b>AIRAAVAT</b><span>The mythological elephant of the gods. Powerful symbolism, but too specific for a broad identity.</span></div>
+    </div>
+  </div>
+
+  <!-- Identity: the final logo, colour, type -->
+  <div class="split rev reveal" style="margin-top:64px">
+    <figure>
+      <div class="mosaic" style="grid-template-columns:1fr">
+        <div class="t fit" style="aspect-ratio:1600/1107;background:#fff"><img src="Assets/SANAT/logo-final-clean.jpg" alt="The final SANAT logotype, a single clean mark: the elephant's ear and trunk forming the initial curve of the S"></div>
+      </div>
+      <figcaption>The final logotype. The elephant's ear and trunk form the initial curve of the S.</figcaption>
+    </figure>
+    <div>
+      <p class="micro">Why an elephant.</p>
+      <div class="say">
+        <p>Elephants have long symbolized power, wisdom and auspiciousness in Indian culture, and artisans in Saharanpur already carve them paired with jaalis and floral motifs. Elephant statues are among the best-selling, most recognizable product categories in the region's woodcraft.</p>
+        <p>Native to the craft's own vocabulary, not decoration added on top.</p>
+      </div>
+
+      <p class="micro" style="padding-top:26px">Brand colours. Earthy, artisanal, heritage.</p>
+      <div class="bars">
+        <div class="bar" style="background:var(--cocoa)"><span>Rich Cocoa Brown</span><span class="hex">#73411F</span></div>
+        <div class="bar" style="background:var(--mustard)"><span>Golden Mustard</span><span class="hex">#C8972A</span></div>
+        <div class="bar" style="background:var(--burnt)"><span>Burnt Orange</span><span class="hex">#D96704</span></div>
+        <div class="bar light" style="background:var(--aqua)"><span>Soft Aqua</span><span class="hex">#91D5D9</span></div>
+        <div class="bar light" style="background:var(--grey5);border:1px solid var(--rule)"><span>Light Grey</span><span class="hex">#EBEBEB</span></div>
+      </div>
+
+      <p class="micro" style="padding-top:26px">Typography. Clean, minimal, artisanal.</p>
+      <div class="facts" style="padding-top:0">
+        <div><span class="lbl">HEADER</span><span class="val">Finalsix Book</span></div>
+        <div><span class="lbl">BODY</span><span class="val">Komet Variable</span></div>
+        <div><span class="lbl">TERTIARY</span><span class="val">Bankgothic Light</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---- The building becomes the box. This is the spine of the project:
+       the packaging is not shaped like a building for decoration, it IS the
+       artisan's building, floor for floor. ---- -->
+  <div class="wrap" style="padding:0;margin-top:72px">
+    <div class="split reveal">
+      <div>
+        <p class="big">On Abdul Salam Road, one building is the shop, the workshop and the home.</p>
+        <div class="say" style="padding-top:20px">
+          <p>Ground floor: the store front, directly on the street. First floor: the workshop and godown. Upper floors: living spaces. Multiple generations live together and the skills are passed down.</p>
+          <p>Craft, commerce and community coexist in one structure. The packaging pays homage to that way of life, floor for floor.</p>
+        </div>
+        <div class="floors">
+          <div class="fl"><span class="fn">04</span><span class="fd">Balcony, with rocking chairs</span></div>
+          <div class="fl"><span class="fn">03</span><span class="fd">Dining and kitchen</span></div>
+          <div class="fl"><span class="fn">02</span><span class="fd">Workshop</span></div>
+          <div class="fl"><span class="fn">01</span><span class="fd">Shop, on the street</span></div>
+        </div>
+      </div>
+      <figure>
+        <div class="mosaic" style="grid-template-columns:1fr">
+          <div class="t fit" style="background:#fff;border:1px solid var(--rule)">
+            <img src="Assets/SANAT/concept-inspiration.png" alt="Concept inspiration sheet: photographs of Abdul Salam Road buildings annotated by hand, mapping ground floor to shop, first floor to workshop and upper floors to living space, beside a sketch of the tiered box">
+          </div>
+        </div>
+        <figcaption>The building, read floor by floor, and turned into a structure.</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- ---- the surface graphic, elevation by elevation ---- -->
+  <div class="wrap" style="padding:0;margin-top:64px">
+    <p class="micro">Each face of the packaging carries a different storey, drawn as its own elevation.</p>
+    <div class="mosaic" style="grid-template-columns:1fr 1.3fr;grid-template-rows:repeat(3,1fr);aspect-ratio:3/2">
+      <div class="t fit" style="grid-row:1 / span 3;background:#fff"><img src="Assets/SANAT/elevation-building.png" alt="Full-colour illustrated elevation of the SANAT building motif, a tiered facade in orange and teal"></div>
+      <div class="t fit" style="background:#fff"><img src="Assets/SANAT/elevation-storefront.png" alt="The ground-floor shop elevation, showing an artisan at work inside"></div>
+      <div class="t fit" style="background:#fff"><img src="Assets/SANAT/elevation-interior.png" alt="The workshop floor elevation, with carved furniture visible through the arches"></div>
+      <div class="t fit" style="background:#fff"><img src="Assets/SANAT/elevation-balcony.png" alt="The upper-floor balcony elevation with a figure at a window"></div>
+    </div>
+  </div>
+
+  <!-- ---- and the tiers are sized to the actual products ---- -->
+  <div class="wrap" style="padding:0;margin-top:64px">
+    <div class="split rev reveal">
+      <figure>
+        <div class="mosaic" style="grid-template-columns:1fr">
+          <div class="t fit" style="background:#fff;border:1px solid var(--rule)">
+            <img src="Assets/SANAT/elephants-measured.png" alt="Four carved wooden elephants photographed and measured by hand: 11cm, 9cm, 7cm and 5cm tall">
+          </div>
+        </div>
+        <figcaption>Measured by hand. The four sizes set the four tiers.</figcaption>
+      </figure>
+      <div>
+        <p class="big" style="font-size:clamp(16px,1.6vw,22px)">The taper is not styling. It is four elephants, in descending order.</p>
+        <div class="facts" style="padding-top:22px">
+          <div><span class="lbl">TIER 01</span><span class="val">11 cm tall · 14.5 cm long</span></div>
+          <div><span class="lbl">TIER 02</span><span class="val">9 cm tall · 11.8 cm long</span></div>
+          <div><span class="lbl">TIER 03</span><span class="val">7 cm tall · 9.2 cm long</span></div>
+          <div><span class="lbl">TIER 04</span><span class="val">5 cm tall · 6.6 cm long</span></div>
+        </div>
+        <p class="micro" style="padding-top:22px;max-width:380px">Four boxes that stack and lock, a handle to carry the whole tower, and a lid on each so a single elephant can be lifted out on its own.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 03 DESIGN PROCESS ============ -->
+<div class="wrap" id="sec-process">
+  <div class="act reveal"><span class="num">04</span><h2>Design Process</h2></div>
+
+  <div class="split reveal">
+    <figure>
+      <div class="mosaic" style="grid-template-columns:1fr 1fr;aspect-ratio:16/9">
+        <div class="t fit" style="background:#fff"><img src="Assets/SANAT/sketches-scripts.png" alt="Hand-drawn script and motif studies for the SANAT identity, testing Devanagari lettering and geometric patterns"></div>
+        <div class="t fit" style="background:#fff"><img src="Assets/SANAT/sketches-elephant.png" alt="Hand-drawn elephant-integrated wordmark studies, working toward the final SANAT logotype"></div>
+      </div>
+      <figcaption>Early identity search. Scripts, motifs and elephant-integrated wordmarks, tested by hand before a single version was finalized.</figcaption>
+    </figure>
+    <div>
+      <p class="micro">What I looked for in a name.</p>
+      <div class="dia-list" style="display:flex">
+        <div class="row"><b>Rooted</b><span>In the craft and artisan culture of Saharanpur.</span></div>
+        <div class="row"><b>Legible</b><span>Easy to recall, pronounce and apply visually.</span></div>
+        <div class="row"><b>Respectful</b><span>Culturally respectful and linguistically meaningful.</span></div>
+        <div class="row"><b>Flexible</b><span>Suitable for government and global platforms, and open to sub-lines.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- three concepts, one chosen -->
+  <div class="wrap" style="padding:0;margin-top:64px">
+    <p class="micro">Three packaging structures, tied to three real price tiers, from interviews with ODOP officials: low-cost for the public, mid-cost for retail, high-cost for corporate gifting. One was built.</p>
+    <div class="concepts">
+      <div class="c">
+        <div class="im"><img src="Assets/SANAT/concept-1.png" alt="Concept I sketch: a long horizontal box with four compartments in a row, with a latch to pull the tray out"></div>
+        <div class="tx">
+          <span class="lb">Concept I</span>
+          <span class="ds">Four compartments in a row, drawn out by a latch. The elephants sit in cavities so each lifts free cleanly.</span>
+        </div>
+      </div>
+      <div class="c">
+        <div class="im"><img src="Assets/SANAT/concept-2.png" alt="Concept II sketch: a cross-shaped box with four pull-out drawers and a transparent top"></div>
+        <div class="tx">
+          <span class="lb">Concept II</span>
+          <span class="ds">Four drawers pulling out of a cross, with a transparent top so the whole set stays visible while it is closed.</span>
+        </div>
+      </div>
+      <div class="c chosen">
+        <div class="im"><img src="Assets/SANAT/concept-3.png" alt="Concept III sketch: the tapering four-tier tower with a carry handle, the concept that was chosen"></div>
+        <div class="tx">
+          <span class="lb">Concept III · Built</span>
+          <span class="ds">Four boxes that stack into a tapering tower with a carry handle. The one that became the building.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Concept II got as far as a physical model before it was set aside -->
+  <div class="wrap" style="padding:0;margin-top:64px">
+    <div class="split reveal">
+      <figure>
+        <div class="mosaic" style="grid-template-columns:1fr">
+          <div class="t" style="aspect-ratio:2/1"><img src="Assets/SANAT/concept-2-proto.png" alt="Concept II built in white card on a cutting mat: the flat net, the assembled box with pull knobs, and a carved elephant sitting in an open drawer"></div>
+        </div>
+        <figcaption>Concept II, built in white card before it was set aside.</figcaption>
+      </figure>
+      <div>
+        <p class="big" style="font-size:clamp(16px,1.6vw,22px)">Every concept was made before it was judged.</p>
+        <div class="say" style="padding-top:18px">
+          <p>The drawer concept worked on paper and in card. It was the tower that carried the idea of the building, so that is the one that went forward.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- the engineering -->
+  <div class="wrap" style="padding:0;margin-top:64px">
+    <div class="split rev reveal">
+      <figure>
+        <div class="mosaic" style="grid-template-columns:1fr">
+          <div class="t fit" style="background:#fff;border:1px solid var(--rule)"><img src="Assets/SANAT/tech-drawing.png" alt="Dimensioned technical drawing of the four-tier structure: 13cm base tapering to 6.67cm at the top, 16.5cm deep, with a 30.64cm sleeve"></div>
+        </div>
+        <figcaption>Every tier dimensioned, base to lid.</figcaption>
+      </figure>
+      <figure>
+        <div class="mosaic" style="grid-template-columns:1fr">
+          <div class="t fit" style="background:#fff;border:1px solid var(--rule)"><img src="Assets/SANAT/logo-grid.png" alt="The SANAT logotype on its construction grid, with cyan alignment lines showing the elephant and lettering built to the same measure"></div>
+        </div>
+        <figcaption>The logotype on its construction grid.</figcaption>
+      </figure>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 05 THE OUTCOME ============ -->
+<div class="wrap" id="sec-outcome">
+  <div class="act reveal"><span class="num">05</span><h2>The Outcome</h2></div>
+
+  <div class="split reveal">
+    <div>
+      <p class="big">It was built. Four boxes, a handle, and a building you can carry home.</p>
+      <div class="say" style="padding-top:20px">
+        <p>Printed, cut, folded and assembled by hand, then photographed as a finished object rather than a render.</p>
+      </div>
+      <div class="facts" style="padding-top:22px">
+        <div><span class="lbl">INITIATIVE</span><span class="val">ODOP, Uttar Pradesh Government</span></div>
+      </div>
+      <div class="voice" style="margin-top:32px">
+        <span>Respectful</span><span>Rooted</span><span>Warm</span><span>Bilingual</span>
+      </div>
+    </div>
+    <figure>
+      <div class="mosaic" style="grid-template-columns:1fr 1fr">
+        <div class="t" style="aspect-ratio:4/3"><img src="Assets/SANAT/hr-proto-tower.jpg" alt="The assembled SANAT tower, four tiers stacked with the carry handle at the top, photographed on a yellow and pink set"></div>
+        <div class="t" style="aspect-ratio:4/3"><img src="Assets/SANAT/brand-sticker.png" alt="The SANAT seal sticker, closing the packaging tower's flap"></div>
+      </div>
+      <figcaption>The finished prototype, held up and carried. The seal on the flap closes each tier shut.</figcaption>
+    </figure>
+  </div>
+
+  <!-- where it would actually live -->
+  <div class="wrap" style="padding:0;margin-top:64px">
+    <p class="micro">Where it is meant to sit: airport retail and the homes it is bought for.</p>
+    <div class="mosaic" style="grid-template-columns:1fr 1fr;aspect-ratio:2/1">
+      <div class="t"><img src="Assets/SANAT/retail-dutyfree-v2.png" alt="The SANAT box on a duty free counter"></div>
+      <div class="t"><img src="Assets/SANAT/retail-cafe-v2.png" alt="The SANAT box on a cafe table"></div>
+    </div>
+  </div>
+
+  <div class="wrap" style="padding:0;margin-top:56px">
+    <div class="stats">
+      <div class="stat"><span class="n">B.Des</span><span class="l">Graduation thesis, World University of Design, 2025</span></div>
+      <div class="stat"><span class="n">IIP</span><span class="l">Sponsored by the Indian Institute of Packaging</span></div>
+      <div class="stat"><span class="n">ODOP</span><span class="l">Built under the UP Government's One District One Product initiative</span></div>
+      <div class="stat"><span class="n">400+ yrs</span><span class="l">of heritage the brand is built to carry forward</span></div>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer" id="site-footer">
+  <div class="footer-content">
+    <p class="eyebrow">Contact</p>
+    <h2 style="font-family:var(--display);font-weight:400;font-stretch:62.5%;text-transform:uppercase;font-size:clamp(26px,3vw,38px);letter-spacing:-.01em">Let's talk</h2>
+    <p class="footer-open">I'm looking for a full-time design role: brand, identity, packaging, campaigns. I take on freelance alongside that, and I'm happy working remote or relocating for the right one. I've worked a summer in Italy and I run a business out of my own kitchen table, so distance has never been the difficult part.</p>
+    <div class="footer-grid">
+      <div class="footer-item"><span class="fact-label">Email</span><a class="val" href="mailto:shambhavijaipuriar.work@gmail.com">shambhavijaipuriar.work@gmail.com</a></div>
+      <div class="footer-item"><span class="fact-label">Instagram</span><a class="val" href="https://instagram.com/shambhavijaipuriar" target="_blank" rel="noopener">@shambhavijaipuriar</a></div>
+      <div class="footer-item"><span class="fact-label">Location</span><span class="val plain">Delhi / Gurugram, India</span></div>
+      <div class="footer-item"><span class="fact-label">Phone</span><span class="val plain">Available on request</span></div>
+    </div>
+  </div>
+  <div class="footer-legal">Selected work, 2024–26</div>
+</footer>
+
+<script>
+  
+  // ---------- tilt-in acts on scroll, real scroll only, no pinning ----------
+  (function(){
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) return;
+    var sections = [].slice.call(document.querySelectorAll(String.raw`[id^="sec-"]`)).slice(1);
+    function update(){
+      var vh = window.innerHeight;
+      sections.forEach(function(el){
+        var r = el.getBoundingClientRect();
+        var start = vh, end = vh * 0.25;
+        var p = (start - r.top) / (start - end);
+        p = Math.max(0, Math.min(1, p));
+        var rot = 30 * (1 - p);
+        el.style.transform = "rotate(" + rot.toFixed(2) + "deg)";
+      });
+    }
+    window.addEventListener("scroll", update, { passive: true });
+    update();
+  })();
+
+  const io = new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  },{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  (function(){
+    const navLinks = document.querySelectorAll('.pagenav .links a');
+    const byId = {};
+    navLinks.forEach(a => byId[a.dataset.target] = a);
+    const sections = [...navLinks].map(a => document.getElementById(a.dataset.target)).filter(Boolean);
+    const spy = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(a => a.classList.remove('active'));
+          const link = byId[entry.target.id];
+          if (link) link.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-35% 0px -55% 0px', threshold: 0 });
+    sections.forEach(s => spy.observe(s));
+  })();
+
+  (function () {
+    var lastY = window.scrollY, ticking = false;
+    var THRESH = 6, TOP_BUFFER = 40;
+    function update() {
+      var y = window.scrollY;
+      var delta = y - lastY;
+      if (Math.abs(delta) > THRESH) {
+        if (y < TOP_BUFFER) document.body.classList.remove('nav-compact');
+        else if (delta > 0) document.body.classList.add('nav-compact');
+        else document.body.classList.remove('nav-compact');
+        lastY = y;
+      }
+      ticking = false;
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { requestAnimationFrame(update); ticking = true; }
+    }, { passive: true });
+  })();
+
+  // ---------- artisan carousel: stacked cards, click to advance ----------
+  // Continuous drag-follow (recalculating the whole stack on every pointermove)
+  // lagged in the browser, so this replaces it with plain click handling:
+  // prev/next buttons, or click any side card to bring it to the front.
+  (function(){
+    var el = document.getElementById('artisanCarousel');
+    if (!el) return;
+    var cards = Array.prototype.slice.call(el.querySelectorAll('.carousel-card'));
+    var total = cards.length;
+    var index = 0;
+
+    function layout(){
+      cards.forEach(function(card, i){
+        var diff = i - index;
+        if (diff > total / 2) diff -= total;
+        if (diff < -total / 2) diff += total;
+        var x = diff * 130;
+        var rot = diff * 8;
+        var y = Math.abs(diff) * 18;
+        var scale = 1 - Math.abs(diff) * 0.1;
+        var opacity = Math.abs(diff) > 2 ? 0 : 1;
+        card.style.transform = 'translate(-50%,-50%) translate(' + x + 'px,' + y + 'px) rotate(' + rot + 'deg) scale(' + scale + ')';
+        card.style.opacity = opacity;
+        card.style.zIndex = 100 - Math.abs(diff);
+      });
+    }
+    layout();
+
+    function go(delta){
+      index = (index + delta + total) % total;
+      layout();
+    }
+    cards.forEach(function(card, i){
+      card.addEventListener('click', function(){
+        if (i === index) return;
+        index = i;
+        layout();
+      });
+    });
+    var prevBtn = document.getElementById('carouselPrev');
+    var nextBtn = document.getElementById('carouselNext');
+    if (prevBtn) prevBtn.addEventListener('click', function(){ go(-1); });
+    if (nextBtn) nextBtn.addEventListener('click', function(){ go(1); });
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About & Resume, Shambhavi Jaipuriar, Concept & Brand Designer</title>
+<meta name="description" content="Concept and brand designer specialising in branding and visual identity. B.Des from World University of Design, semester abroad at NABA Milan. About, experience and resume.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="design.css">
+<style>
+  .page-head{padding:64px 0 0}
+  .page-head h1{padding-top:12px}
+
+  /* ---------- photo + doodle cluster ----------
+     Photo column: 320px first pass, -20% to 256px, then +10% back up to
+     282px, your two most recent calls in sequence. */
+  .about-top{display:grid;grid-template-columns:minmax(200px,282px) 1fr;gap:72px;align-items:start}
+  @media(max-width:860px){ .about-top{grid-template-columns:1fr} }
+
+  /* margin, not padding: the doodles are absolutely positioned against this
+     box's own padding edge, so a margin shifts photo and doodles down
+     together as one unit; padding alone would only move the photo (a normal
+     flow child) and leave the doodles behind, breaking their alignment to
+     her head. */
+  .a-photo-wrap{position:relative;padding-top:24px;margin-top:40px}
+  .a-photo{
+    width:100%;height:auto;display:block;position:relative;z-index:2;
+    transition:transform .4s cubic-bezier(.34,1.56,.64,1);
+  }
+  .a-photo:hover,.a-photo:focus-visible,.a-photo.is-touched{transform:rotate(-2deg) scale(1.04)}
+  @media(prefers-reduced-motion:reduce){ .a-photo{transition:none} .a-photo:hover{transform:none} }
+
+  /* Doodles, cropped from your own reference sheet, clustered over her head
+     and shoulders rather than scattered full-bleed the way the source sheet
+     had them — this column is much narrower than that sheet was. Each one
+     wiggles once, staggered, the same reveal-on-scroll mechanism already
+     used sitewide (`.reveal`/`.in`), so it plays on load if the photo is
+     already in view and on scroll if it isn't. */
+  .a-doodle{
+    position:absolute;z-index:1;pointer-events:none;
+    opacity:0;transform:rotate(var(--rot,0deg)) scale(.7);
+    transition:opacity .5s var(--ease-reveal),transform .6s var(--ease-reveal);
+  }
+  .a-doodle.in{opacity:1;transform:rotate(var(--rot,0deg)) scale(1);animation:doodle-wiggle 1.8s ease-in-out var(--delay,.4s) 1}
+  @keyframes doodle-wiggle{
+    0%,100%{ transform:rotate(var(--rot,0deg)) scale(1); }
+    25%{ transform:rotate(calc(var(--rot,0deg) + 8deg)) scale(1.05); }
+    50%{ transform:rotate(calc(var(--rot,0deg) - 6deg)) scale(1); }
+    75%{ transform:rotate(calc(var(--rot,0deg) + 4deg)) scale(1.03); }
+  }
+  @media(prefers-reduced-motion:reduce){
+    .a-doodle{transition:opacity .3s ease}
+    .a-doodle.in{animation:none;transform:rotate(var(--rot,0deg)) scale(1)}
+  }
+  .d-cup{width:15%;top:20px;left:4%;--rot:-8deg;--delay:.2s}
+  .d-crab{width:19%;top:28px;right:0%;--rot:6deg;--delay:.45s}
+  .d-scissors{width:14%;top:30%;right:-8%;--rot:-10deg;--delay:.7s}
+  .d-duck{width:20%;top:18%;left:-9%;--rot:5deg;--delay:.3s}
+  .d-shell{width:15%;top:46%;left:-8%;--rot:-4deg;--delay:.55s}
+  .d-cookie{width:11%;top:50%;right:-11%;--rot:12deg;--delay:.8s}
+  .d-book{width:16%;top:68%;right:-16%;--rot:-6deg;--delay:.65s}
+  @media(max-width:860px){ .a-doodle{display:none} }
+
+  /* Bio: CONTEXT.md's three paragraphs, verbatim aside from the role phrase
+     (D-77's "Concept & Brand Designer" now applied here too), per your
+     instruction. Bold treatment follows your reference. */
+  .a-bio{margin-top:var(--sp-l);display:flex;flex-direction:column;gap:16px;max-width:68ch}
+  .a-bio p{font-size:16px;line-height:1.6;color:var(--ink)}
+  .a-bio strong{font-weight:700}
+
+  .a-facts{
+    margin-top:var(--sp-xl);padding-top:var(--sp-l);border-top:1px solid var(--rule);
+    display:grid;grid-template-columns:1fr 1fr;gap:32px 56px;
+  }
+  .a-facts .fact-label{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:block;padding-bottom:10px}
+
+  .edu-row{padding:10px 0;border-bottom:1px solid var(--rule)}
+  .edu-row:last-child{border-bottom:none}
+  .edu-row b{display:block;font-size:14px;font-weight:600}
+  .edu-row span{display:block;font-size:13px;color:var(--muted);padding-top:2px}
+
+  .role{padding:12px 0;border-bottom:1px solid var(--rule)}
+  .role:last-child{border-bottom:none}
+  .role-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+  .role-head b{font-size:14px;font-weight:600}
+  .role-head span{font-size:12px;color:var(--muted);white-space:nowrap}
+  .role ul{list-style:none;margin-top:6px;display:flex;flex-direction:column;gap:4px}
+  .role li{font-size:13px;line-height:1.5;color:var(--ink);padding-left:13px;position:relative}
+  .role li::before{content:'';position:absolute;left:0;top:7px;width:4px;height:4px;border-radius:50%;background:var(--rule)}
+  .role li strong{font-weight:700}
+
+  @media(max-width:860px){ .a-facts{grid-template-columns:1fr} }
+
+  .a-skills{margin-top:var(--sp-xl);padding-top:var(--sp-l);border-top:1px solid var(--rule)}
+  .a-skills h2{
+    font-family:var(--display);font-weight:400;font-stretch:62.5%;text-transform:uppercase;
+    font-size:clamp(26px,3vw,38px);letter-spacing:-.01em;
+  }
+  .skills-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px 40px;margin-top:20px}
+  .skills-grid .fact-label{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:block;padding-bottom:6px}
+  .skills-grid p{font-size:14px;line-height:1.6;color:var(--ink)}
+  @media(max-width:860px){ .skills-grid{grid-template-columns:1fr 1fr} }
+  @media(max-width:480px){ .skills-grid{grid-template-columns:1fr} }
+
+  .sw-icons{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:220px}
+  .sw-icons img{width:100%;height:auto;border-radius:9px;display:block}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="name"><a href="index.html">Shambhavi Jaipuriar</a></div>
+  <nav>
+    <a href="index.html#work">Work</a>
+    <a href="about.html">About</a>
+    <a href="archive.html">Archive</a>
+    <a href="#site-footer">Contact</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <div class="about-top">
+    <div class="a-photo-wrap">
+      <img class="a-photo" tabindex="0" src="Assets/About/photo.png" alt="Shambhavi Jaipuriar, laughing">
+      <img class="a-doodle d-cup reveal" src="Assets/About/doodle-cup.png" alt="">
+      <img class="a-doodle d-crab reveal" src="Assets/About/doodle-crab.png" alt="">
+      <img class="a-doodle d-scissors reveal" src="Assets/About/doodle-scissors.png" alt="">
+      <img class="a-doodle d-duck reveal" src="Assets/About/doodle-duck.png" alt="">
+      <img class="a-doodle d-shell reveal" src="Assets/About/doodle-shell.png" alt="">
+      <img class="a-doodle d-cookie reveal" src="Assets/About/doodle-cookie.png" alt="">
+      <img class="a-doodle d-book reveal" src="Assets/About/doodle-book.png" alt="">
+    </div>
+
+    <div>
+      <section class="page-head">
+        <p class="eyebrow">About</p>
+        <h1 class="h1-display">Shambhavi Jaipuriar</h1>
+      </section>
+
+      <!-- Bio, verbatim from CONTEXT.md aside from the role phrase, per your instruction -->
+      <section class="a-bio">
+        <p>I am a concept and brand designer specialising in <strong>branding</strong> and <strong>visual identity</strong>. My work captures the essence of people, places, and relationships through a visual style that is expressive, balancing playfulness with intention, without losing depth.</p>
+        <p>I strive to create engaging brand experiences that feel <strong>approachable, empathetic and have great recall value</strong>. Helping people interact with brands and form genuine connections with them. I specially enjoy working on tangible, hands-on projects that bring a human touch to design, making experiences feel more personal and real.</p>
+        <p>Through my designs, I aim to bring <strong>diverse stories</strong> to light, foster <strong>representation</strong>, and translate emotions into <strong>visuals that resonate across cultures and contexts</strong>.</p>
+        <a class="pill-btn" href="Assets/resume.pdf" download style="margin-top:8px;align-self:flex-start">Download resume →</a>
+      </section>
+    </div>
+  </div>
+
+  <section class="a-facts">
+    <div>
+      <span class="fact-label">Education</span>
+      <div class="edu-row"><b>World University of Design, Haryana</b><span>B.Des, Graphic and Communication Design · 2021–2025</span></div>
+      <div class="edu-row"><b>Nuova Accademia di Belle Arti (NABA), Milan</b><span>Semester abroad · Jan–May 2024</span></div>
+      <div class="edu-row"><b>Notre Dame Academy, Patna</b><span>CBSE, X and XII · 2009–2021</span></div>
+    </div>
+    <div>
+      <span class="fact-label">Experience</span>
+      <div class="role">
+        <div class="role-head"><b>BoopShaillyBoop, Founder</b><span>2026–present</span></div>
+        <ul>
+          <li>Founded and run an <strong>art mail club</strong>, one hand-made envelope a month.</li>
+          <li>Designed the brand and packaging, then <strong>built the site, checkout and accounting tools myself</strong>.</li>
+        </ul>
+      </div>
+      <div class="role">
+        <div class="role-head"><b>Indian Institute of Packaging, Delhi</b><span>2025</span></div>
+        <ul>
+          <li>Developed <strong>SANAT</strong>, a brand and packaging system for Saharanpur's wood carving craft, under IIP's ODOP contract.</li>
+          <li>Conducted <strong>field research</strong> on Abdul Salam Road and delivered the concept for state handover.</li>
+        </ul>
+      </div>
+      <div class="role">
+        <div class="role-head"><b>Lombardi Hotels, Italy</b><span>Summer 2024</span></div>
+        <ul>
+          <li>Rebranded a <strong>three-property hotel group</strong>, one identity across Hotel Adriatico, Hotel Atlas and Residence Rosa.</li>
+          <li>Designed <strong>Alice</strong>, a character built from the group's own audience research, and the campaign around her.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="a-skills">
+    <h2>Skills</h2>
+    <div class="skills-grid">
+      <div><span class="fact-label">Design</span><p>Brand strategy, visual identity, packaging, campaigns, character design, art direction</p></div>
+      <div>
+        <span class="fact-label">Software</span>
+        <div class="sw-icons">
+          <img src="Assets/About/icon-illustrator.png" alt="Adobe Illustrator">
+          <img src="Assets/About/icon-photoshop.png" alt="Adobe Photoshop">
+          <img src="Assets/About/icon-indesign.png" alt="Adobe InDesign">
+          <img src="Assets/About/icon-lightroom.png" alt="Adobe Lightroom">
+          <img src="Assets/About/icon-aftereffects.png" alt="Adobe After Effects">
+          <img src="Assets/About/icon-figma.png" alt="Figma">
+          <img src="Assets/About/icon-procreate.png" alt="Procreate">
+        </div>
+      </div>
+      <div><span class="fact-label">Build</span><p>Claude Code, ChatGPT, HTML, CSS, JavaScript, Razorpay, double-entry bookkeeping</p></div>
+      <div><span class="fact-label">Languages</span><p>English, Hindi</p></div>
+    </div>
+  </section>
+</div>
+
+<footer class="site-footer" id="site-footer">
+  <div class="footer-content">
+    <p class="eyebrow">Contact</p>
+    <h2>Let's talk</h2>
+    <p class="footer-open">I'm looking for a full-time design role: brand, identity, packaging, campaigns. I take on freelance alongside that, and I'm happy working remote or relocating for the right one. I've worked a summer in Italy and I run a business out of my own kitchen table, so distance has never been the difficult part.</p>
+    <div class="footer-grid">
+      <div class="footer-item"><span class="fact-label">Email</span><a class="val" href="mailto:shambhavijaipuriar.work@gmail.com">shambhavijaipuriar.work@gmail.com</a></div>
+      <div class="footer-item"><span class="fact-label">Instagram</span><a class="val" href="https://instagram.com/shambhavijaipuriar" target="_blank" rel="noopener">@shambhavijaipuriar</a></div>
+      <div class="footer-item"><span class="fact-label">Location</span><span class="val plain">Delhi / Gurugram, India</span></div>
+      <div class="footer-item"><span class="fact-label">Phone</span><span class="val plain">Available on request</span></div>
+    </div>
+  </div>
+  <div class="footer-legal">Selected work, 2024–26</div>
+</footer>
+
+<script>
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: .12 });
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+</script>
+
+<script src="nav-scroll.js"></script>
+
+</body>
+</html>

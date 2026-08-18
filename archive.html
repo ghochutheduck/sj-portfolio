@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Archive, Side Quests, Craft and Photographs | Shambhavi Jaipuriar</title>
+<meta name="description" content="Things made by hand and pictures taken along the way. Quilling, clay, linocut, calligraphy, collage, and photographs from Saharanpur, Gabicce Mare and Milan.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="design.css">
+<style>
+  /* ---------- arc/circle stage ---------- */
+  /* Desktop (>=640px, motion allowed): scatter -> line -> circle -> scroll
+     drives circle into an arc and rotates it. Real document scroll only,
+     never hijacked — DESIGN.md D-42.
+     Phone (<640px, motion allowed): scatter -> line -> circle, then it
+     holds. No arc — tested against real overlap measurements at 375px and
+     it doesn't hold up at any card size (D-45, D-50). The page releases
+     into normal scroll immediately after, no long pinned section.
+     Reduced motion (any width): plain static mosaic, no movement at all. */
+  .arc-stage{ position:relative; }
+  body.mode-arc .arc-stage{ height:280vh; }
+  body.mode-circle .arc-stage{ height:100vh; }
+  body.mode-mosaic .arc-stage{ display:none; }
+
+  .arc-viewport{ height:100vh; width:100%; overflow:hidden; background:var(--paper); }
+  body.mode-arc .arc-viewport{ position:sticky; top:0; }
+  body.mode-circle .arc-viewport{ position:relative; }
+
+  .arc-field{ position:absolute; inset:0; }
+
+  .reveal-text{
+    position:absolute; left:50%; top:50%;
+    transform:translate(-50%,-50%);
+    font-family:var(--display); font-weight:400; font-stretch:62.5%;
+    text-transform:uppercase; /* caps, roman — not italic. Italic is never
+       caps, per the brand guide's own typographic law; D-49 corrects the
+       earlier draft that broke that rule. */
+    font-size:clamp(28px,3.6vw,46px); letter-spacing:-.01em; line-height:1;
+    color:var(--ink);
+    opacity:0; pointer-events:none; white-space:nowrap; z-index:50;
+    will-change:transform,opacity;
+  }
+
+  .a-card{
+    position:absolute; left:50%; top:50%;
+    background:var(--stage); border:1px solid var(--rule); border-radius:var(--radius);
+    display:flex; align-items:flex-end; justify-content:flex-start;
+    will-change:transform; cursor:pointer;
+  }
+  .a-card--portrait{ width:140px; height:190px; }
+  .a-card--landscape{ width:190px; height:140px; }
+  @media(max-width:1000px){
+    .a-card--portrait{ width:110px; height:150px; }
+    .a-card--landscape{ width:150px; height:110px; }
+  }
+  @media(max-width:480px){
+    .a-card--portrait{ width:78px; height:106px; }
+    .a-card--landscape{ width:106px; height:78px; }
+  }
+
+  .a-card .idx{
+    position:absolute; top:10px; left:12px;
+    font-size:12px; font-weight:500; color:var(--muted);
+    letter-spacing:.04em; font-variant-numeric:tabular-nums;
+    transition:opacity .3s var(--ease-reveal);
+  }
+  .a-card .scrim{
+    position:absolute; inset:0; background:var(--ink); opacity:0;
+    display:flex; align-items:flex-end; justify-content:flex-start; padding:12px;
+    transition:opacity .3s var(--ease-reveal); pointer-events:none;
+  }
+  .a-card .cap{ opacity:0; transition:opacity .3s var(--ease-reveal); }
+  .a-card .cap .t1{ display:block; font-size:13px; font-weight:600; color:var(--paper); line-height:1.35; }
+  .a-card .cap .t2{ display:block; font-size:12px; font-weight:400; color:var(--paper); opacity:.75; line-height:1.4; padding-top:2px; }
+  .a-card:hover .scrim, .a-card:focus-visible .scrim, .a-card.is-open .scrim{ opacity:.7; }
+  .a-card:hover .cap, .a-card:focus-visible .cap, .a-card.is-open .cap{ opacity:1; }
+  .a-card:hover .idx, .a-card:focus-visible .idx, .a-card.is-open .idx{ opacity:0; }
+
+  /* ---------- mosaic fallback: reduced motion only ---------- */
+  .mosaic-grid{
+    display:none; grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+    gap:var(--gut); padding:56px 0 0;
+  }
+  .mosaic-grid .a-card{ position:static; width:auto; height:auto; aspect-ratio:140/190; }
+  .mosaic-grid .a-card--landscape{ aspect-ratio:190/140; }
+  body.mode-mosaic .mosaic-grid{ display:grid; }
+
+  /* ---------- page sections, below the fold ---------- */
+  .a-section{padding-top:var(--sp-xl);border-top:1px solid var(--rule)}
+  .a-section:first-of-type{margin-top:var(--sp-xl)}
+  .a-section h2{
+    font-family:var(--display);font-weight:400;font-stretch:62.5%;text-transform:uppercase;
+    font-size:clamp(26px,3vw,38px);letter-spacing:-.01em;
+  }
+  .a-section p{font-size:17px;line-height:1.65;color:var(--ink);max-width:64ch;padding-top:18px}
+  .a-section p+p{margin-top:4px}
+  .a-pending{
+    margin-top:24px;padding:24px;border:1px dashed var(--rule);border-radius:var(--radius);
+    font-size:13px;color:var(--muted);max-width:64ch;
+  }
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="name"><a href="index.html">Shambhavi Jaipuriar</a></div>
+  <nav>
+    <a href="index.html#work">Work</a>
+    <a href="about.html">About</a>
+    <a href="archive.html">Archive</a>
+    <a href="#site-footer">Contact</a>
+  </nav>
+</header>
+
+<div class="arc-stage" id="stage">
+  <div class="arc-viewport" id="viewport">
+    <div class="arc-field" id="field">
+      <div class="reveal-text" id="revealText">Side quests</div>
+    </div>
+  </div>
+</div>
+
+<div class="mosaic-grid" id="mosaic"></div>
+
+<div class="wrap">
+  <section class="a-section" style="border-top:none;padding-top:var(--sp-m)">
+    <p class="eyebrow">Archive</p>
+    <h2 style="font-size:clamp(34px,4vw,52px)">Archive</h2>
+    <p>I have been making things since long before it was a job. Photos, places, and things that never had a brief.</p>
+  </section>
+
+  <section class="a-section">
+    <h2>The making</h2>
+    <p>Quilling, clay, knitting, calligraphy, linocut, collage, sewing, pattern making. If it can be made by hand, I've probably tried it.</p>
+    <p>Not one of these is a specialism, and that's rather the point. Most of them turn up in the work eventually, usually as knowing what a material will actually do before I design something out of it.</p>
+  </section>
+
+  <section class="a-section">
+    <h2>Words</h2>
+    <p>Public speaking, debates and elocutions are my cup of tea, and I write short stories for toddlers, which is harder than it sounds. In 2023 I suggested my university should have a literary society, on the grounds that it was strange that it didn't. Three other people agreed, and The Inkwell Society happened. I designed it, coordinated it for a year, and handed it over. It's still going.</p>
+  </section>
+
+  <section class="a-section">
+    <h2>Photographs</h2>
+    <p>Saharanpur, Gabicce Mare, Milan, home. Some of these ended up in case studies. Most didn't.</p>
+    <div class="a-pending">Images pending. This section is built and ready: drop the photographs into <code>Assets/Archive/</code> and they slot straight in.</div>
+  </section>
+
+  <section class="a-section">
+    <h2>Experiments</h2>
+    <p>Things made for no reason, with nobody to approve them.</p>
+    <div class="a-pending">Images pending, same as above.</div>
+  </section>
+</div>
+
+<footer class="site-footer" id="site-footer">
+  <div class="footer-content">
+    <p class="eyebrow">Contact</p>
+    <h2 style="font-family:var(--display);font-weight:400;font-stretch:62.5%;text-transform:uppercase;font-size:clamp(26px,3vw,38px);letter-spacing:-.01em">Let's talk</h2>
+    <p class="footer-open">I'm looking for a full-time design role: brand, identity, packaging, campaigns. I take on freelance alongside that, and I'm happy working remote or relocating for the right one. I've worked a summer in Italy and I run a business out of my own kitchen table, so distance has never been the difficult part.</p>
+    <div class="footer-grid">
+      <div class="footer-item"><span class="fact-label">Email</span><a class="val" href="mailto:shambhavijaipuriar.work@gmail.com">shambhavijaipuriar.work@gmail.com</a></div>
+      <div class="footer-item"><span class="fact-label">Instagram</span><a class="val" href="https://instagram.com/shambhavijaipuriar" target="_blank" rel="noopener">@shambhavijaipuriar</a></div>
+      <div class="footer-item"><span class="fact-label">Location</span><span class="val plain">Delhi / Gurugram, India</span></div>
+      <div class="footer-item"><span class="fact-label">Phone</span><span class="val plain">Available on request</span></div>
+    </div>
+  </div>
+  <div class="footer-legal">Selected work, 2024–26</div>
+</footer>
+
+<script>
+(function(){
+  // Curated count: you said you'd pick however many pieces fit the phone's
+  // circle without overlapping, and use that same number on desktop. 10 is
+  // a placeholder sized to the legibility range the phone test confirmed
+  // (roughly 8-10 at this card size) — change this constant once you've
+  // settled on real images. Cards are still blank placeholders throughout.
+  var TOTAL = 10;
+
+  var field = document.getElementById('field');
+  var mosaic = document.getElementById('mosaic');
+  var stage = document.getElementById('stage');
+  var viewport = document.getElementById('viewport');
+  var revealText = document.getElementById('revealText');
+
+  var cards = [];
+  for (var i = 0; i < TOTAL; i++){
+    cards.push({ i: i, landscape: (i % 3 === 2) });
+  }
+
+  cards.forEach(function(c){
+    var el = document.createElement('div');
+    el.className = 'a-card ' + (c.landscape ? 'a-card--landscape' : 'a-card--portrait');
+    el.tabIndex = 0;
+    var n = String(c.i + 1).padStart(2,'0');
+    el.innerHTML =
+      '<span class="idx">' + n + '</span>' +
+      '<div class="scrim"><div class="cap">' +
+        '<span class="t1">Placeholder title ' + n + '</span>' +
+        '<span class="t2">One or two lines about this piece go here once it’s a real image.</span>' +
+      '</div></div>';
+    field.appendChild(el);
+    c.el = el;
+    el.addEventListener('click', function(){ el.classList.toggle('is-open'); });
+    mosaic.appendChild(el.cloneNode(true));
+  });
+
+  var loadStart = performance.now();
+  cards.forEach(function(c, i){
+    var sx = (Math.random() - 0.5) * Math.min(window.innerWidth * 1.2, 1400);
+    var sy = (Math.random() - 0.5) * Math.min(window.innerHeight * 0.9, 700);
+    var srot = (Math.random() - 0.5) * 180;
+    c.cur = { x: sx, y: sy, rot: srot, scale: 0.6, opacity: 0 };
+    c.delay = i * 24;
+  });
+
+  function lerp(a, b, t){ return a * (1 - t) + b * t; }
+  function clamp(v, lo, hi){ return Math.min(hi, Math.max(lo, v)); }
+
+  var phase = 'scatter';
+  setTimeout(function(){ if (phase === 'scatter') phase = 'line'; }, 500);
+  setTimeout(function(){ if (phase === 'line') phase = 'circle'; }, 2200);
+
+  // Bug: the scatter/line/circle entrance plays on a fixed timer, but the
+  // sticky pin that holds the arc on screen is driven by real scroll
+  // position — two independent clocks. A user who scrolls fast the moment
+  // the page loads can outrun the timer: the sticky region releases and the
+  // whole arc scrolls off before the circle has even formed, which reads as
+  // the arc leaving the page mid-animation. Fix: the instant real scrolling
+  // is detected, skip straight to 'circle' so the scroll-driven arc math
+  // takes over immediately — same clock as the sticky pin, so it can never
+  // be outrun again. Someone who never touches the scroll wheel still gets
+  // the full timed entrance, per D-47.
+
+  function lineTarget(i, total, W){
+    var refW = 150, lineScale = 0.55;
+    var spacing = Math.min(refW * lineScale + 10, (W * 0.9) / Math.max(total - 1, 1));
+    var totalWidth = spacing * (total - 1);
+    var x = i * spacing - totalWidth / 2;
+    return { x: x, y: 0, rot: 0, scale: lineScale, opacity: 1 };
+  }
+
+  function ringArcTarget(i, total, morphValue, rotateProgress, parallax, W, H){
+    var circleRadius = Math.min(Math.min(W, H) * 0.35, 350);
+    var angle = (i / total) * 360;
+    var rad = angle * Math.PI / 180;
+    var circle = { x: Math.cos(rad) * circleRadius, y: Math.sin(rad) * circleRadius, rot: angle + 90, scale: 1 };
+
+    var arcRadius = Math.min(W, H * 1.5) * 1.1;
+    var arcApexY = H * 0.25;
+    var arcCenterY = arcApexY + arcRadius;
+    var spreadAngle = 130;
+    var startAngle = -90 - spreadAngle / 2;
+    var step = spreadAngle / (total - 1);
+    var maxRotation = spreadAngle * 0.8;
+    var boundedRotation = -rotateProgress * maxRotation;
+    var curAngle = startAngle + i * step + boundedRotation;
+    var arad = curAngle * Math.PI / 180;
+
+    var arc = {
+      x: Math.cos(arad) * arcRadius + parallax,
+      y: Math.sin(arad) * arcRadius + arcCenterY,
+      rot: curAngle + 90,
+      scale: 1.3
+    };
+
+    return {
+      x: lerp(circle.x, arc.x, morphValue), y: lerp(circle.y, arc.y, morphValue),
+      rot: lerp(circle.rot, arc.rot, morphValue), scale: lerp(circle.scale, arc.scale, morphValue),
+      opacity: 1, arcApexY: arcApexY
+    };
+  }
+
+  function circleOnlyTarget(i, total, W, H){
+    // Radius sized so the ring's circumference actually fits the card count
+    // at this width, rather than a fixed fraction of viewport — otherwise
+    // small screens and higher counts overlap regardless of card size, the
+    // exact failure the desktop arc was dropped for at 18 cards (D-45).
+    // Chord between neighbouring centres needs to clear roughly one card's
+    // width; solved for radius given the angular step.
+    var refCard = W < 480 ? 106 : 150;
+    var stepRad = (2 * Math.PI) / total;
+    var neededRadius = (refCard * 1.05) / (2 * Math.sin(stepRad / 2));
+    var circleRadius = Math.min(neededRadius, Math.min(W, H) * 0.42);
+    var angle = (i / total) * 360;
+    var rad = angle * Math.PI / 180;
+    return { x: Math.cos(rad) * circleRadius, y: Math.sin(rad) * circleRadius, rot: angle + 90, scale: 1, opacity: 1 };
+  }
+
+  var progress = 0;
+  function updateProgress(){
+    var rect = stage.getBoundingClientRect();
+    var stageTop = rect.top + window.scrollY;
+    var stageHeight = stage.offsetHeight;
+    var vh = window.innerHeight;
+    progress = clamp((window.scrollY - stageTop) / (stageHeight - vh), 0, 1);
+  }
+  window.addEventListener('scroll', function(){
+    updateProgress();
+    if (phase !== 'circle' && window.scrollY > 2){ phase = 'circle'; }
+  }, { passive: true });
+
+  var mouseTarget = 0, mouseCur = 0;
+  var hasFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (hasFinePointer){
+    viewport.addEventListener('mousemove', function(e){
+      var rect = viewport.getBoundingClientRect();
+      var nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      mouseTarget = nx * 30;
+    });
+  }
+
+  // ---- mode: arc (desktop) / circle (phone) / mosaic (reduced motion) ----
+  var reduceMQ = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var mode = 'arc';
+  function applyMode(){
+    if (reduceMQ.matches) mode = 'mosaic';
+    else if (window.innerWidth < 640) mode = 'circle';
+    else mode = 'arc';
+    document.body.classList.remove('mode-arc','mode-circle','mode-mosaic');
+    document.body.classList.add('mode-' + mode);
+  }
+  applyMode();
+  window.addEventListener('resize', applyMode);
+  reduceMQ.addEventListener('change', applyMode);
+
+  var textCur = { y: 0, opacity: 0 };
+  var EASE = 0.12;
+
+  function tick(now){
+    if (mode !== 'mosaic'){
+      var W = window.innerWidth, H = window.innerHeight;
+      var elapsed = now - loadStart;
+      var inCircle = (phase === 'circle');
+      var morphValue = 0, rotateProgress = 0, lastRingArc = null;
+
+      if (mode === 'arc' && inCircle){
+        updateProgress();
+        morphValue = clamp(progress / 0.5, 0, 1);
+        rotateProgress = clamp((progress - 0.5) / 0.5, 0, 1);
+      }
+      mouseCur += (mouseTarget - mouseCur) * 0.08;
+
+      cards.forEach(function(c){
+        if (elapsed < c.delay) return;
+        var t;
+        if (phase === 'scatter'){
+          t = { x: c.cur.x, y: c.cur.y, rot: c.cur.rot, scale: 0.6, opacity: 1 };
+        } else if (phase === 'line'){
+          t = lineTarget(c.i, TOTAL, W);
+        } else if (mode === 'arc'){
+          t = ringArcTarget(c.i, TOTAL, morphValue, rotateProgress, mouseCur, W, H);
+          lastRingArc = t;
+        } else { // mode === 'circle': forms once, holds, no arc
+          t = circleOnlyTarget(c.i, TOTAL, W, H);
+        }
+
+        c.cur.x += (t.x - c.cur.x) * EASE;
+        c.cur.y += (t.y - c.cur.y) * EASE;
+        c.cur.rot += (t.rot - c.cur.rot) * EASE;
+        c.cur.scale += (t.scale - c.cur.scale) * EASE;
+        c.cur.opacity += (t.opacity - c.cur.opacity) * EASE;
+
+        c.el.style.opacity = c.cur.opacity;
+        c.el.style.transform =
+          'translate(-50%,-50%) translate(' + c.cur.x.toFixed(1) + 'px,' + c.cur.y.toFixed(1) + 'px) ' +
+          'rotate(' + c.cur.rot.toFixed(1) + 'deg) scale(' + c.cur.scale.toFixed(3) + ')';
+      });
+
+      // Reveal text: centred once the circle forms. On desktop it then
+      // travels up to the arc's crown as scroll morphs the ring; on phone
+      // there's no arc, so it just stays centred, holding as the heading.
+      var textTarget;
+      if (!inCircle){
+        textTarget = { y: textCur.y, opacity: 0 };
+      } else if (mode === 'arc'){
+        var apexY = lastRingArc ? lastRingArc.arcApexY : H * 0.25;
+        var topY = (apexY - H / 2) - 70;
+        textTarget = { y: lerp(0, topY, morphValue), opacity: 1 };
+      } else {
+        textTarget = { y: 0, opacity: 1 };
+      }
+      textCur.y += (textTarget.y - textCur.y) * EASE;
+      textCur.opacity += (textTarget.opacity - textCur.opacity) * EASE;
+      revealText.style.opacity = textCur.opacity;
+      revealText.style.transform = 'translate(-50%,-50%) translate(0px,' + textCur.y.toFixed(1) + 'px)';
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+
+<script src="nav-scroll.js"></script>
+
+</body>
+</html>

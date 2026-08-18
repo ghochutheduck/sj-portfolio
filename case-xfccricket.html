@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>XFC Cricket, Shambhavi Jaipuriar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="design.css">
+<style>
+  /* Display face, locked 8 Aug: real static extra-condensed instance
+     (font-stretch 62.5%), weight fixed at 400 always, caps carry the
+     presence instead of extra weight. Self-hosted, not a CDN link. */
+  @font-face{
+    font-family:'Noto Serif Display Extra Condensed';
+    font-style:normal; font-weight:400; font-stretch:62.5%; font-display:swap;
+    src:url('Assets/fonts/NotoSerifDisplayExtraCondensed-400.woff2') format('woff2');
+  }
+  :root{
+    --paper:#F3F1EC; --ink:#111111; --muted:#767676;
+    --rule:#E0DDD3; --red:#D92E15; --stage:#EDEAE1;
+    --pad:72px;
+    --gut:10px;
+    --display:'Noto Serif Display Extra Condensed', serif;
+    /* Official XFC values, supplied by the club. XFC Blue is a light teal, so it
+       takes dark text: white on it is only 2.1:1, ink is 9.01:1. */
+    --purple:#6C40DD; --xblue:#5FC2C6; --cyan:#5FC2C6; --ink-dark:#050510;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  h1,h2,.big,.tagline,.act h2{text-wrap:balance}
+  p,figcaption,.say p{text-wrap:pretty}
+  header .name a{color:inherit;text-decoration:none}
+  html{scroll-behavior:smooth}
+  html,body{overflow-x:hidden}
+  body{background:var(--paper);color:var(--ink);font-family:'Inter Tight',-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1440px;margin:0 auto;padding:0 var(--pad)}
+
+  header{display:flex;justify-content:space-between;align-items:baseline;padding:40px var(--pad) 0;max-width:1440px;margin:0 auto}
+  .name{font-size:14px;font-weight:600;letter-spacing:-.01em}
+  nav{display:flex;gap:36px}
+  nav a{font-size:14px;color:var(--ink);text-decoration:none}
+  nav a:hover{color:var(--red)}
+
+  h1{font-family:var(--display);font-weight:400;font-stretch:62.5%;text-transform:uppercase;font-size:clamp(52px,6.4vw,92px);letter-spacing:-.01em;line-height:.98;padding-top:80px}
+  .tagline{font-size:clamp(19px,1.7vw,24px);line-height:1.4;letter-spacing:-.015em;max-width:680px;padding-top:20px;color:var(--muted)}
+  .meta{display:flex;gap:24px 48px;padding-top:36px;flex-wrap:wrap}
+  .meta>div{display:flex;flex-direction:column;gap:6px;min-width:200px}
+  .meta .lbl{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:.06em}
+  .meta .val{font-size:14px;max-width:420px}
+
+  .act{padding-top:120px;display:flex;align-items:baseline;gap:24px;border-bottom:1px solid var(--rule);padding-bottom:20px}
+  .act .num{font-size:12px;font-weight:500;color:var(--purple);letter-spacing:.06em}
+  .act h2{font-family:var(--display);font-weight:400;font-stretch:62.5%;text-transform:uppercase;font-size:clamp(34px,4vw,57px);letter-spacing:0;line-height:1}
+
+  .say{display:flex;flex-direction:column;gap:18px}
+  .say p{font-size:17px;line-height:1.6}
+  .big{font-size:clamp(24px,2.5vw,35px);font-weight:900;letter-spacing:-.03em;line-height:1.15}
+  .micro{font-size:12px;color:var(--muted);line-height:1.5;padding-bottom:10px}
+
+  .visual-note{display:flex;gap:12px;align-items:baseline;margin-top:32px;padding:16px 18px;border-left:3px solid var(--red);background:#fff;font-size:13px;line-height:1.55;max-width:820px}
+  .hero{margin-top:40px;background:var(--stage)}
+  .hero img{display:block;width:100%;height:auto}
+
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  .split{display:grid;grid-template-columns:minmax(0,46fr) minmax(0,54fr);gap:48px;align-items:start;margin-top:40px}
+  .split.rev{grid-template-columns:minmax(0,54fr) minmax(0,46fr)}
+  .split.mid{align-items:center}
+
+  .mosaic{display:grid;gap:var(--gut)}
+  .mosaic .t{overflow:hidden;background:var(--stage)}
+  .mosaic .t img{width:100%;height:100%;object-fit:cover;display:block}
+  .mosaic .t.fit{background:var(--ink-dark)}
+  .mosaic .t.fit img{object-fit:contain}
+
+  .facts{display:flex;gap:22px 40px;padding-top:28px;flex-wrap:wrap}
+  .facts>div{display:flex;flex-direction:column;gap:5px;min-width:150px}
+  .facts .lbl{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:.06em}
+  .facts .val{font-size:14px;max-width:280px}
+
+  /* dark bands, so the kit renders sit on the ground they were designed for */
+  .dark{background:var(--ink-dark);color:#fff;margin-top:56px;padding:64px 0}
+  .dark .micro{color:#9A9AA8}
+  .dark .act{border-bottom-color:#26263A}
+  .dark .say p{color:#D8D8E4}
+
+  /* annotated diagram, same system as the Lombardi page */
+  .dia{width:100%;display:block}
+  .dia text{font-family:'Inter Tight',sans-serif;fill:var(--ink)}
+  .dia .ann{font-size:13px}
+  .dia .cap{font-size:12px;fill:var(--muted);letter-spacing:.06em}
+  .dia .arrow{stroke:#9A9A9A;stroke-width:1.6;fill:none}
+  .dia-list{display:none;margin-top:20px;flex-direction:column;gap:20px}
+  .dia-list .row{display:flex;flex-direction:column;gap:10px}
+  .dia-list .row img{width:100%;max-width:280px;border-radius:6px;display:block}
+  .dia-list .row .txt{display:flex;gap:12px;font-size:14px;line-height:1.5}
+  .dia-list .row .txt b{flex:0 0 auto;font-weight:700}
+
+  /* the 75 / 25 rule, drawn as the ratio it actually is */
+  /* the 75/25 rule drawn as the ratio it actually is, each segment labelled with
+     the value taken from the final kit artwork */
+  /* Three deliberate lines per segment: name, share, value. Stacking on purpose
+     stops the narrow 25% segment wrapping its label while the 75% one does not. */
+  .ratio{display:flex;height:96px;margin-top:var(--gut);border-radius:3px;overflow:hidden;
+         border:1px solid rgba(243,241,236,.35)}
+  .ratio div{display:flex;flex-direction:column;justify-content:center;gap:3px;padding:0 14px;
+             color:#fff;min-width:0}
+  .ratio .nm{font-size:12px;font-weight:700;letter-spacing:.05em;white-space:nowrap}
+  .ratio .pct{font-size:19px;font-weight:900;letter-spacing:-.02em;line-height:1.1}
+  .ratio .hex{font-weight:500;font-size:12px;letter-spacing:.05em;opacity:.85;
+              font-variant-numeric:tabular-nums;white-space:nowrap}
+  /* On XFC's own purple ground (--ground:#6C40DD, the same value as --purple),
+     the 75% segment used to disappear into the page behind it. A right-edge
+     border on the segment itself, not just the bar's outer edge, keeps that
+     boundary readable regardless of what ground colour sits behind it. */
+  .ratio .p{flex:75;background:var(--purple);border-right:1px solid rgba(243,241,236,.35)}
+  .ratio .b{flex:25;background:var(--xblue);color:var(--ink)}
+
+  /* The Brief's own ground runs shorter than the other three acts': its
+     figure (the competition card) shrank to 82% width with breathing room
+     round it, so the split is shorter and the shared 140px has-ground
+     padding-bottom (design.css, all four case studies) reads as too much
+     leftover purple below it here specifically. ID-scoped so the other
+     three grounds on this page keep the shared value. */
+  #sec-problem.has-ground{padding-bottom:100px}
+
+  .keys{margin-top:26px;display:flex;flex-direction:column;gap:14px}
+  .keys .row{display:flex;align-items:flex-start;gap:13px;font-size:17px;line-height:1.5}
+  .keys .dot{width:10px;height:10px;border-radius:50%;flex:0 0 auto;margin-top:6px;background:var(--cyan)}
+
+  .pillars{display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--gut);margin-top:28px}
+  .pillar{border:1px solid var(--rule);border-radius:3px;padding:20px 18px}
+  .pillar .n{font-size:12px;color:var(--muted);letter-spacing:.06em}
+  .pillar .v{font-size:17px;font-weight:700;letter-spacing:-.01em;padding-top:6px;color:var(--purple)}
+
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:28px;margin-top:36px}
+  .stat .n{display:block;font-size:clamp(24px,2.6vw,34px);font-weight:900;letter-spacing:-.02em;line-height:1.05}
+  .stat .l{display:block;font-size:12px;color:var(--muted);padding-top:6px;line-height:1.4;max-width:190px}
+
+  figcaption{font-size:12px;color:var(--muted);padding-top:10px;max-width:760px}
+  .dark figcaption{color:#8A8A9A}
+
+  /* legacy plain-footer rule removed: the shared .site-footer from design.css now supplies its own layout */
+
+  @media(max-width:1000px){
+    :root{--pad:24px}
+    .split,.split.rev{grid-template-columns:1fr;gap:28px}
+    .pillars{grid-template-columns:1fr}
+    .act{padding-top:80px}
+    .dia{display:none}
+    .dia-list{display:flex}
+    .ratio{height:60px}
+    .ratio div{padding:0 12px;font-size:11px}
+    #sec-problem.has-ground{padding-bottom:90px}
+    .mosaic{max-width:100%!important;margin:0!important}
+  }
+
+  /* ---------- in-project section nav ---------- */
+  [id^="sec-"]{scroll-margin-top:96px}
+
+  .pagenav{position:fixed;top:22px;left:50%;transform:translateX(-50%);z-index:100;
+           display:flex;align-items:center;gap:10px;max-width:calc(100% - 32px);
+           transition:top .35s cubic-bezier(.4,0,.2,1)}
+  .pagenav .back{width:40px;height:40px;border-radius:50%;background:#fff;border:1px solid var(--rule);
+                 display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--ink);
+                 font-size:16px;box-shadow:0 6px 20px rgba(0,0,0,.10);flex-shrink:0}
+  .pagenav .back:hover{background:var(--stage)}
+  .pagenav .links{display:flex;gap:2px;background:#fff;border:1px solid var(--rule);border-radius:100px;
+                  padding:6px;box-shadow:0 6px 20px rgba(0,0,0,.10);overflow-x:auto;max-width:100%;
+                  transition:padding .35s cubic-bezier(.4,0,.2,1),background-color .35s ease,
+                             backdrop-filter .35s ease,box-shadow .35s ease}
+  .pagenav .links a{font-family:'Inter Tight',sans-serif;font-size:12px;font-weight:500;color:var(--muted);
+                    text-decoration:none;padding:8px 16px;border-radius:100px;white-space:nowrap;
+                    transition:color .2s,background .2s;flex-shrink:0}
+  .pagenav .links a:hover{color:var(--ink)}
+  .pagenav .links a.active{color:var(--ink);background:var(--stage);font-weight:600}
+  /* on scroll-down past a small threshold, the pagenav shifts up and its
+     pill goes compact + translucent, toggled on <body> by shared JS at the
+     bottom of the page (the plain header is untouched by this) */
+  body.nav-compact .pagenav{top:14px}
+  body.nav-compact .pagenav .links{
+    padding:3px;
+    background:color-mix(in srgb, #fff 72%, transparent);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  }
+  body.nav-compact .pagenav .links a{padding:6px 12px}
+
+  @media(max-width:640px){
+    .pagenav .links a{padding:7px 12px;font-size:12px}
+    .pagenav{top:64px}
+    body.nav-compact .pagenav{top:38px}
+  }
+
+  /* ---------- tilt-in acts, DESIGN.md D-27/D-28/D-49 (this build): each
+     act after the first enters rotated 30deg about its bottom-left corner
+     and straightens as it scrolls up the viewport. Real scroll only, no
+     pinning -- pinning would desync the pagenav scroll-spy above. Colour
+     grounds per act (D-29) are applied via .has-ground in design.css: the
+     ground is a full-bleed pseudo-element inside the rotating section, so it
+     tilts in with its act. Grounds alternate with paper rather than colouring
+     every act, per D-64. ---------- */
+  [id^="sec-"]:not(#sec-overview){transform-origin:bottom left;will-change:transform}
+  @media(prefers-reduced-motion:reduce){ [id^="sec-"]{transform:none!important} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="name"><a href="index.html">Shambhavi Jaipuriar</a></div>
+  <nav><a href="index.html#work">Work</a><a href="about.html">About</a><a href="archive.html">Archive</a><a href="#site-footer">Contact</a></nav>
+</header>
+
+<nav class="pagenav" aria-label="Section navigation">
+  <a class="back" href="index.html" aria-label="Back to work">&larr;</a>
+  <div class="links">
+    <a href="#sec-overview" data-target="sec-overview">Overview</a>
+    <a href="#sec-problem" data-target="sec-problem">Problem</a>
+    <a href="#sec-solution" data-target="sec-solution">Solution</a>
+    <a href="#sec-process" data-target="sec-process">Design Process</a>
+    <a href="#sec-outcome" data-target="sec-outcome">Outcome</a>
+  </div>
+</nav>
+
+<div class="wrap" id="sec-overview">
+  <h1>XFC Cricket</h1>
+  <p class="tagline">Practice Kit 2026/27</p>
+  <div class="meta">
+    <div><span class="lbl">ROLE</span><span class="val">Kit Design · Pattern System · Concept Development</span></div>
+    <div><span class="lbl">CLIENT</span><span class="val">XFC Cricket, Dubai</span></div>
+    <div><span class="lbl">OUTCOME</span><span class="val">Winning entry, XFC Kit Design Competition 2026/27. In production for next season</span></div>
+  </div>
+</div>
+
+<div class="hero reveal">
+  <img src="Assets/XFC/lifestyle-crop.png" alt="A generated visualisation of the XFC 2026/27 practice kit design, jersey detail and full kit">
+</div>
+
+<!-- ============ 01 THE BRIEF ============ -->
+<div class="wrap has-ground on-dark" id="sec-problem" style="--ground:#6C40DD">
+  <div class="act reveal"><span class="num">01</span><h2>The Brief</h2></div>
+
+  <div class="split reveal">
+    <div>
+      <p class="big">More than a cricket club, a connected community.</p>
+      <div class="say" style="padding-top:20px">
+        <p>This season's practice kit was designed around the idea that XFC is more than a cricket club, it is a connected community.</p>
+      </div>
+      <div class="facts">
+        <div><span class="lbl">THEME</span><span class="val">Community</span></div>
+        <div><span class="lbl">LOGO</span><span class="val">Stays on the chest</span></div>
+        <div><span class="lbl">OPEN TO</span><span class="val">Drawing, design apps, AI, any creative method</span></div>
+      </div>
+
+      <p class="micro" style="padding-top:26px">The colour split was fixed by the competition rules.</p>
+      <div class="ratio">
+        <div class="p"><span class="nm">XFC PURPLE</span><span class="pct">75%</span><span class="hex">#6C40DD</span></div>
+        <div class="b"><span class="nm">XFC BLUE</span><span class="pct">25%</span><span class="hex">#5FC2C6</span></div>
+      </div>
+    </div>
+
+    <figure>
+      <div class="mosaic" style="grid-template-columns:1fr;max-width:82%;margin:0 auto">
+        <div class="t" style="aspect-ratio:1320/1557;background:transparent"><img src="Assets/XFC/competition-card.jpeg" alt="The official XFC kit design competition announcement, the club's call for next season's practice kit" style="object-fit:contain"></div>
+      </div>
+      <figcaption>The competition brief, as issued by the club.</figcaption>
+    </figure>
+  </div>
+</div>
+
+<!-- ============ 02 THE IDEA ============ -->
+<div class="wrap" id="sec-process">
+  <div class="act reveal"><span class="num">02</span><h2>From Huddle to Hexagon</h2></div>
+
+  <div class="reveal">
+    <svg class="dia" viewBox="0 0 1180 470" role="img"
+         aria-label="Three stages: an aerial sketch of players in a pre-game huddle, the same formation drawn as a circle, and the resulting hexagon.">
+      <image href="Assets/XFC/huddle-1.png" xlink:href="Assets/XFC/huddle-1.png" x="10" y="10" width="322" height="309"/>
+      <image href="Assets/XFC/huddle-2.png" xlink:href="Assets/XFC/huddle-2.png" x="422" y="10" width="355" height="309"/>
+      <image href="Assets/XFC/huddle-3.png" xlink:href="Assets/XFC/huddle-3.png" x="858" y="10" width="322" height="309"/>
+
+      <defs>
+        <marker id="xa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#9A9A9A"/>
+        </marker>
+      </defs>
+      <path class="arrow" d="M344,176 C368,150 388,150 410,166" marker-end="url(#xa)"/>
+      <path class="arrow" d="M790,176 C814,150 834,150 846,166" marker-end="url(#xa)"/>
+
+      <text class="ann" x="10" y="352">The hexagon pattern comes from</text>
+      <text class="ann" x="10" y="369">the aerial view of players standing</text>
+      <text class="ann" x="10" y="386">together in a pre-game huddle</text>
+
+      <text class="ann" x="422" y="352">The circular formation naturally</text>
+      <text class="ann" x="422" y="369">creates a structured hexagonal</text>
+      <text class="ann" x="422" y="386">silhouette</text>
+
+      <text class="ann" x="858" y="352">transforming a moment of</text>
+      <text class="ann" x="858" y="369">togetherness into the</text>
+      <text class="ann" x="858" y="386" font-weight="700">core visual identity of the kit</text>
+    </svg>
+
+    <div class="dia-list">
+      <div class="row"><img src="Assets/XFC/huddle-1.png" alt="Aerial sketch of players standing together in a pre-game huddle"><div class="txt"><b>1</b><span>The hexagon pattern comes from the aerial view of players standing together in a pre-game huddle</span></div></div>
+      <div class="row"><img src="Assets/XFC/huddle-2.png" alt="The same huddle redrawn as a circular formation"><div class="txt"><b>2</b><span>The circular formation naturally creates a structured hexagonal silhouette</span></div></div>
+      <div class="row"><img src="Assets/XFC/huddle-3.png" alt="The resulting hexagon, the kit's core visual identity"><div class="txt"><b>3</b><span>transforming a moment of togetherness into the core visual identity of the kit</span></div></div>
+    </div>
+  </div>
+
+  <p class="micro reveal" style="padding-top:26px">The hexagon symbolizes</p>
+  <div class="pillars reveal">
+    <div class="pillar"><span class="n">01</span><div class="v">Shared energy</div></div>
+    <div class="pillar"><span class="n">02</span><div class="v">Team unity</div></div>
+    <div class="pillar"><span class="n">03</span><div class="v">Collective growth</div></div>
+  </div>
+</div>
+
+<!-- ============ 03 THE JERSEY ============ -->
+<div class="dark reveal" id="sec-solution">
+  <div class="wrap">
+    <div class="act" style="padding-top:0;border-bottom:1px solid #26263A"><span class="num" style="color:var(--cyan)">03</span><h2 style="color:#fff">The Jersey</h2></div>
+
+    <div class="split mid" style="margin-top:36px">
+      <div>
+        <div class="say">
+          <p>The jersey combines layered hexagons representing the spirit of the players and the game in a gradient. It has a sleeve of interconnected network graphic to represent the wider XFC community, where each dot has its role.</p>
+        </div>
+        <div class="keys">
+          <div class="row"><span class="dot"></span><span style="color:#D8D8E4">75% XFC Purple / 25% XFC Blue</span></div>
+          <div class="row"><span class="dot"></span><span style="color:#D8D8E4">Overlapping opacity-based hexagons</span></div>
+          <div class="row"><span class="dot"></span><span style="color:#D8D8E4">Blue concentration toward lower body</span></div>
+          <div class="row"><span class="dot"></span><span style="color:#D8D8E4">Connected sleeve network graphics</span></div>
+        </div>
+      </div>
+
+      <figure>
+        <div class="mosaic" style="grid-template-columns:1fr">
+          <div class="t fit" style="aspect-ratio:2007/1217"><img src="Assets/XFC/jersey-pair.png" alt="The XFC 2026/27 jersey, front and back"></div>
+        </div>
+      </figure>
+    </div>
+
+    <div class="split rev mid" style="margin-top:var(--gut)">
+      <figure>
+        <div class="mosaic" style="grid-template-columns:1fr">
+          <div class="t fit" style="aspect-ratio:1035/891"><img src="Assets/XFC/jersey-sleeve.png" alt="Sleeve detail, a connected network of dots and lines over the hexagon field"></div>
+        </div>
+      </figure>
+      <div>
+        <div class="say">
+          <p>The sleeves symbolize the interconnected network of players, families, coaches, and supporters that make up XFC Cricket.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 04 THE KIT ============ -->
+<div class="dark reveal" style="margin-top:0;padding-top:0">
+  <div class="wrap">
+    <div class="act" style="padding-top:72px;border-bottom:1px solid #26263A"><span class="num" style="color:var(--cyan)">04</span><h2 style="color:#fff">The Kit</h2></div>
+
+    <div class="split mid" style="margin-top:36px">
+      <div>
+        <div class="say">
+          <p>Each garment was designed with a different visual weight to create a balanced training kit system. Together, the kit feels modern, cohesive and wearable</p>
+          <p>The design system combines modern cricket aesthetics with a strong emotional identity. Creating a kit that feels visually memorable both on and off the field.</p>
+        </div>
+      </div>
+      <figure>
+        <div class="mosaic" style="grid-template-columns:1fr 1.25fr;aspect-ratio:16/9">
+          <div class="t fit"><img src="Assets/XFC/kit-tops.png" alt="Jersey front and back with matching shorts"></div>
+          <div class="t fit"><img src="Assets/XFC/kit-trousers.png" alt="Full length training trousers, front and side"></div>
+        </div>
+        <figcaption>Jersey, shorts and trousers, one visual language across the set.</figcaption>
+      </figure>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 05 THE OUTCOME ============ -->
+<div class="wrap" id="sec-outcome">
+  <div class="act reveal"><span class="num">05</span><h2>The Outcome</h2></div>
+
+  <div class="split reveal">
+    <div>
+      <p class="big">The final kit delivers a modern, energetic, and professional look that reflects the spirit of XFC Cricket.</p>
+      <div class="say" style="padding-top:20px">
+        <p>The 2026/27 XFC Practice Kit was created directly from this season's theme: Community. The hexagon graphics evolved from the team huddle. The sleeve networks symbolize the wider XFC ecosystem of players, families, coaches, and supporters. The shared visual language connects every garment into one identity system.</p>
+      </div>
+      <div class="stats">
+        <div class="stat"><span class="n">Winner</span><span class="l">XFC Kit Design Competition 2026/27</span></div>
+        <div class="stat"><span class="n">Sept 2026</span><span class="l">into production, worn by the club next season</span></div>
+      </div>
+    </div>
+    <figure>
+      <div class="mosaic" style="grid-template-columns:1fr">
+        <div class="t" style="aspect-ratio:3/2"><img src="Assets/XFC/lifestyle-crop.png" alt="A generated visualisation of the XFC 2026/27 kit"></div>
+      </div>
+      <figcaption>More than a cricket club, a connected community.</figcaption>
+    </figure>
+  </div>
+
+  <div class="visual-note reveal" style="margin-top:56px">
+    <span>The kit is real and going into production. The images on this page are visualisations I generated to develop and present the design. The competition explicitly allowed any method, including AI. There are no photographs of the kit in wear, because it hasn't been made yet.</span>
+  </div>
+</div>
+
+<footer class="site-footer" id="site-footer">
+  <div class="footer-content">
+    <p class="eyebrow">Contact</p>
+    <h2 style="font-family:var(--display);font-weight:400;font-stretch:62.5%;text-transform:uppercase;font-size:clamp(26px,3vw,38px);letter-spacing:-.01em">Let's talk</h2>
+    <p class="footer-open">I'm looking for a full-time design role: brand, identity, packaging, campaigns. I take on freelance alongside that, and I'm happy working remote or relocating for the right one. I've worked a summer in Italy and I run a business out of my own kitchen table, so distance has never been the difficult part.</p>
+    <div class="footer-grid">
+      <div class="footer-item"><span class="fact-label">Email</span><a class="val" href="mailto:shambhavijaipuriar.work@gmail.com">shambhavijaipuriar.work@gmail.com</a></div>
+      <div class="footer-item"><span class="fact-label">Instagram</span><a class="val" href="https://instagram.com/shambhavijaipuriar" target="_blank" rel="noopener">@shambhavijaipuriar</a></div>
+      <div class="footer-item"><span class="fact-label">Location</span><span class="val plain">Delhi / Gurugram, India</span></div>
+      <div class="footer-item"><span class="fact-label">Phone</span><span class="val plain">Available on request</span></div>
+    </div>
+  </div>
+  <div class="footer-legal">Selected work, 2024–26</div>
+</footer>
+
+<script>
+  
+  // ---------- tilt-in acts on scroll, real scroll only, no pinning ----------
+  (function(){
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) return;
+    var sections = [].slice.call(document.querySelectorAll(String.raw`[id^="sec-"]`)).slice(1);
+    function update(){
+      var vh = window.innerHeight;
+      sections.forEach(function(el){
+        var r = el.getBoundingClientRect();
+        var start = vh, end = vh * 0.25;
+        var p = (start - r.top) / (start - end);
+        p = Math.max(0, Math.min(1, p));
+        var rot = 30 * (1 - p);
+        el.style.transform = "rotate(" + rot.toFixed(2) + "deg)";
+      });
+    }
+    window.addEventListener("scroll", update, { passive: true });
+    update();
+  })();
+
+  const io = new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  },{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // section nav scroll-spy: highlights whichever section is crossing the
+  // vertical middle band of the viewport, independent of the pill's own
+  // left-to-right order, since content order and nav order don't have to match
+  (function(){
+    const navLinks = document.querySelectorAll('.pagenav .links a');
+    const byId = {};
+    navLinks.forEach(a => byId[a.dataset.target] = a);
+    const sections = [...navLinks].map(a => document.getElementById(a.dataset.target)).filter(Boolean);
+    const spy = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(a => a.classList.remove('active'));
+          const link = byId[entry.target.id];
+          if (link) link.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-35% 0px -55% 0px', threshold: 0 });
+    sections.forEach(s => spy.observe(s));
+  })();
+
+  (function () {
+    var lastY = window.scrollY, ticking = false;
+    var THRESH = 6, TOP_BUFFER = 40;
+    function update() {
+      var y = window.scrollY;
+      var delta = y - lastY;
+      if (Math.abs(delta) > THRESH) {
+        if (y < TOP_BUFFER) document.body.classList.remove('nav-compact');
+        else if (delta > 0) document.body.classList.add('nav-compact');
+        else document.body.classList.remove('nav-compact');
+        lastY = y;
+      }
+      ticking = false;
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { requestAnimationFrame(update); ticking = true; }
+    }, { passive: true });
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Resume, Shambhavi Jaipuriar</title>
+<!--
+  PRINT SOURCE for Assets/resume.pdf. Open this file in a browser, Print,
+  destination "Save as PDF", paper size A4, margins "Default" or "None".
+  Save the result as Assets/resume.pdf. Regenerate any time this file or
+  the resume content on about.html changes; the two should stay in sync.
+
+  Phone is included here per your instruction (email + phone on the PDF,
+  email only on the site) — see COPY.md's Resume section for the reasoning
+  and the trade-off already flagged there.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+  @font-face{
+    font-family:'Noto Serif Display Extra Condensed';
+    font-style:normal; font-weight:400; font-stretch:62.5%; font-display:swap;
+    src:url('Assets/fonts/NotoSerifDisplayExtraCondensed-400.woff2') format('woff2');
+  }
+  :root{
+    --ink:#111111; --muted:#5A5A5A; --rule:#D9D5CC;
+    --display:'Noto Serif Display Extra Condensed', serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  @page{ size:A4; margin:16mm 18mm; }
+  body{
+    font-family:'Inter Tight',-apple-system,sans-serif; color:var(--ink); background:#fff;
+    -webkit-font-smoothing:antialiased; font-size:10.5pt; line-height:1.4;
+    max-width:800px; margin:0 auto; padding:24px;
+  }
+  h1{
+    font-family:var(--display); font-weight:400; font-stretch:62.5%; text-transform:uppercase;
+    font-size:32pt; letter-spacing:-.01em; line-height:.98;
+  }
+  .title{font-size:12pt; font-weight:600; color:var(--ink); padding-top:4pt}
+  .summary{font-size:10.5pt; color:var(--muted); max-width:64ch; padding-top:6px}
+  .contact-line{font-size:9.5pt; color:var(--ink); padding-top:8px}
+  .contact-line a{color:var(--ink)}
+
+  h2{
+    font-family:var(--display); font-weight:400; font-stretch:62.5%; text-transform:uppercase;
+    font-size:14pt; letter-spacing:0; margin-top:16pt; padding-bottom:4pt; border-bottom:1px solid var(--rule);
+  }
+  .role{margin-top:8pt}
+  .role-head{display:flex; justify-content:space-between; gap:12pt}
+  .role-head b{font-size:10.5pt; font-weight:700}
+  .role-head span{font-size:9pt; color:var(--muted); white-space:nowrap}
+  ul{list-style:none; margin-top:3pt}
+  li{font-size:9.5pt; line-height:1.45; padding-left:11pt; position:relative}
+  li::before{content:'–'; position:absolute; left:0; color:var(--muted)}
+
+  .edu-row,.recog-row{display:flex; justify-content:space-between; gap:12pt; padding:3pt 0; font-size:9.5pt}
+  .edu-row b{font-weight:600}
+  .edu-row span{color:var(--muted)}
+
+  /* Single column, not a grid: a simple ATS parser reads a resume top to
+     bottom, left to right, and a multi-column layout can interleave text
+     from side-by-side cells out of order. Low risk here either way since
+     these are short tag lists rather than the experience section an ATS
+     actually scores, but there's no cost to being safe. */
+  .skills-list{display:flex; flex-direction:column; gap:4pt; margin-top:6pt}
+  .skills-list .lbl{font-size:8.5pt; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); margin-right:8pt}
+  .skills-list p{font-size:9.5pt; display:inline}
+  .skills-list > div{display:flex; align-items:baseline; gap:6pt; flex-wrap:wrap}
+
+  @media print{
+    body{padding:0}
+    a{color:inherit; text-decoration:none}
+  }
+</style>
+</head>
+<body>
+
+<h1>Shambhavi Jaipuriar</h1>
+<p class="title">Concept and Brand Designer</p>
+<p class="summary">Turn concepts into brands, products and experiences. Designing, building and shipping the things they become.</p>
+<p class="contact-line">shambhavijaipuriar.com · shambhavijaipuriar.work@gmail.com · 7004435040 · Delhi / Gurugram, open to relocating and remote</p>
+
+<h2>Education</h2>
+<div class="edu-row"><b>World University of Design, Haryana</b><span>B.Des, Graphic and Communication Design · 2021–2025</span></div>
+<div class="edu-row"><b>Nuova Accademia di Belle Arti (NABA), Milan</b><span>Semester abroad · Jan–May 2024</span></div>
+<div class="edu-row"><b>Notre Dame Academy, Patna</b><span>CBSE X and XII · 2009–2021</span></div>
+
+<h2>Experience</h2>
+
+<div class="role">
+  <div class="role-head"><b>BoopShaillyBoop, Founder</b><span>2026–present · Remote, India</span></div>
+  <ul>
+    <li>Founded and run an art mail club: one hand-made envelope a month, posted from India. First issue shipped August 2026 to 31 members.</li>
+    <li>Designed the full brand identity, product and packaging, working inside a 50g postal weight limit that sets the shipping cost, the subscription price, and therefore who can afford to join.</li>
+    <li>Built the website in plain HTML, CSS and JavaScript, dependency-free, deployed from GitHub, with a documented design system.</li>
+    <li>Integrated live Razorpay checkout, a four-step member form writing into a database, and Boop Ledger, a private double-entry accounting app.</li>
+    <li>Run all operations: printing, fulfilment, postage and member communications.</li>
+  </ul>
+</div>
+
+<div class="role">
+  <div class="role-head"><b>Indian Institute of Packaging, Delhi, Intern and Degree Project</b><span>2025 · Delhi and Saharanpur</span></div>
+  <ul>
+    <li>Developed SANAT, a brand and packaging system for Saharanpur's wood carving craft, under IIP's contract with the UP Government's ODOP initiative.</li>
+    <li>Conducted field research on Abdul Salam Road, interviewing artisan families about market decline and export networks.</li>
+    <li>Designed a four-tier stacking pack, built and photographed as a finished object. Delivered the concept to IIP for handover to the state government.</li>
+  </ul>
+</div>
+
+<div class="role">
+  <div class="role-head"><b>Lombardi Hotels, Gabicce Mare, Italy, Brand Design Intern</b><span>Summer 2024 · Italy</span></div>
+  <ul>
+    <li>Rebranded a three-property hotel group facing declining reservations. One identity across Hotel Adriatico, Hotel Atlas and Residence Rosa.</li>
+    <li>Designed Alice, a character drawn from the group's own audience research, and built the campaign around her.</li>
+    <li>Launched in the season that recorded 673 Italian reservations and 3,003 Italian room nights.</li>
+  </ul>
+</div>
+
+<div class="role">
+  <div class="role-head"><b>World University of Design, Social Media Team, Paid Internship</b><span>Jan–May 2023 · Second year</span></div>
+  <ul>
+    <li>Worked on the university's official Instagram under the head of marketing. Concept development, copywriting, captions and occasional reels.</li>
+  </ul>
+</div>
+
+<div class="role">
+  <div class="role-head"><b>The Inkwell Society, World University of Design, Co-founder and Coordinator</b><span>Founded March 2023 · 2023–24</span></div>
+  <ul>
+    <li>Proposed and co-founded WUD's first literary and debate society, with three others. Designed its identity, coordinated it for a year, then handed over. Still running.</li>
+  </ul>
+</div>
+
+<h2>Selected recognition</h2>
+<div class="edu-row"><b>Winner, XFC Kit Design Competition 2026/27, Dubai</b><span>Open competition, 1,000 AED prize, in production</span></div>
+<div class="edu-row"><b>Sponsored by the Indian Institute of Packaging</b><span>SANAT, under IIP's ODOP contract</span></div>
+
+<h2>Skills</h2>
+<div class="skills-list">
+  <div><span class="lbl">Design</span><p>Brand strategy, visual identity, packaging, campaigns, character design, art direction</p></div>
+  <div><span class="lbl">Software</span><p>Illustrator, Photoshop, InDesign, Lightroom, After Effects, Figma, Procreate</p></div>
+  <div><span class="lbl">Build</span><p>Claude Code, ChatGPT, HTML, CSS, JavaScript, Razorpay, double-entry bookkeeping</p></div>
+  <div><span class="lbl">Languages</span><p>English, Hindi</p></div>
+</div>
+
+</body>
+</html>

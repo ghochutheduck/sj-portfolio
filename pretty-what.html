@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pretty, What?, Social Communication Design | Shambhavi Jaipuriar</title>
+<meta name="description" content="An awareness campaign and activity book addressing the sexualisation of the school-girl image in media, for girls aged 9 to 15. Sam, the campaign character, came out of this project.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="design.css">
+<style>
+  @font-face{
+    font-family:'Noto Serif Display Extra Condensed';
+    font-style:normal; font-weight:400; font-stretch:62.5%; font-display:swap;
+    src:url('Assets/fonts/NotoSerifDisplayExtraCondensed-400.woff2') format('woff2');
+  }
+  :root{
+    --pad:72px; --gut:10px;
+    --pw-yellow:#FFC94A; --pw-berry:#B5253A; --pw-lavender:#C6A8CC;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  h1,h2,.big,.tagline,.act h2{text-wrap:balance}
+  p,figcaption,.say p{text-wrap:pretty}
+  header .name a{color:inherit;text-decoration:none}
+  html{scroll-behavior:smooth}
+  .wrap{max-width:1440px;margin:0 auto;padding:0 var(--pad)}
+
+  h1{font-family:var(--display);font-weight:400;font-stretch:62.5%;text-transform:uppercase;font-size:clamp(52px,6.4vw,92px);letter-spacing:-.01em;line-height:.98;padding-top:80px}
+  .tagline{font-size:clamp(19px,1.7vw,24px);line-height:1.4;letter-spacing:-.015em;max-width:680px;padding-top:20px;color:var(--muted)}
+  .meta{display:flex;gap:24px 48px;padding-top:36px;flex-wrap:wrap}
+  .meta>div{display:flex;flex-direction:column;gap:6px;min-width:200px}
+  .meta .lbl{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:.06em}
+  .meta .val{font-size:14px;max-width:420px}
+
+  .act{padding-top:96px;display:flex;align-items:baseline;gap:24px;border-bottom:1px solid var(--rule);padding-bottom:20px}
+  .act .num{font-size:12px;font-weight:500;color:var(--pw-berry);letter-spacing:.06em}
+  .act h2{font-family:var(--display);font-weight:400;font-stretch:62.5%;text-transform:uppercase;font-size:clamp(34px,4vw,57px);letter-spacing:0;line-height:1}
+
+  .say{display:flex;flex-direction:column;gap:18px}
+  .say p{font-size:17px;line-height:1.6}
+  .big{font-size:clamp(24px,2.5vw,35px);font-weight:900;letter-spacing:-.03em;line-height:1.15}
+  .micro{font-size:12px;color:var(--muted);line-height:1.5;padding-bottom:10px}
+
+  .hero{margin-top:40px;background:var(--stage)}
+  .hero img{display:block;width:100%;height:auto}
+
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  .split{display:grid;grid-template-columns:minmax(0,46fr) minmax(0,54fr);gap:48px;align-items:start;margin-top:40px}
+  .split.rev{grid-template-columns:minmax(0,54fr) minmax(0,46fr)}
+
+  .mosaic{display:grid;gap:var(--gut)}
+  .mosaic .t{overflow:hidden;background:var(--stage);position:relative}
+  .mosaic .t img{width:100%;height:100%;object-fit:cover;display:block}
+  .mosaic .t.fit img{object-fit:contain}
+
+  .facts{display:flex;gap:22px 40px;padding-top:28px;flex-wrap:wrap}
+  .facts>div{display:flex;flex-direction:column;gap:5px;min-width:150px}
+  .facts .lbl{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:.06em}
+  .facts .val{font-size:14px;max-width:280px}
+
+  .voice{display:flex;gap:10px;margin-top:24px;flex-wrap:wrap}
+  .voice span{font-size:14px;font-weight:700;letter-spacing:.03em;padding:9px 20px;border:1px solid var(--rule);border-radius:100px}
+
+  .bars{display:flex;flex-direction:column;gap:var(--gut);margin-top:var(--gut)}
+  .bar{display:flex;justify-content:space-between;align-items:center;padding:13px 18px;border-radius:3px;font-size:14px;font-weight:700;color:#fff}
+  .bar.light{color:var(--ink)}
+  .bar .hex{font-weight:500;letter-spacing:.04em;opacity:.92}
+
+  /* the note: cream card, set apart from the rest of the case-study rhythm */
+  .origin{
+    margin-top:64px;padding:40px;background:#fff;border:1px solid var(--rule);border-radius:3px;
+    display:grid;grid-template-columns:auto 1fr;gap:32px;align-items:center;
+  }
+  .origin img{height:150px;width:auto}
+  .origin p{font-size:16px;line-height:1.65;color:var(--ink)}
+  @media(max-width:640px){ .origin{grid-template-columns:1fr;text-align:left} .origin img{height:120px} }
+
+  .asset-note{
+    margin-top:20px;padding:16px 18px;border:1px dashed var(--rule);border-radius:3px;
+    font-size:12px;color:var(--muted);max-width:64ch;
+  }
+
+  /* Lavender ground for the merch mosaic: sampled from the pin and tote
+     mockups themselves rather than invented, so the section reads as the
+     same world as the photos on it. Measured 8.88:1 for ink, 1.88:1 for
+     paper, so it takes ink type only, same rule as the case studies' light
+     grounds. */
+  .merch{
+    margin-top:56px;padding:40px;background:var(--pw-lavender);border-radius:3px;
+  }
+  .merch .micro{color:#4A3A4E}
+  .merch figcaption{color:#4A3A4E}
+  .merch-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--gut)}
+  .merch-grid .t{aspect-ratio:4/5}
+  @media(max-width:1000px){ .merch{padding:24px} .merch-grid{grid-template-columns:1fr} .merch-grid .t{aspect-ratio:4/3} }
+
+  figcaption{font-size:12px;color:var(--muted);padding-top:10px;max-width:760px}
+
+  @media(max-width:1000px){
+    :root{--pad:24px}
+    .split,.split.rev{grid-template-columns:1fr;gap:28px}
+    .act{padding-top:64px}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="name"><a href="index.html">Shambhavi Jaipuriar</a></div>
+  <nav>
+    <a href="index.html#work">Work</a>
+    <a href="about.html">About</a>
+    <a href="archive.html">Archive</a>
+    <a href="#site-footer">Contact</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <h1>Pretty, What?</h1>
+  <p class="tagline">Girls grow up being told they are pretty. The problem isn't the word. It's that it's the whole sentence.</p>
+  <div class="meta">
+    <div><span class="lbl">ROLE</span><span class="val">Research + Strategy · Campaign Concept · Character Design · Publication Design</span></div>
+    <div><span class="lbl">WHEN &amp; WHERE</span><span class="val">Semester 3 · World University of Design · 2023</span></div>
+    <div><span class="lbl">AGE GROUP</span><span class="val">Girls aged 9–15, and their caregivers</span></div>
+  </div>
+</div>
+
+<div class="hero reveal">
+  <img src="Assets/PrettyWhat/book-spread-intro.jpg" alt="Sam Says: Pretty What? activity book cover beside its introduction spread">
+</div>
+
+<!-- ============ 01 THE BRIEF ============ -->
+<div class="wrap" id="sec-problem">
+  <div class="act reveal"><span class="num">01</span><h2>The Brief</h2></div>
+
+  <div class="split reveal">
+    <div>
+      <p class="big">Girls are told they are pretty early, and often.</p>
+      <div class="say" style="padding-top:20px">
+        <p>By family, by strangers, by the media they consume, before they have the language to question it. Over years of exposure, the result is a narrowing: the sense that looking pleasing is the most important thing you can be.</p>
+        <p>This project addresses the sexualisation of the school-girl image in media, and its effects on pre and early teen girls aged 9 to 15. The challenge was an awareness campaign that could reach this age group and their caregivers in a way that felt safe and empowering, not preachy or frightening.</p>
+        <p>It had to work across schools, NGOs and social media, without a formal facilitator to deliver it.</p>
+      </div>
+    </div>
+    <figure>
+      <div class="mosaic" style="grid-template-columns:1fr">
+        <div class="t" style="aspect-ratio:4/3"><img src="Assets/PrettyWhat/book-pages-colouring.jpg" alt="Two colouring pages from the activity book, Sam is pretty brave, Sam is pretty kind"></div>
+      </div>
+      <figcaption>Two pages from the activity book. Sam getting a vaccine, and Sam looking out for a younger kid.</figcaption>
+    </figure>
+  </div>
+</div>
+
+<!-- ============ 02 MEET SAM ============ -->
+<div class="wrap">
+  <div class="act reveal"><span class="num">02</span><h2>Meet Sam</h2></div>
+
+  <div class="split rev reveal">
+    <figure>
+      <div class="mosaic" style="grid-template-columns:1fr 1fr">
+        <div class="t" style="aspect-ratio:3/4;background:#fff"><img src="Assets/Sam/sam-standing.png" alt="Sam, the campaign character: a twelve-year-old in a yellow coat, round glasses and a knitted beret" style="object-fit:contain"></div>
+        <div class="t" style="aspect-ratio:3/4;background:#fff"><img src="Assets/Sam/sam-expressions.jpg" alt="Sam's expression sheet: eight poses, from thinking to mid-jump, in the same yellow coat" style="object-fit:contain"></div>
+      </div>
+      <figcaption>The expression sheet the rest of Sam's appearances on this site are drawn from.</figcaption>
+    </figure>
+    <div>
+      <p class="big">Sam is 12. Her favourite colour is yellow. Every time someone calls her pretty, she asks: Pretty, what?</p>
+      <div class="say" style="padding-top:20px">
+        <p>Sam is the campaign mascot: a curious, chatty twelve-year-old, completely comfortable in her own world. She's modelled in part on Olive from <em>Little Miss Sunshine</em>, a child with no interest in being anyone else's idea of pretty.</p>
+        <p>Not aspirational in the conventional sense. Achievable. Already enough.</p>
+      </div>
+      <p class="micro" style="padding-top:26px">Palette.</p>
+      <div class="bars">
+        <div class="bar" style="background:var(--pw-yellow);color:var(--ink)">Sunshine Yellow<span class="hex">Primary</span></div>
+        <div class="bar" style="background:var(--pw-berry)">Deep Red / Berry<span class="hex">Accent</span></div>
+        <div class="bar light" style="background:#fff;border:1px solid var(--rule)">Off White<span class="hex">Background</span></div>
+        <div class="bar light" style="background:var(--pw-lavender)">Soft Lavender<span class="hex">Merch</span></div>
+      </div>
+      <div class="voice"><span>Curious</span><span>Unbothered</span><span>Kind</span><span>Brave</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 03 THE ACTIVITY BOOK ============ -->
+<div class="wrap">
+  <div class="act reveal"><span class="num">03</span><h2>The Activity Book</h2></div>
+
+  <div class="split reveal">
+    <div>
+      <p class="big">A book a ten-year-old would actually want to pick up.</p>
+      <div class="say" style="padding-top:20px">
+        <p>Sam Says: Pretty What? is a colouring and activity book built around one question, asked a dozen different ways. Sam is pretty brave. Sam is pretty kind. Sam is pretty curious. Pretty, what, is left for the reader to decide about themselves.</p>
+        <p>Colouring pages sit alongside activities designed for a classroom or a kitchen table, without an adult trained to run them.</p>
+      </div>
+    </div>
+    <figure>
+      <div class="mosaic" style="grid-template-columns:1fr">
+        <div class="t" style="aspect-ratio:4/3"><img src="Assets/PrettyWhat/book-cover-alt.jpg" alt="Sam Says: Pretty What? activity book cover and its stated contents"></div>
+      </div>
+      <figcaption>The cover, and what the book sets out to do.</figcaption>
+    </figure>
+  </div>
+
+  <div class="merch reveal">
+    <p class="micro">Sam, out in the world.</p>
+    <div class="merch-grid">
+      <div class="t"><img src="Assets/PrettyWhat/merch-pins.jpg" alt="Sam enamel pins, on the rocking horse and as the pretty WHAT? wordmark, on a lavender backpack"></div>
+      <div class="t"><img src="Assets/PrettyWhat/merch-tote.jpg" alt="Three schoolgirls, one carrying a tote bag printed with Sam and the pretty WHAT? wordmark"></div>
+      <div class="t"><img src="Assets/PrettyWhat/merch-wrap.jpg" alt="The activity book in its gift wrap, with a personalised name label reading Diya Sharma, Class 4-B"></div>
+    </div>
+    <figcaption>Pins, a tote, and the book's own wrap. Merchandise concepts built to carry Sam past the book itself.</figcaption>
+  </div>
+
+  <div class="asset-note reveal">More interior pages from the book still to come. This page is built to take them as they arrive.</div>
+</div>
+
+<!-- ============ 04 WHERE THIS STARTED ============ -->
+<div class="wrap">
+  <div class="act reveal"><span class="num">04</span><h2>Where This Started</h2></div>
+
+  <div class="origin reveal">
+    <img src="Assets/Sam/sam-peek.png" alt="Sam, peeking">
+    <p>Pretty, What? was my first full design project at design school: the first time I carried something through the whole process, start to finish, in semester 3. Sam came out of it, and she stayed. You might recognise her from the cover of my portfolio. She lives there because she is, in many ways, the clearest expression of what I believe design can do: give a voice to someone who needs one.</p>
+  </div>
+</div>
+
+<footer class="site-footer" id="site-footer">
+  <div class="footer-content">
+    <p class="eyebrow">Contact</p>
+    <h2 style="font-family:var(--display);font-weight:400;font-stretch:62.5%;text-transform:uppercase;font-size:clamp(26px,3vw,38px);letter-spacing:-.01em">Let's talk</h2>
+    <p class="footer-open">I'm looking for a full-time design role: brand, identity, packaging, campaigns. I take on freelance alongside that, and I'm happy working remote or relocating for the right one. I've worked a summer in Italy and I run a business out of my own kitchen table, so distance has never been the difficult part.</p>
+    <div class="footer-grid">
+      <div class="footer-item"><span class="fact-label">Email</span><a class="val" href="mailto:shambhavijaipuriar.work@gmail.com">shambhavijaipuriar.work@gmail.com</a></div>
+      <div class="footer-item"><span class="fact-label">Instagram</span><a class="val" href="https://instagram.com/shambhavijaipuriar" target="_blank" rel="noopener">@shambhavijaipuriar</a></div>
+      <div class="footer-item"><span class="fact-label">Location</span><span class="val plain">Delhi / Gurugram, India</span></div>
+      <div class="footer-item"><span class="fact-label">Phone</span><span class="val plain">Available on request</span></div>
+    </div>
+  </div>
+  <div class="footer-legal">Selected work, 2024–26</div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  },{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+
+<script src="nav-scroll.js"></script>
+
+</body>
+</html>

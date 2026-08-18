@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shambhavi Jaipuriar, Concept & Brand Designer</title>
+<meta name="description" content="Concept and brand designer. Brand identity, packaging and campaigns: designed, built and shipped. Selected work and in-depth case studies.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="design.css">
+<style>
+  /* ---------- hero: two-line headline left, intro+status right, D-57 ---------- */
+  .hero{padding:88px 0 var(--sp-xl)}
+  .hero-grid{display:grid;grid-template-columns:1fr 300px;gap:80px;align-items:end}
+  @media(max-width:860px){ .hero-grid{grid-template-columns:1fr;gap:32px} }
+
+  .morph-h1{ position:relative; margin-top:16px; }
+  .morph-h1 .sr-text{
+    position:absolute; width:1px; height:1px; overflow:hidden;
+    clip:rect(0,0,0,0); white-space:nowrap;
+  }
+  /* forced two-line break above 480px; below that, wrap naturally rather
+     than risk the sans layer overflowing a narrow column mid-morph */
+  br.hero-break{display:block;content:''}
+  @media(max-width:480px){ br.hero-break{display:none} }
+
+  /* Serif sits in normal flow and sizes the parent — the resting state for
+     all but the ~1.35s morph. Sans and ghost overlay on top only during
+     the animation. */
+  .morph-serif{
+    position:relative; z-index:2; line-height:.98; letter-spacing:-.01em;
+    font-family:var(--display); font-weight:400; font-stretch:62.5%;
+    text-transform:uppercase; font-size:var(--fs-display); opacity:1;
+  }
+  .morph-sans{
+    position:absolute; inset:0; z-index:3; line-height:.98; letter-spacing:-.01em;
+    font-family:var(--sans); font-weight:900; font-size:calc(var(--fs-display) * .86);
+    letter-spacing:-.03em; text-transform:none; opacity:0;
+  }
+  .morph-ghost{
+    position:absolute; inset:0; z-index:1; line-height:.98; letter-spacing:-.01em;
+    font-family:var(--display); font-weight:400; font-stretch:62.5%;
+    text-transform:uppercase; font-size:var(--fs-display); color:var(--red);
+    opacity:0; pointer-events:none;
+  }
+
+  .hero-side{padding-bottom:8px}
+  .intro{font-size:14px;line-height:1.55;color:var(--muted);max-width:420px}
+  .status{display:flex;align-items:center;gap:8px;margin-top:20px;font-size:13px;font-weight:500;color:var(--ink)}
+  .status .dot{width:7px;height:7px;border-radius:50%;background:var(--red)}
+
+  /* ---------- project grid: symmetric 2x2, D-58 (reverses D-26/35/38) ---------- */
+  .work-heading{padding-top:var(--sp-xl);border-top:1px solid var(--rule)}
+  .project-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--gut);margin-top:var(--sp-m)}
+  .tile-link{display:block;text-decoration:none;color:inherit}
+  .tile{
+    position:relative; overflow:hidden; background:var(--stage);
+    border-radius:var(--radius); cursor:pointer; aspect-ratio:4/3;
+  }
+  .tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+
+  /* BoopShaillyBoop's laptop mockup is a transparent cut-out, so the tile has to
+     supply its own ground or the laptop floats on paper. Its own brand red,
+     sampled from the subscribe button in the mockup (DESIGN.md project palettes:
+     #930F23, gradient #9C1428 to #6B0B1B). Flat red read too solid next to the
+     photographed tiles; the diagonal keeps the laptop's drop shadow legible
+     against the dark corner. Carried over from the previous build. */
+  .tile--boop{background:linear-gradient(135deg,#9C1428,#6B0B1B)}
+
+  .tile-scrim{
+    position:absolute; inset:0; background:var(--ink); opacity:0;
+    display:flex; align-items:flex-end; padding:24px;
+  }
+  .tile-scrim .inner{opacity:0}
+  .tile-scrim .name{
+    font-family:var(--display); font-weight:400; font-stretch:62.5%; text-transform:uppercase;
+    font-size:clamp(22px,2.6vw,32px); line-height:1; color:var(--paper); display:block;
+  }
+  .tile-scrim .one{font-size:15px;line-height:1.4;color:var(--paper);display:block;padding-top:10px;max-width:44ch}
+  .tile-scrim .proof{font-size:19px;font-weight:900;color:var(--paper);font-variant-numeric:tabular-nums;display:block;padding-top:10px}
+  .tile-scrim .cue{font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--paper);opacity:.7;display:block;padding-top:12px}
+
+  .tile.is-expanding{
+    position:fixed; top:50%; left:50%; z-index:300;
+    width:min(88vw,640px); aspect-ratio:auto; height:min(80vh,640px);
+    transition:transform .4s var(--ease-reveal);
+  }
+  .tile.is-expanding .tile-scrim{transition:opacity .3s var(--ease-reveal) .1s;opacity:.7}
+  .tile.is-expanding .tile-scrim .inner{transition:opacity .3s var(--ease-reveal) .2s;opacity:1}
+
+  .tile-dim{
+    position:fixed; inset:0; background:var(--ink); opacity:0; z-index:290;
+    pointer-events:none; transition:opacity .3s var(--ease-reveal);
+  }
+  .tile-dim.is-on{opacity:.3;pointer-events:auto}
+
+  /* Sam as the cursor, project by project. Hover-capable pointers only
+     (fine pointer + hover, gated in JS) — touch has no cursor to replace.
+     A tiny hover zoom on the tile is the "wants to be selected" cue before
+     Sam even appears; she fades in a beat after, tracks the real pointer
+     with light easing, and stays through both clicks (expand, then
+     navigate) since `cursor:none` and the follower both persist across
+     that state change untouched. */
+  .tile-link[data-sam]:not([data-sam=""]) .tile{transition:transform .25s var(--ease-reveal)}
+  body.sam-cursor-active .tile-link[data-sam]:not([data-sam=""]):hover .tile:not(.is-expanding){transform:scale(1.015)}
+  body.sam-cursor-active{cursor:none}
+  body.sam-cursor-active a,body.sam-cursor-active button{cursor:none}
+
+  /* Base width is XFC's own size (the one you said to keep). Source images
+     don't share an aspect ratio -- the bat art is portrait, the rocking
+     horse landscape -- so a shared width alone reads very differently in
+     practice: at 110px the bat renders 110x165, the rocking horse only
+     110x62. --sam-scale is set per tile in JS from `data-sam-scale`, area-
+     matched to the bat rather than matched on any single axis, so "size"
+     means comparable visual weight, not a mismatched stretch. */
+  .sam-cursor{
+    position:fixed; top:0; left:0; z-index:400;
+    width:calc(110px * var(--sam-scale, 1)); height:auto; pointer-events:none;
+    opacity:0; transform:translate(-50%,-50%) scale(.6);
+    transition:opacity .25s var(--ease-reveal),transform .25s var(--ease-reveal),width .2s var(--ease-reveal);
+    filter:drop-shadow(0 8px 14px rgba(0,0,0,.18));
+  }
+  .sam-cursor.is-on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+
+  .tile-caption{display:flex;justify-content:space-between;align-items:baseline;padding-top:14px;gap:16px}
+  .tile-caption h3{
+    font-family:var(--display);font-weight:400;font-stretch:62.5%;text-transform:uppercase;
+    font-size:20px;letter-spacing:0;
+  }
+  .tile-caption span{font-size:12px;color:var(--muted);white-space:nowrap}
+
+  @media(max-width:1000px){
+    .project-grid{grid-template-columns:1fr}
+    .tile.is-expanding{width:92vw;height:auto;aspect-ratio:4/3}
+  }
+
+  /* ---------- show more: Sam peeking beside a centred pill, reveals Pretty What ---------- */
+  .grid-more{display:flex;justify-content:center;align-items:center;gap:0;margin-top:var(--sp-m);position:relative;min-height:64px}
+  .show-more-btn{position:relative;z-index:2}
+  .sam-peek{
+    position:absolute; right:calc(50% + 90px); bottom:-6px; height:92px; width:auto;
+    z-index:1; pointer-events:none;
+  }
+  .grid-more.is-open{display:none}
+
+  /* D-59 amended: the fifth tile is the same size as the four above it and sits
+     centred beneath them, rather than running the full grid width. It keeps the
+     2x2's own column measure so nothing about the grid's rhythm changes when it
+     opens. */
+  .extra-wrap{margin-top:var(--gut)}
+  .extra-wrap .project-grid{margin-top:0}
+  .extra-wrap .tile-link{grid-column:1/-1;width:calc(50% - var(--gut)/2);margin-inline:auto}
+  @media(max-width:1000px){ .extra-wrap .tile-link{width:100%} }
+
+  @media(max-width:640px){ .sam-peek{display:none} }
+
+  /* ---------- closing ---------- */
+  .closing{padding:var(--sp-xl) 0;border-top:1px solid var(--rule);margin-top:var(--sp-xl)}
+  .closing h2{
+    font-family:var(--display);font-weight:400;font-stretch:62.5%;text-transform:uppercase;
+    font-size:clamp(28px,3.4vw,44px);letter-spacing:-.01em;
+  }
+  .closing p{font-size:16px;line-height:1.6;color:var(--ink);max-width:60ch;padding-top:18px}
+  .closing .ghost-link{margin-top:24px;font-size:16px}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="name"><a href="index.html">Shambhavi Jaipuriar</a></div>
+  <nav>
+    <a href="#work">Work</a>
+    <a href="about.html">About</a>
+    <a href="archive.html">Archive</a>
+    <a href="#site-footer" id="contactNavLink">Contact</a>
+  </nav>
+</header>
+
+<div class="wrap">
+
+  <section class="hero">
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow">Concept &amp; brand designer</p>
+        <h1 class="morph-h1" id="morphH1">
+          <span class="sr-text">The niches hate to see me coming</span>
+          <span class="morph-layer morph-sans" aria-hidden="true">THE NICHES HATE<br class="hero-break">TO SEE ME COMING</span>
+          <span class="morph-layer morph-serif" aria-hidden="true">THE NICHES HATE<br class="hero-break">TO SEE ME COMING</span>
+          <span class="morph-ghost" aria-hidden="true">THE NICHES HATE<br class="hero-break">TO SEE ME COMING</span>
+        </h1>
+      </div>
+      <div class="hero-side">
+        <p class="intro">I turn concepts into brands, products and experiences. Designing, building and shipping the things they become.</p>
+        <div class="status"><span class="dot"></span>Open to full-time and freelance, remote preferred</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="work-heading" id="work">
+    <p class="eyebrow">Selected work</p>
+  </section>
+
+  <div class="project-grid" id="projectGrid">
+    <a class="tile-link" href="case-lombardihotels.html" data-sam="Assets/Sam/sam-sand.png" data-sam-scale="1.5">
+      <div class="tile" data-tile>
+        <img src="Assets/lombardi keys.PNG" alt="Lombardi Hotels keycards for three properties, pink, green and blue">
+        <div class="tile-scrim">
+          <div class="inner">
+            <span class="name">Lombardi Hotels</span>
+            <span class="one">One identity across three Italian hotels, and a 102-year-old woman who became the face of it.</span>
+            <span class="proof">673 Italian reservations</span>
+            <span class="cue">Read the case study →</span>
+          </div>
+        </div>
+      </div>
+      <div class="tile-caption"><h3>Lombardi Hotels</h3><span>Brand Identity · Campaign · Character · 2024</span></div>
+    </a>
+
+    <a class="tile-link" href="case-sanat.html" data-sam="Assets/Sam/sam-rockinghorse.png" data-sam-scale="1.92">
+      <div class="tile" data-tile>
+        <img src="Assets/SANAT/hero-lifestyle-render.png" alt="The SANAT packaging tower on a wooden table, printed with a Saharanpur artisan building">
+        <div class="tile-scrim">
+          <div class="inner">
+            <span class="name">SANAT</span>
+            <span class="one">A 400-year-old Saharanpur wood carving tradition, repackaged as a building you can carry home.</span>
+            <span class="proof">Built under the UP Government's ODOP initiative</span>
+            <span class="cue">Read the case study →</span>
+          </div>
+        </div>
+      </div>
+      <div class="tile-caption"><h3>SANAT</h3><span>Strategy · Identity · Packaging · 2025</span></div>
+    </a>
+
+    <a class="tile-link" href="case-boopshaillyboop.html" data-sam="Assets/Sam/sam-laptop-mail.png" data-sam-scale="1.14">
+      <div class="tile tile--boop" data-tile>
+        <img src="Assets/BoopShaillyBoop/landing page laptop mockup centred.png" alt="The BoopShaillyBoop home page on a laptop">
+        <div class="tile-scrim">
+          <div class="inner">
+            <span class="name">BoopShaillyBoop</span>
+            <span class="one">An art mail club I designed, built and ship myself. One envelope a month, made by hand.</span>
+            <span class="proof">Designed, built and shipped solo</span>
+            <span class="cue">Read the case study →</span>
+          </div>
+        </div>
+      </div>
+      <div class="tile-caption"><h3>BoopShaillyBoop</h3><span>Brand · Product · Digital Build · 2026</span></div>
+    </a>
+
+    <a class="tile-link" href="case-xfccricket.html" data-sam="Assets/Sam/sam-swing-bat-web.png" data-sam-scale="0.9">
+      <div class="tile" data-tile>
+        <img src="Assets/XFC/xfc-card.jpg" alt="A young player in the winning XFC Cricket practice shirt for the 2026/27 season, on the field">
+        <div class="tile-scrim">
+          <div class="inner">
+            <span class="name">XFC Cricket</span>
+            <span class="one">A winning practice kit built from the shape of a team huddle. Going into production.</span>
+            <span class="proof">Winner, open competition, Dubai</span>
+            <span class="cue">Read the case study →</span>
+          </div>
+        </div>
+      </div>
+      <div class="tile-caption"><h3>XFC Cricket</h3><span>Concept · Visual System · Apparel · 2026</span></div>
+    </a>
+  </div>
+
+  <div class="grid-more" id="gridMore">
+    <img class="sam-peek sam-jiggle" src="Assets/Sam/sam-peek.png" alt="" aria-hidden="true">
+    <button class="pill-btn show-more-btn" id="showMoreBtn">Show one more →</button>
+  </div>
+
+  <div class="extra-wrap" id="extraWrap" hidden>
+    <div class="project-grid">
+      <a class="tile-link" href="pretty-what.html" data-sam="Assets/Sam/sam-jump-wave.png" data-sam-scale="0.62">
+        <div class="tile" data-tile>
+          <img src="Assets/PrettyWhat/book-cover-card.jpg" alt="The Sam Says: Pretty What? activity book standing open on a desk, with pencils and crayons">
+          <div class="tile-scrim">
+            <div class="inner">
+              <span class="name">Pretty, What?</span>
+              <span class="one">An activity book and campaign character for girls told, before anything else, that they're pretty.</span>
+              <span class="proof">Sam, who has followed me into every project since</span>
+              <span class="cue">Read the case study →</span>
+            </div>
+          </div>
+        </div>
+        <div class="tile-caption"><h3>Pretty, What?</h3><span>Social Communication Design · 2023</span></div>
+      </a>
+    </div>
+  </div>
+
+  <section class="closing">
+    <h2>Taking on new work</h2>
+    <p>I want to take brands from the first idea to the thing people actually hold. Full-time roles, freelance, remote either way.</p>
+    <a class="ghost-link" href="mailto:shambhavijaipuriar.work@gmail.com">Email me →</a>
+  </section>
+
+</div>
+
+<div class="tile-dim" id="tileDim"></div>
+<img class="sam-cursor" id="samCursor" src="Assets/Sam/sam-peek.png" alt="" aria-hidden="true">
+
+<footer class="site-footer" id="site-footer">
+  <div class="footer-content">
+    <p class="eyebrow">Contact</p>
+    <h2 style="font-family:var(--display);font-weight:400;font-stretch:62.5%;text-transform:uppercase;font-size:clamp(26px,3vw,38px);letter-spacing:-.01em">Let's talk</h2>
+    <p class="footer-open">I'm looking for a full-time design role: brand, identity, packaging, campaigns. I take on freelance alongside that, and I'm happy working remote or relocating for the right one. I've worked a summer in Italy and I run a business out of my own kitchen table, so distance has never been the difficult part.</p>
+    <div class="footer-grid">
+      <div class="footer-item"><span class="fact-label">Email</span><a class="val" href="mailto:shambhavijaipuriar.work@gmail.com">shambhavijaipuriar.work@gmail.com</a></div>
+      <div class="footer-item"><span class="fact-label">Instagram</span><a class="val" href="https://instagram.com/shambhavijaipuriar" target="_blank" rel="noopener">@shambhavijaipuriar</a></div>
+      <div class="footer-item"><span class="fact-label">Location</span><span class="val plain">Delhi / Gurugram, India</span></div>
+      <div class="footer-item"><span class="fact-label">Phone</span><span class="val plain">Available on request</span></div>
+    </div>
+  </div>
+  <div class="footer-legal">Selected work, 2024–26</div>
+</footer>
+
+<script>
+  // ---------- section reveal ----------
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: .12 });
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+
+  // ---------- hero morph: sans -> wave -> serif, with a persistent red shadow, D-57 ----------
+  (function(){
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var sans = document.querySelector('.morph-sans');
+    var serif = document.querySelector('.morph-serif');
+    var ghost = document.querySelector('.morph-ghost');
+
+    var restOpacity = 0.22, restX = 4, restY = 5;
+
+    if (reduceMotion){
+      sans.style.opacity = 0;
+      serif.style.opacity = 1;
+      ghost.style.opacity = restOpacity;
+      ghost.style.transform = 'translate(' + restX + 'px,' + restY + 'px)';
+      return;
+    }
+
+    var svgNS = 'http://www.w3.org/2000/svg';
+    var svg = document.createElementNS(svgNS, 'svg');
+    svg.setAttribute('width', '0'); svg.setAttribute('height', '0');
+    svg.style.position = 'absolute';
+    svg.innerHTML =
+      '<defs><filter id="morphDisplace" x="-20%" y="-20%" width="140%" height="140%">' +
+      '<feTurbulence type="fractalNoise" baseFrequency="0.012 0.06" numOctaves="1" seed="4" result="noise"/>' +
+      '<feDisplacementMap in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" id="morphDisp"/>' +
+      '</filter></defs>';
+    document.body.appendChild(svg);
+    var dispEl = document.getElementById('morphDisp');
+
+    sans.style.opacity = 1;
+    sans.style.filter = 'url(#morphDisplace)';
+    serif.style.opacity = 0;
+
+    var dur = 1350, start = null; // 50% slower than the original 900ms
+    function frame(ts){
+      if (start === null) start = ts;
+      var p = Math.min((ts - start) / dur, 1);
+      var wave = Math.sin(Math.PI * p);
+
+      dispEl.setAttribute('scale', (wave * 40).toFixed(1));
+      sans.style.opacity = p < 0.5 ? 1 : Math.max(0, 1 - (p - 0.5) * 2);
+      serif.style.opacity = 1 - sans.style.opacity;
+      ghost.style.opacity = (wave * 0.5).toFixed(2);
+      ghost.style.transform = 'translate(' + (wave * 3).toFixed(1) + 'px,0)';
+
+      if (p < 1) requestAnimationFrame(frame);
+      else {
+        sans.style.opacity = 0; sans.style.filter = 'none';
+        serif.style.opacity = 1;
+        // Settle the ghost into a permanent low shadow behind the serif
+        // headline, rather than fading it to nothing (D-57 amends D-03:
+        // red now also serves as a one-off shadow on the hero's largest
+        // text, not only as punctuation).
+        ghost.style.transition = 'opacity .4s ease, transform .4s ease';
+        requestAnimationFrame(function(){
+          ghost.style.opacity = restOpacity;
+          ghost.style.transform = 'translate(' + restX + 'px,' + restY + 'px)';
+        });
+      }
+    }
+    requestAnimationFrame(frame);
+  })();
+
+  // ---------- project grid: expand to centre on click, FLIP, D-32 to D-40 ----------
+  (function(){
+    var dim = document.getElementById('tileDim');
+    var openTile = null;
+
+    function rectCenterDelta(fromRect, toRect){
+      return {
+        dx: (fromRect.left + fromRect.width / 2) - (toRect.left + toRect.width / 2),
+        dy: (fromRect.top + fromRect.height / 2) - (toRect.top + toRect.height / 2),
+        sx: fromRect.width / toRect.width,
+        sy: fromRect.height / toRect.height
+      };
+    }
+
+    function expand(tile){
+      var r0 = tile.getBoundingClientRect();
+      tile.classList.add('is-expanding');
+      var r1 = tile.getBoundingClientRect();
+      var d = rectCenterDelta(r0, r1);
+      tile.style.transition = 'none';
+      tile.style.transform = 'translate(-50%,-50%) translate(' + d.dx + 'px,' + d.dy + 'px) scale(' + d.sx + ',' + d.sy + ')';
+      tile.offsetWidth;
+      tile.style.transition = '';
+      tile.style.transform = 'translate(-50%,-50%)';
+      dim.classList.add('is-on');
+      openTile = tile;
+    }
+
+    function collapse(){
+      if (!openTile) return;
+      var tile = openTile;
+      var r0 = tile.getBoundingClientRect();
+      tile.classList.remove('is-expanding');
+      var r1 = tile.getBoundingClientRect();
+      var d = rectCenterDelta(r0, r1);
+      tile.classList.add('is-expanding');
+      tile.style.transition = 'none';
+      tile.style.transform = 'translate(-50%,-50%)';
+      tile.offsetWidth;
+      tile.style.transition = '';
+      tile.style.transform = 'translate(-50%,-50%) translate(' + (-d.dx) + 'px,' + (-d.dy) + 'px) scale(' + (1/d.sx) + ',' + (1/d.sy) + ')';
+      dim.classList.remove('is-on');
+      setTimeout(function(){
+        tile.classList.remove('is-expanding');
+        tile.style.transform = '';
+      }, 400);
+      openTile = null;
+      if (window.hideSamCursor) window.hideSamCursor();
+    }
+
+    function wireTiles(){
+      document.querySelectorAll('.tile-link').forEach(function(link){
+        if (link.dataset.wired) return;
+        link.dataset.wired = '1';
+        var tile = link.querySelector('[data-tile]');
+        link.addEventListener('click', function(e){
+          if (tile.classList.contains('is-expanding')) return;
+          e.preventDefault();
+          if (openTile && openTile !== tile) collapse();
+          expand(tile);
+        });
+      });
+    }
+    wireTiles();
+
+    dim.addEventListener('click', collapse);
+    window.addEventListener('keydown', function(e){ if (e.key === 'Escape') collapse(); });
+
+    // ---------- show more: reveal Pretty What, wire its tile too ----------
+    var gridMore = document.getElementById('gridMore');
+    var extraWrap = document.getElementById('extraWrap');
+    document.getElementById('showMoreBtn').addEventListener('click', function(){
+      extraWrap.hidden = false;
+      gridMore.classList.add('is-open');
+      wireTiles();
+    });
+  })();
+
+  // ---------- Sam as the cursor on project tiles ----------
+  // Hover-capable pointers only; touch has no cursor to swap. A cursor
+  // follower rather than the native CSS `cursor:url()` property, since
+  // browsers cap custom cursor images at roughly 32-128px -- too small for
+  // an illustration -- while a positioned element has no such limit.
+  (function(){
+    var hasFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (!hasFinePointer) return;
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    var cursor = document.getElementById('samCursor');
+    var mx = 0, my = 0, cx = 0, cy = 0, active = false;
+
+    window.addEventListener('mousemove', function(e){
+      mx = e.clientX; my = e.clientY;
+      if (!active){ cx = mx; cy = my; } // snap on entry, no travel-in from a stale position
+    });
+
+    function tick(){
+      var ease = reduceMotion ? 1 : 0.22;
+      cx += (mx - cx) * ease;
+      cy += (my - cy) * ease;
+      if (active){ cursor.style.transform = 'translate(' + cx + 'px,' + cy + 'px) translate(-50%,-50%) scale(1)'; }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+
+    function showSamCursor(src, scale){
+      cursor.src = src;
+      cursor.style.setProperty('--sam-scale', scale || 1);
+      cursor.classList.add('is-on');
+      document.body.classList.add('sam-cursor-active');
+      active = true;
+    }
+    window.hideSamCursor = function(){
+      cursor.classList.remove('is-on');
+      document.body.classList.remove('sam-cursor-active');
+      active = false;
+    };
+
+    document.querySelectorAll('.tile-link[data-sam]').forEach(function(link){
+      var src = link.dataset.sam;
+      if (!src) return; // art not supplied yet for this project
+      var scale = parseFloat(link.dataset.samScale) || 1;
+      link.addEventListener('mouseenter', function(){ showSamCursor(src, scale); });
+      link.addEventListener('mouseleave', function(){
+        var tile = link.querySelector('[data-tile]');
+        if (!tile.classList.contains('is-expanding')) window.hideSamCursor();
+      });
+    });
+
+    // The footer gets Sam too, the same thinking pose Pretty What's tile
+    // used to carry, at 30% smaller (0.87 * 0.7). The footer is the actual
+    // contact block (the nav's "Contact" link just scrolls here), so this
+    // is where the cursor swap belongs, not on the nav link itself.
+    var footer = document.getElementById('site-footer');
+    if (footer){
+      footer.addEventListener('mouseenter', function(){ showSamCursor('Assets/Sam/sam-thinking.png', 0.61); });
+      footer.addEventListener('mouseleave', function(){ window.hideSamCursor(); });
+    }
+  })();
+</script>
+
+<script src="nav-scroll.js"></script>
+
+</body>
+</html>
