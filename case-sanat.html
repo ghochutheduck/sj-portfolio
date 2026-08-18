@@ -795,6 +795,7 @@
     var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) return;
     var sections = [].slice.call(document.querySelectorAll(String.raw`[id^="sec-"]`)).slice(1);
+    var ticking = false;
     function update(){
       var vh = window.innerHeight;
       sections.forEach(function(el){
@@ -805,8 +806,11 @@
         var rot = 30 * (1 - p);
         el.style.transform = "rotate(" + rot.toFixed(2) + "deg)";
       });
+      ticking = false;
     }
-    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("scroll", function(){
+      if (!ticking){ requestAnimationFrame(update); ticking = true; }
+    }, { passive: true });
     update();
   })();
 

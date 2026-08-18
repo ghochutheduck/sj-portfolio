@@ -471,6 +471,15 @@
     if (!hasFinePointer) return;
     var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    // Preload every Sam pose up front so the first hover swaps instantly
+    // instead of stalling on a fetch+decode (that stall read as a "fidgety"
+    // cursor before this fix).
+    document.querySelectorAll('.tile-link[data-sam]').forEach(function(link){
+      var src = link.dataset.sam;
+      if (src) (new Image()).src = src;
+    });
+    (new Image()).src = 'Assets/Sam/sam-thinking.png';
+
     var cursor = document.getElementById('samCursor');
     var mx = 0, my = 0, cx = 0, cy = 0, active = false;
 
