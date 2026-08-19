@@ -142,3 +142,15 @@ Assets/XFC/previous-kits.jpeg
 Assets/XFC/rules-card.jpeg
 Assets/XFC/xfc-card-source.png
 Assets/xfc cricket kit.JPG
+
+# Working documents: project instructions, decision log, copy source and
+# research notes. They are the project's memory, not site content, and the
+# repo is the website, so anything tracked here is publicly readable at
+# /HANDOFF.md and the like. Kept on disk, untracked so they are not served.
+# Earlier versions remain in git history if one is ever needed back.
+CLAUDE.md
+HANDOFF.md
+DESIGN.md
+COPY.md
+CONTEXT.md
+hosting-question.md
