@@ -61,7 +61,23 @@
   .d-shell{width:15%;top:46%;left:-8%;--rot:-4deg;--delay:.55s}
   .d-cookie{width:11%;top:50%;right:-11%;--rot:12deg;--delay:.8s}
   .d-book{width:16%;top:68%;right:-16%;--rot:-6deg;--delay:.65s}
-  @media(max-width:860px){ .a-doodle{display:none} }
+
+  /* Mobile: photo down 40% and centred, so it no longer fills the wrapper
+     width the desktop doodle offsets were tuned against. Re-enable the
+     doodles here instead of hiding them, but re-position each one inward
+     (percentages against the full wrapper, no negative offsets) so they
+     cluster against the smaller centred photo without overflowing the
+     viewport -- the desktop coordinates would push them off-screen. */
+  @media(max-width:860px){
+    .a-photo{width:60%;margin:0 auto}
+    .d-cup{width:17%;top:0;left:16%}
+    .d-crab{width:20%;top:6px;right:16%}
+    .d-scissors{width:14%;top:22%;right:8%}
+    .d-duck{width:20%;top:10%;left:8%}
+    .d-shell{width:15%;top:40%;left:8%}
+    .d-cookie{width:11%;top:44%;right:6%}
+    .d-book{width:16%;top:60%;right:4%}
+  }
 
   /* Bio: CONTEXT.md's three paragraphs, verbatim aside from the role phrase
      (D-77's "Concept & Brand Designer" now applied here too), per your
