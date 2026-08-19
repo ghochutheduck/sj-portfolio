@@ -5,3 +5,140 @@ Add a heading.jpg
 Add a heading.svg
 XFC Practice Kit 2026-27.png
 .claude/scheduled_tasks.lock
+
+# ---------------------------------------------------------------------------
+# Assets on disk but not referenced by any page. Kept locally (several are
+# source material, e.g. SANAT/drive-originals) but not tracked, so they are
+# not published: they were 304 MB of the repo's 358 MB of assets while only
+# 54 MB is actually served. If you start using one of these files on a page,
+# delete its line here and "git add" it.
+# ---------------------------------------------------------------------------
+Assets/SANAT/drive-originals/
+Assets/XFC Cricket Kit/
+Assets/BoopShaillyBoop/2 a.png
+Assets/BoopShaillyBoop/2 full.png
+Assets/BoopShaillyBoop/4 full.png
+Assets/BoopShaillyBoop/4a.png
+Assets/BoopShaillyBoop/4b.png
+Assets/BoopShaillyBoop/4c.png
+Assets/BoopShaillyBoop/4d.png
+Assets/BoopShaillyBoop/5a.png
+Assets/BoopShaillyBoop/6 full.png
+Assets/BoopShaillyBoop/8a.png
+Assets/BoopShaillyBoop/8b.png
+Assets/BoopShaillyBoop/BoopLedger/IMG_3250.PNG
+Assets/BoopShaillyBoop/BoopLedger/IMG_3252.PNG
+Assets/BoopShaillyBoop/BoopLedger/IMG_3254.PNG
+Assets/BoopShaillyBoop/BoopLedger/IMG_3255.PNG
+Assets/BoopShaillyBoop/BoopLedger/IMG_3257.PNG
+Assets/BoopShaillyBoop/BoopLedger/IMG_3259.PNG
+Assets/BoopShaillyBoop/BoopLedger/IMG_3260.PNG
+Assets/BoopShaillyBoop/BoopLedger/IMG_3261.PNG
+Assets/BoopShaillyBoop/BoopLedger/IMG_3262.PNG
+Assets/BoopShaillyBoop/BoopLedger/IMG_3263.PNG
+Assets/BoopShaillyBoop/landing page laptop mockup.png
+Assets/BoopShaillyBoop/Screenshot 2026-07-20 040417.png
+Assets/BSB page only.png
+Assets/Lombardi/15-crop.png
+Assets/Lombardi/16-crop.png
+Assets/Lombardi/19-crop.png
+Assets/Lombardi/4.png
+Assets/Lombardi/adriatico.png
+Assets/Lombardi/alice options/10.png
+Assets/Lombardi/alice options/12.png
+Assets/Lombardi/alice options/13.png
+Assets/Lombardi/alice-character-sheet.png
+Assets/Lombardi/atlas.png
+Assets/Lombardi/logo-exploration-sketch.png
+Assets/Lombardi/master.png
+Assets/Lombardi/onsite-coastview.png
+Assets/Lombardi/onsite-selfie.png
+Assets/Lombardi/rosa.png
+Assets/lombardi buggy.PNG
+Assets/Madhubani.PNG
+Assets/PrettyWhat/book-cover-mockup.jpg
+Assets/Sam/sam-swing-bat.png
+Assets/Sam/_source/sam-swing-bat.png
+Assets/sam standing.PNG
+Assets/SANAT/artisan-elder.png
+Assets/SANAT/artisan-naved-shafiq.png
+Assets/SANAT/artisan-workshop.png
+Assets/SANAT/brother-holding.png
+Assets/SANAT/card-cover.png
+Assets/SANAT/concept-2-elephants.jpg
+Assets/SANAT/debug-small.png
+Assets/SANAT/field-visit-buildings.png
+Assets/SANAT/field-visit-facade.png
+Assets/SANAT/field-visit-shopfront.png
+Assets/SANAT/hi-brother-21.png
+Assets/SANAT/hi-brother-22.png
+Assets/SANAT/hi-proto-three.png
+Assets/SANAT/hi-proto-tower.png
+Assets/SANAT/hi-retail-cafe.png
+Assets/SANAT/hi-retail-dutyfree.png
+Assets/SANAT/hi-retail-store.png
+Assets/SANAT/hr-artisan-naved-shafiq.jpg
+Assets/SANAT/hr-artisan-polishing.jpg
+Assets/SANAT/hr-brother-holding.jpg
+Assets/SANAT/hr-facade-arch.jpg
+Assets/SANAT/hr-facade-detail.jpg
+Assets/SANAT/hr-hero-three.jpg
+Assets/SANAT/hr-woodwork-tools.jpg
+Assets/SANAT/logo-clean.png
+Assets/SANAT/logo-variants.png
+Assets/SANAT/p24-tools.png
+Assets/SANAT/p25-visiting-saharanpur.png
+Assets/SANAT/p26-field-visit-street.png
+Assets/SANAT/p27-artisan-portraits.png
+Assets/SANAT/p28-process-figure1.png
+Assets/SANAT/p29-process-figure2.png
+Assets/SANAT/p30-products-figure34.png
+Assets/SANAT/p43-competitor-analysis.png
+Assets/SANAT/p47-logo-sketches.png
+Assets/SANAT/p48-logo-final.png
+Assets/SANAT/p53-brand-colours.png
+Assets/SANAT/p54-typography.png
+Assets/SANAT/p55-surface-graphics-line.png
+Assets/SANAT/p56-packaging-mockup-white.png
+Assets/SANAT/p57-packaging-elevation-tall.png
+Assets/SANAT/p58-packaging-elevation-detail.png
+Assets/SANAT/p59-packaging-elevation-domed.png
+Assets/SANAT/p60-packaging-mockup-colour.png
+Assets/SANAT/proto-carried.png
+Assets/SANAT/proto-three.png
+Assets/SANAT/proto-tower.png
+Assets/SANAT/raw-concept-inspiration.png
+Assets/SANAT/raw-concept1.png
+Assets/SANAT/raw-concept2-proto.png
+Assets/SANAT/raw-concept2.png
+Assets/SANAT/raw-concept3.png
+Assets/SANAT/raw-elephants-measured.png
+Assets/SANAT/raw-logo-clean.png
+Assets/SANAT/raw-logo-grid.png
+Assets/SANAT/raw-proto-carried.png
+Assets/SANAT/raw-proto-three.png
+Assets/SANAT/raw-proto-tower1.png
+Assets/SANAT/raw-proto-tower2.png
+Assets/SANAT/raw-retail-cafe.png
+Assets/SANAT/raw-retail-dutyfree.png
+Assets/SANAT/raw-retail-store.png
+Assets/SANAT/raw-tech-drawing.png
+Assets/SANAT/retail-cafe.png
+Assets/SANAT/retail-dutyfree.png
+Assets/SANAT/retail-store.png
+Assets/SANAT/saharanpur-academic-paper.pdf
+Assets/SANAT/woodwork-chisel.png
+Assets/SANAT/woodwork-detail.png
+Assets/SANAT/woodwork-grain.png
+Assets/Screenshot BSB Home Expanded.png
+Assets/Screenshot BSB Home.png
+Assets/Screenshot incognito expanded.png
+Assets/Screenshot incognito.png
+Assets/XFC/full-kit.png
+Assets/XFC/huddle-to-hexagon.png
+Assets/XFC/jersey.png
+Assets/XFC/lifestyle.png
+Assets/XFC/previous-kits.jpeg
+Assets/XFC/rules-card.jpeg
+Assets/XFC/xfc-card-source.png
+Assets/xfc cricket kit.JPG
