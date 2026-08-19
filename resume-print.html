@@ -11,7 +11,9 @@
 
   Phone is included here per your instruction (email + phone on the PDF,
   email only on the site) — see COPY.md's Resume section for the reasoning
-  and the trade-off already flagged there.
+  and the trade-off already flagged there. It is wrapped in .print-only so
+  it reaches the PDF without being published on this page, which is itself
+  served at a public URL.
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -72,6 +74,14 @@
     body{padding:0}
     a{color:inherit; text-decoration:none}
   }
+
+  /* The phone number belongs on the PDF but not on the web. This file is
+     served at its own public URL (the repo is the site), so anything visible
+     here is published, and the site's own footer says the number is available
+     on request. Hidden on screen, restored for print, so "Save as PDF" from
+     this page still produces a resume with the number on it. D-132. */
+  .print-only{display:none}
+  @media print{ .print-only{display:inline} }
 </style>
 </head>
 <body>
@@ -79,7 +89,7 @@
 <h1>Shambhavi Jaipuriar</h1>
 <p class="title">Concept and Brand Designer</p>
 <p class="summary">Turn concepts into brands, products and experiences. Designing, building and shipping the things they become.</p>
-<p class="contact-line">shambhavijaipuriar.com · shambhavijaipuriar.work@gmail.com · 7004435040 · Delhi / Gurugram, open to relocating and remote</p>
+<p class="contact-line">shambhavijaipuriar.com · shambhavijaipuriar.work@gmail.com<span class="print-only"> · 7004435040</span> · Delhi / Gurugram, open to relocating and remote</p>
 
 <h2>Education</h2>
 <div class="edu-row"><b>World University of Design, Haryana</b><span>B.Des, Graphic and Communication Design · 2021–2025</span></div>
