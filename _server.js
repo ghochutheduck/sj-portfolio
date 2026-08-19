@@ -6,7 +6,11 @@ const MIME = {
   '.html': 'text/html', '.css': 'text/css', '.js': 'application/javascript',
   '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg',
   '.gif': 'image/gif', '.svg': 'image/svg+xml', '.woff2': 'font/woff2',
-  '.woff': 'font/woff', '.PNG': 'image/png', '.JPG': 'image/jpeg', '.JPEG': 'image/jpeg'
+  '.woff': 'font/woff', '.PNG': 'image/png', '.JPG': 'image/jpeg', '.JPEG': 'image/jpeg',
+  // Without these two the browser gets application/octet-stream and silently
+  // refuses the modern formats, so a <picture> looks broken locally while
+  // being fine in production.
+  '.avif': 'image/avif', '.webp': 'image/webp', '.pdf': 'application/pdf'
 };
 
 const root = __dirname;
@@ -22,4 +26,9 @@ http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream' });
     res.end(data);
   });
-}).listen(8790, () => console.log('Serving D:\Portfolio Website prettier at http://localhost:8080'));
+// PORT from the environment so two sessions can preview at once; 8790 stays
+// the default so existing launch configs keep working.
+}).listen(process.env.PORT || 8790, function(){
+  console.log('Serving ' + root + ' at http://localhost:' + this.address().port);
+});
+

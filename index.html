@@ -25,6 +25,22 @@
   br.hero-break{display:block;content:''}
   @media(max-width:480px){ br.hero-break{display:none} }
 
+  /* Safari drops the whitespace sitting next to a display:none inline
+     element, so hiding the break fused HATE and TO into HATETO on iOS while
+     Chrome rendered it correctly. The space is now its own element, shown
+     exactly when the break is hidden, so neither engine has to guess. D-133. */
+  .hb-sp{display:none}
+  @media(max-width:480px){ .hb-sp{display:inline} }
+
+  /* All three layers must wrap identically or the red ghost stops being a
+     shadow and reads as a second, misaligned headline. The serif sat inline
+     while the ghost and sans are absolutely positioned blocks, so
+     `text-wrap:balance` (inherited from h1) balanced them against different
+     containers: on a phone the serif broke into three lines at 254px while
+     the ghost broke at the full 345px. Making the serif a block too gives
+     all three the same width, the same content and the same balance. D-133. */
+  .morph-serif{display:block}
+
   /* Serif sits in normal flow and sizes the parent — the resting state for
      all but the ~1.35s morph. Sans and ghost overlay on top only during
      the animation. */
@@ -185,9 +201,9 @@
         <p class="eyebrow">Concept &amp; brand designer</p>
         <h1 class="morph-h1" id="morphH1">
           <span class="sr-text">The niches hate to see me coming</span>
-          <span class="morph-layer morph-sans" aria-hidden="true">THE NICHES HATE <br class="hero-break">TO SEE ME COMING</span>
-          <span class="morph-layer morph-serif" aria-hidden="true">THE NICHES HATE <br class="hero-break">TO SEE ME COMING</span>
-          <span class="morph-ghost" aria-hidden="true">THE NICHES HATE <br class="hero-break">TO SEE ME COMING</span>
+          <span class="morph-layer morph-sans" aria-hidden="true">THE NICHES HATE<span class="hb-sp"> </span><br class="hero-break">TO SEE ME COMING</span>
+          <span class="morph-layer morph-serif" aria-hidden="true">THE NICHES HATE<span class="hb-sp"> </span><br class="hero-break">TO SEE ME COMING</span>
+          <span class="morph-ghost" aria-hidden="true">THE NICHES HATE<span class="hb-sp"> </span><br class="hero-break">TO SEE ME COMING</span>
         </h1>
       </div>
       <div class="hero-side">
@@ -204,7 +220,7 @@
   <div class="project-grid" id="projectGrid">
     <a class="tile-link" href="case-lombardihotels.html" data-sam="Assets/Sam/sam-sand.png" data-sam-scale="1.5">
       <div class="tile" data-tile>
-        <img src="Assets/lombardi keys.PNG" alt="Lombardi Hotels keycards for three properties, pink, green and blue">
+        <picture><source type="image/avif" srcset="Assets/lombardi%20keys-355.avif 355w, Assets/lombardi%20keys-636.avif 636w, Assets/lombardi%20keys-937.avif 937w" sizes="(max-width: 700px) 355px, (max-width: 1200px) 937px, 636px"><source type="image/webp" srcset="Assets/lombardi%20keys-355.webp 355w, Assets/lombardi%20keys-636.webp 636w, Assets/lombardi%20keys-937.webp 937w" sizes="(max-width: 700px) 355px, (max-width: 1200px) 937px, 636px"><img src="Assets/lombardi keys.PNG" alt="Lombardi Hotels keycards for three properties, pink, green and blue" width="1024" height="1024" decoding="async" fetchpriority="high"></picture>
         <div class="tile-scrim">
           <div class="inner">
             <span class="name">Lombardi Hotels</span>
@@ -219,7 +235,7 @@
 
     <a class="tile-link" href="case-sanat.html" data-sam="Assets/Sam/sam-rockinghorse.png" data-sam-scale="1.92">
       <div class="tile" data-tile>
-        <img src="Assets/SANAT/hero-lifestyle-render.png" alt="The SANAT packaging tower on a wooden table, printed with a Saharanpur artisan building">
+        <picture><source type="image/avif" srcset="Assets/SANAT/hero-lifestyle-render-360.avif 360w, Assets/SANAT/hero-lifestyle-render-720.avif 720w, Assets/SANAT/hero-lifestyle-render-985.avif 985w, Assets/SANAT/hero-lifestyle-render-1410.avif 1410w" sizes="(max-width: 700px) 360px, (max-width: 1200px) 985px, 1410px"><source type="image/webp" srcset="Assets/SANAT/hero-lifestyle-render-360.webp 360w, Assets/SANAT/hero-lifestyle-render-720.webp 720w, Assets/SANAT/hero-lifestyle-render-985.webp 985w, Assets/SANAT/hero-lifestyle-render-1410.webp 1410w" sizes="(max-width: 700px) 360px, (max-width: 1200px) 985px, 1410px"><img src="Assets/SANAT/hero-lifestyle-render.png" alt="The SANAT packaging tower on a wooden table, printed with a Saharanpur artisan building" width="1536" height="1024" decoding="async" loading="lazy"></picture>
         <div class="tile-scrim">
           <div class="inner">
             <span class="name">SANAT</span>
@@ -234,7 +250,7 @@
 
     <a class="tile-link" href="case-boopshaillyboop.html" data-sam="Assets/Sam/sam-laptop-mail.png" data-sam-scale="1.14">
       <div class="tile tile--boop" data-tile>
-        <img src="Assets/BoopShaillyBoop/landing page laptop mockup centred.png" alt="The BoopShaillyBoop home page on a laptop">
+        <picture><source type="image/avif" srcset="Assets/BoopShaillyBoop/landing%20page%20laptop%20mockup%20centred-355.avif 355w, Assets/BoopShaillyBoop/landing%20page%20laptop%20mockup%20centred-636.avif 636w, Assets/BoopShaillyBoop/landing%20page%20laptop%20mockup%20centred-937.avif 937w, Assets/BoopShaillyBoop/landing%20page%20laptop%20mockup%20centred-1200.avif 1200w" sizes="(max-width: 700px) 355px, (max-width: 1200px) 937px, 636px"><source type="image/webp" srcset="Assets/BoopShaillyBoop/landing%20page%20laptop%20mockup%20centred-355.webp 355w, Assets/BoopShaillyBoop/landing%20page%20laptop%20mockup%20centred-636.webp 636w, Assets/BoopShaillyBoop/landing%20page%20laptop%20mockup%20centred-937.webp 937w, Assets/BoopShaillyBoop/landing%20page%20laptop%20mockup%20centred-1200.webp 1200w" sizes="(max-width: 700px) 355px, (max-width: 1200px) 937px, 636px"><img src="Assets/BoopShaillyBoop/landing page laptop mockup centred.png" alt="The BoopShaillyBoop home page on a laptop" width="1200" height="900" decoding="async" loading="lazy"></picture>
         <div class="tile-scrim">
           <div class="inner">
             <span class="name">BoopShaillyBoop</span>
@@ -249,7 +265,7 @@
 
     <a class="tile-link" href="case-xfccricket.html" data-sam="Assets/Sam/sam-swing-bat-web.png" data-sam-scale="0.9">
       <div class="tile" data-tile>
-        <img src="Assets/XFC/xfc-card.jpg" alt="A young player in the winning XFC Cricket practice shirt for the 2026/27 season, on the field">
+        <picture><source type="image/avif" srcset="Assets/XFC/xfc-card-355.avif 355w, Assets/XFC/xfc-card-636.avif 636w, Assets/XFC/xfc-card-937.avif 937w, Assets/XFC/xfc-card-1272.avif 1272w" sizes="(max-width: 700px) 355px, (max-width: 1200px) 937px, 636px"><source type="image/webp" srcset="Assets/XFC/xfc-card-355.webp 355w, Assets/XFC/xfc-card-636.webp 636w, Assets/XFC/xfc-card-937.webp 937w, Assets/XFC/xfc-card-1272.webp 1272w" sizes="(max-width: 700px) 355px, (max-width: 1200px) 937px, 636px"><img src="Assets/XFC/xfc-card.jpg" alt="A young player in the winning XFC Cricket practice shirt for the 2026/27 season, on the field" width="1400" height="1050" decoding="async" loading="lazy"></picture>
         <div class="tile-scrim">
           <div class="inner">
             <span class="name">XFC Cricket</span>
@@ -272,7 +288,7 @@
     <div class="project-grid">
       <a class="tile-link" href="pretty-what.html" data-sam="Assets/Sam/sam-jump-wave.png" data-sam-scale="0.62">
         <div class="tile" data-tile>
-          <img src="Assets/PrettyWhat/book-cover-card.jpg" alt="The Sam Says: Pretty What? activity book standing open on a desk, with pencils and crayons">
+          <picture><source type="image/avif" srcset="Assets/PrettyWhat/book-cover-card-355.avif 355w, Assets/PrettyWhat/book-cover-card-636.avif 636w, Assets/PrettyWhat/book-cover-card-937.avif 937w, Assets/PrettyWhat/book-cover-card-1272.avif 1272w" sizes="(max-width: 700px) 355px, (max-width: 1200px) 937px, 636px"><source type="image/webp" srcset="Assets/PrettyWhat/book-cover-card-355.webp 355w, Assets/PrettyWhat/book-cover-card-636.webp 636w, Assets/PrettyWhat/book-cover-card-937.webp 937w, Assets/PrettyWhat/book-cover-card-1272.webp 1272w" sizes="(max-width: 700px) 355px, (max-width: 1200px) 937px, 636px"><img src="Assets/PrettyWhat/book-cover-card.jpg" alt="The Sam Says: Pretty What? activity book standing open on a desk, with pencils and crayons" width="1400" height="1050" decoding="async" loading="lazy"></picture>
           <div class="tile-scrim">
             <div class="inner">
               <span class="name">Pretty, What?</span>

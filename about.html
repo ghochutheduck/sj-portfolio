@@ -68,15 +68,28 @@
      (percentages against the full wrapper, no negative offsets) so they
      cluster against the smaller centred photo without overflowing the
      viewport -- the desktop coordinates would push them off-screen. */
+  /* The doodles are tall: 60px wide but 144px high for the cup, so widths
+     alone were misleading and the first mobile pass had seven of them
+     overlapping in seven places, worst of all the cup sitting 117px deep
+     through the duck. With the photo at 60% there are two 69px gutters to
+     work with, which holds three doodles a side at 11% and no more, so the
+     cookie sits this breakpoint out. Three fixed rows per side, spaced off
+     the measured heights, means none of them touch. D-133. */
   @media(max-width:860px){
     .a-photo{width:60%;margin:0 auto}
-    .d-cup{width:17%;top:0;left:16%}
-    .d-crab{width:20%;top:6px;right:16%}
-    .d-scissors{width:14%;top:22%;right:8%}
-    .d-duck{width:20%;top:10%;left:8%}
-    .d-shell{width:15%;top:40%;left:8%}
-    .d-cookie{width:11%;top:44%;right:6%}
-    .d-book{width:16%;top:60%;right:4%}
+    /* Height, not width: these vary from roughly 1:1.5 to 1:2.4, so sizing
+       them by width left the cup 142px tall next to a 90px shell and the
+       rows collided anyway. Fixing the height makes every row the same
+       height whatever the drawing, and max-width keeps the wide ones out of
+       the photo. */
+    .a-doodle{width:auto;height:78px;max-width:60px}
+    .d-duck    {top:0;     left:2px;  right:auto}
+    .d-shell   {top:104px; left:2px;  right:auto}
+    .d-cup     {top:208px; left:2px;  right:auto}
+    .d-crab    {top:0;     right:2px; left:auto}
+    .d-scissors{top:104px; right:2px; left:auto}
+    .d-book    {top:208px; right:2px; left:auto}
+    .d-cookie  {display:none}
   }
 
   /* Bio: CONTEXT.md's three paragraphs, verbatim aside from the role phrase
@@ -139,14 +152,14 @@
 <div class="wrap">
   <div class="about-top">
     <div class="a-photo-wrap">
-      <img class="a-photo" tabindex="0" src="Assets/About/photo.png" alt="Shambhavi Jaipuriar, laughing">
-      <img class="a-doodle d-cup reveal" src="Assets/About/doodle-cup.png" alt="">
-      <img class="a-doodle d-crab reveal" src="Assets/About/doodle-crab.png" alt="">
-      <img class="a-doodle d-scissors reveal" src="Assets/About/doodle-scissors.png" alt="">
-      <img class="a-doodle d-duck reveal" src="Assets/About/doodle-duck.png" alt="">
-      <img class="a-doodle d-shell reveal" src="Assets/About/doodle-shell.png" alt="">
-      <img class="a-doodle d-cookie reveal" src="Assets/About/doodle-cookie.png" alt="">
-      <img class="a-doodle d-book reveal" src="Assets/About/doodle-book.png" alt="">
+      <picture><source type="image/avif" srcset="Assets/About/photo-187.avif 187w, Assets/About/photo-282.avif 282w, Assets/About/photo-374.avif 374w, Assets/About/photo-564.avif 564w" sizes="(max-width: 700px) 187px, (max-width: 1200px) 282px, 282px"><source type="image/webp" srcset="Assets/About/photo-187.webp 187w, Assets/About/photo-282.webp 282w, Assets/About/photo-374.webp 374w, Assets/About/photo-564.webp 564w" sizes="(max-width: 700px) 187px, (max-width: 1200px) 282px, 282px"><img class="a-photo" tabindex="0" src="Assets/About/photo.png" alt="Shambhavi Jaipuriar, laughing" width="700" height="933" decoding="async" fetchpriority="high"></picture>
+      <picture><source type="image/avif" srcset="Assets/About/doodle-cup-68.avif 68w, Assets/About/doodle-cup-86.avif 86w, Assets/About/doodle-cup-102.avif 102w, Assets/About/doodle-cup-129.avif 129w" sizes="(max-width: 700px) 43px, (max-width: 1200px) 34px, 34px"><source type="image/webp" srcset="Assets/About/doodle-cup-68.webp 68w, Assets/About/doodle-cup-86.webp 86w, Assets/About/doodle-cup-102.webp 102w, Assets/About/doodle-cup-129.webp 129w" sizes="(max-width: 700px) 43px, (max-width: 1200px) 34px, 34px"><img class="a-doodle d-cup reveal" src="Assets/About/doodle-cup.png" alt="" width="162" height="200" decoding="async" loading="lazy"></picture>
+      <picture><source type="image/avif" srcset="Assets/About/doodle-crab-80.avif 80w, Assets/About/doodle-crab-94.avif 94w, Assets/About/doodle-crab-120.avif 120w, Assets/About/doodle-crab-141.avif 141w" sizes="(max-width: 700px) 47px, (max-width: 1200px) 40px, 40px"><source type="image/webp" srcset="Assets/About/doodle-crab-80.webp 80w, Assets/About/doodle-crab-94.webp 94w, Assets/About/doodle-crab-120.webp 120w, Assets/About/doodle-crab-141.webp 141w" sizes="(max-width: 700px) 47px, (max-width: 1200px) 40px, 40px"><img class="a-doodle d-crab reveal" src="Assets/About/doodle-crab.png" alt="" width="200" height="137" decoding="async" loading="lazy"></picture>
+      <picture><source type="image/avif" srcset="Assets/About/doodle-scissors-64.avif 64w, Assets/About/doodle-scissors-96.avif 96w" sizes="(max-width: 700px) 35px, (max-width: 1200px) 32px, 32px"><source type="image/webp" srcset="Assets/About/doodle-scissors-64.webp 64w, Assets/About/doodle-scissors-96.webp 96w" sizes="(max-width: 700px) 35px, (max-width: 1200px) 32px, 32px"><img class="a-doodle d-scissors reveal" src="Assets/About/doodle-scissors.png" alt="" width="160" height="160" decoding="async" loading="lazy"></picture>
+      <picture><source type="image/avif" srcset="Assets/About/doodle-duck-84.avif 84w, Assets/About/doodle-duck-126.avif 126w" sizes="(max-width: 700px) 47px, (max-width: 1200px) 42px, 42px"><source type="image/webp" srcset="Assets/About/doodle-duck-84.webp 84w, Assets/About/doodle-duck-126.webp 126w" sizes="(max-width: 700px) 47px, (max-width: 1200px) 42px, 42px"><img class="a-doodle d-duck reveal" src="Assets/About/doodle-duck.png" alt="" width="220" height="182" decoding="async" loading="lazy"></picture>
+      <picture><source type="image/avif" srcset="Assets/About/doodle-shell-62.avif 62w, Assets/About/doodle-shell-93.avif 93w" sizes="(max-width: 700px) 34px, (max-width: 1200px) 31px, 31px"><source type="image/webp" srcset="Assets/About/doodle-shell-62.webp 62w, Assets/About/doodle-shell-93.webp 93w" sizes="(max-width: 700px) 34px, (max-width: 1200px) 31px, 31px"><img class="a-doodle d-shell reveal" src="Assets/About/doodle-shell.png" alt="" width="180" height="126" decoding="async" loading="lazy"></picture>
+      <picture><source type="image/avif" srcset="Assets/About/doodle-cookie-52.avif 52w, Assets/About/doodle-cookie-78.avif 78w" sizes="(max-width: 700px) 28px, (max-width: 1200px) 26px, 26px"><source type="image/webp" srcset="Assets/About/doodle-cookie-52.webp 52w, Assets/About/doodle-cookie-78.webp 78w" sizes="(max-width: 700px) 28px, (max-width: 1200px) 26px, 26px"><img class="a-doodle d-cookie reveal" src="Assets/About/doodle-cookie.png" alt="" width="120" height="120" decoding="async" loading="lazy"></picture>
+      <picture><source type="image/avif" srcset="Assets/About/doodle-book-68.avif 68w, Assets/About/doodle-book-102.avif 102w" sizes="(max-width: 700px) 37px, (max-width: 1200px) 34px, 34px"><source type="image/webp" srcset="Assets/About/doodle-book-68.webp 68w, Assets/About/doodle-book-102.webp 102w" sizes="(max-width: 700px) 37px, (max-width: 1200px) 34px, 34px"><img class="a-doodle d-book reveal" src="Assets/About/doodle-book.png" alt="" width="180" height="118" decoding="async" loading="lazy"></picture>
     </div>
 
     <div>
@@ -205,13 +218,13 @@
       <div>
         <span class="fact-label">Software</span>
         <div class="sw-icons">
-          <img src="Assets/About/icon-illustrator.png" alt="Adobe Illustrator">
-          <img src="Assets/About/icon-photoshop.png" alt="Adobe Photoshop">
-          <img src="Assets/About/icon-indesign.png" alt="Adobe InDesign">
-          <img src="Assets/About/icon-lightroom.png" alt="Adobe Lightroom">
-          <img src="Assets/About/icon-aftereffects.png" alt="Adobe After Effects">
-          <img src="Assets/About/icon-figma.png" alt="Figma">
-          <img src="Assets/About/icon-procreate.png" alt="Procreate">
+          <picture><source type="image/avif" srcset="Assets/About/icon-illustrator-88.avif 88w, Assets/About/icon-illustrator-128.avif 128w" sizes="(max-width: 700px) 48px, (max-width: 1200px) 44px, 48px"><source type="image/webp" srcset="Assets/About/icon-illustrator-88.webp 88w, Assets/About/icon-illustrator-128.webp 128w" sizes="(max-width: 700px) 48px, (max-width: 1200px) 44px, 48px"><img src="Assets/About/icon-illustrator.png" alt="Adobe Illustrator" width="128" height="128" decoding="async" loading="lazy"></picture>
+          <picture><source type="image/avif" srcset="Assets/About/icon-photoshop-88.avif 88w, Assets/About/icon-photoshop-128.avif 128w" sizes="(max-width: 700px) 48px, (max-width: 1200px) 44px, 48px"><source type="image/webp" srcset="Assets/About/icon-photoshop-88.webp 88w, Assets/About/icon-photoshop-128.webp 128w" sizes="(max-width: 700px) 48px, (max-width: 1200px) 44px, 48px"><img src="Assets/About/icon-photoshop.png" alt="Adobe Photoshop" width="128" height="128" decoding="async" loading="lazy"></picture>
+          <picture><source type="image/avif" srcset="Assets/About/icon-indesign-88.avif 88w, Assets/About/icon-indesign-128.avif 128w" sizes="(max-width: 700px) 48px, (max-width: 1200px) 44px, 48px"><source type="image/webp" srcset="Assets/About/icon-indesign-88.webp 88w, Assets/About/icon-indesign-128.webp 128w" sizes="(max-width: 700px) 48px, (max-width: 1200px) 44px, 48px"><img src="Assets/About/icon-indesign.png" alt="Adobe InDesign" width="128" height="128" decoding="async" loading="lazy"></picture>
+          <picture><source type="image/avif" srcset="Assets/About/icon-lightroom-88.avif 88w, Assets/About/icon-lightroom-128.avif 128w" sizes="(max-width: 700px) 48px, (max-width: 1200px) 44px, 48px"><source type="image/webp" srcset="Assets/About/icon-lightroom-88.webp 88w, Assets/About/icon-lightroom-128.webp 128w" sizes="(max-width: 700px) 48px, (max-width: 1200px) 44px, 48px"><img src="Assets/About/icon-lightroom.png" alt="Adobe Lightroom" width="128" height="128" decoding="async" loading="lazy"></picture>
+          <picture><source type="image/avif" srcset="Assets/About/icon-aftereffects-88.avif 88w, Assets/About/icon-aftereffects-128.avif 128w" sizes="(max-width: 700px) 48px, (max-width: 1200px) 44px, 48px"><source type="image/webp" srcset="Assets/About/icon-aftereffects-88.webp 88w, Assets/About/icon-aftereffects-128.webp 128w" sizes="(max-width: 700px) 48px, (max-width: 1200px) 44px, 48px"><img src="Assets/About/icon-aftereffects.png" alt="Adobe After Effects" width="128" height="128" decoding="async" loading="lazy"></picture>
+          <picture><source type="image/avif" srcset="Assets/About/icon-figma-88.avif 88w, Assets/About/icon-figma-128.avif 128w" sizes="(max-width: 700px) 48px, (max-width: 1200px) 44px, 48px"><source type="image/webp" srcset="Assets/About/icon-figma-88.webp 88w, Assets/About/icon-figma-128.webp 128w" sizes="(max-width: 700px) 48px, (max-width: 1200px) 44px, 48px"><img src="Assets/About/icon-figma.png" alt="Figma" width="128" height="128" decoding="async" loading="lazy"></picture>
+          <picture><source type="image/avif" srcset="Assets/About/icon-procreate-88.avif 88w, Assets/About/icon-procreate-128.avif 128w" sizes="(max-width: 700px) 48px, (max-width: 1200px) 44px, 48px"><source type="image/webp" srcset="Assets/About/icon-procreate-88.webp 88w, Assets/About/icon-procreate-128.webp 128w" sizes="(max-width: 700px) 48px, (max-width: 1200px) 44px, 48px"><img src="Assets/About/icon-procreate.png" alt="Procreate" width="128" height="128" decoding="async" loading="lazy"></picture>
         </div>
       </div>
       <div><span class="fact-label">Build</span><p>Claude Code, ChatGPT, HTML, CSS, JavaScript, Razorpay, double-entry bookkeeping</p></div>
