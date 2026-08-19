@@ -246,6 +246,30 @@
   .pagenav .links{scrollbar-width:none;-ms-overflow-style:none}
   .pagenav .links::-webkit-scrollbar{display:none}
 
+  /* ...and with the scrollbar gone, a chip sliced off at the pill's edge read
+     as breakage rather than as "there is more this way". These fades sit over
+     the pill's own edges and come on only when there is something to scroll
+     to in that direction. Geometry measured off the pagenav box: it is 40px
+     tall (the back button sets that) with the 33px pill centred in it, hence
+     the 3px insets, and the back button plus the 10px flex gap put the pill's
+     left edge at 50px. Both hold in the compact state too. D-131. */
+  .pagenav::before,.pagenav::after{
+    content:'';position:absolute;top:3px;bottom:3px;width:34px;
+    pointer-events:none;opacity:0;transition:opacity .2s ease;
+  }
+  .pagenav::before{left:50px;border-radius:100px 0 0 100px;
+    background:linear-gradient(to right,#fff,rgba(255,255,255,0))}
+  .pagenav::after{right:0;border-radius:0 100px 100px 0;
+    background:linear-gradient(to left,#fff,rgba(255,255,255,0))}
+  .pagenav.can-prev::before{opacity:1}
+  .pagenav.can-next::after{opacity:1}
+  /* the compact pill is 72% white over a blur, so its fades match that fill
+     rather than sitting on it as a more opaque white block */
+  body.nav-compact .pagenav::before{
+    background:linear-gradient(to right,color-mix(in srgb,#fff 72%,transparent),rgba(255,255,255,0))}
+  body.nav-compact .pagenav::after{
+    background:linear-gradient(to left,color-mix(in srgb,#fff 72%,transparent),rgba(255,255,255,0))}
+
   /* The header's wordmark plus its four links need 388px at 375px wide, so the
      row wrapped and its second line ran under the pagenav pill fixed above it:
      "Shambhavi" butted straight into "Work", "Jaipuriar" sat behind the pill.
@@ -876,6 +900,23 @@
       });
     }, { rootMargin: '-35% 0px -55% 0px', threshold: 0 });
     sections.forEach(s => spy.observe(s));
+  })();
+
+  // Fade whichever edge of the pagenav pill still has chips beyond it, so a
+  // sliced-off chip reads as "more this way" rather than as a clipped layout.
+  (function(){
+    var pn = document.querySelector('.pagenav');
+    if (!pn) return;
+    var strip = pn.querySelector('.links');
+    if (!strip) return;
+    function update(){
+      var max = strip.scrollWidth - strip.clientWidth;
+      pn.classList.toggle('can-prev', strip.scrollLeft > 1);
+      pn.classList.toggle('can-next', max - strip.scrollLeft > 1);
+    }
+    strip.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
   })();
 
   (function () {
