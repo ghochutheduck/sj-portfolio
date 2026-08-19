@@ -21,12 +21,14 @@
      Reduced motion (any width): plain static mosaic, no movement at all. */
   .arc-stage{ position:relative; }
   body.mode-arc .arc-stage{ height:280vh; }
-  body.mode-circle .arc-stage{ height:100vh; }
+  /* Phone gets scroll room too, so the ring has something to resolve into:
+     one screen to form the circle, one to settle into the collage. D-136. */
+  body.mode-circle .arc-stage{ height:200vh; }
   body.mode-mosaic .arc-stage{ display:none; }
 
   .arc-viewport{ height:100vh; width:100%; overflow:hidden; background:var(--paper); }
   body.mode-arc .arc-viewport{ position:sticky; top:0; }
-  body.mode-circle .arc-viewport{ position:relative; }
+  body.mode-circle .arc-viewport{ position:sticky; top:0; }
 
   .arc-field{ position:absolute; inset:0; }
 
@@ -289,6 +291,30 @@
     return { x: Math.cos(rad) * circleRadius, y: Math.sin(rad) * circleRadius, rot: angle + 90, scale: 1, opacity: 1 };
   }
 
+  // The phone's payoff. The ring forms, then scroll settles it into a
+  // collage: a three-column stagger, alternate rows nudged across and every
+  // card left slightly off-square so it reads as arranged by hand rather than
+  // snapped to a grid. Landscape cards take a full row of their own, since
+  // they are wider than a column. Positions are measured off the real card
+  // sizes at this breakpoint rather than assumed. D-136.
+  function collageTarget(i, total, W, H){
+    var cardW = W < 480 ? 78 : 110;
+    var cardH = W < 480 ? 106 : 150;
+    var cols = 3;
+    var gap = Math.max(10, W * 0.03);
+    var scale = Math.min(1, (W - gap * 2) / (cols * cardW + (cols - 1) * gap));
+    var col = i % cols, row = Math.floor(i / cols);
+    var rows = Math.ceil(total / cols);
+    var stepX = (cardW + gap) * scale;
+    var stepY = (cardH + gap) * scale;
+    var rowOffset = (row % 2 === 0 ? 1 : -1) * stepX * 0.16;
+    var x = (col - (cols - 1) / 2) * stepX + rowOffset;
+    var y = (row - (rows - 1) / 2) * stepY;
+    // deterministic per-card tilt, so it looks placed rather than random
+    var tilt = ((i * 37) % 9) - 4;
+    return { x: x, y: y, rot: tilt, scale: scale, opacity: 1 };
+  }
+
   var progress = 0;
   function updateProgress(){
     var rect = stage.getBoundingClientRect();
@@ -312,18 +338,12 @@
     });
   }
 
-  // ---- mode: arc (desktop) / mosaic (phone and reduced motion) ----
-  // D-45 tested this at 375px and found 36 of 153 card pairs overlapping in
-  // the ring, so the arc was dropped below 640px in favour of the mosaic.
-  // D-50 then left a circle-only intro on phones, which is what shipped: a
-  // ring wider than the screen, cropped both sides, sitting still because the
-  // scroll payoff it exists to set up never arrives on that device. Reverting
-  // to what D-45 concluded, the mosaic, which is already built below and was
-  // only ever wired to reduced motion. D-135.
+  // ---- mode: arc (desktop) / circle (phone) / mosaic (reduced motion) ----
   var reduceMQ = window.matchMedia('(prefers-reduced-motion: reduce)');
   var mode = 'arc';
   function applyMode(){
-    if (reduceMQ.matches || window.innerWidth < 640) mode = 'mosaic';
+    if (reduceMQ.matches) mode = 'mosaic';
+    else if (window.innerWidth < 640) mode = 'circle';
     else mode = 'arc';
     document.body.classList.remove('mode-arc','mode-circle','mode-mosaic');
     document.body.classList.add('mode-' + mode);
@@ -342,10 +362,17 @@
       var inCircle = (phase === 'circle');
       var morphValue = 0, rotateProgress = 0, lastRingArc = null;
 
+      var collageValue = 0;
       if (mode === 'arc' && inCircle){
         updateProgress();
         morphValue = clamp(progress / 0.5, 0, 1);
         rotateProgress = clamp((progress - 0.5) / 0.5, 0, 1);
+      } else if (mode === 'circle' && inCircle){
+        // Hold the formed ring for the first fifth of the scroll, then settle
+        // it into the collage over the rest, so the circle is read as a circle
+        // before it resolves.
+        updateProgress();
+        collageValue = clamp((progress - 0.2) / 0.6, 0, 1);
       }
       mouseCur += (mouseTarget - mouseCur) * 0.08;
 
@@ -359,8 +386,20 @@
         } else if (mode === 'arc'){
           t = ringArcTarget(c.i, TOTAL, morphValue, rotateProgress, mouseCur, W, H);
           lastRingArc = t;
-        } else { // mode === 'circle': forms once, holds, no arc
-          t = circleOnlyTarget(c.i, TOTAL, W, H);
+        } else { // mode === 'circle': ring forms, then settles into the collage
+          var ring = circleOnlyTarget(c.i, TOTAL, W, H);
+          if (collageValue > 0){
+            var col = collageTarget(c.i, TOTAL, W, H);
+            t = {
+              x: lerp(ring.x, col.x, collageValue),
+              y: lerp(ring.y, col.y, collageValue),
+              rot: lerp(ring.rot, col.rot, collageValue),
+              scale: lerp(ring.scale, col.scale, collageValue),
+              opacity: 1
+            };
+          } else {
+            t = ring;
+          }
         }
 
         c.cur.x += (t.x - c.cur.x) * EASE;
@@ -386,7 +425,9 @@
         var topY = (apexY - H / 2) - 70;
         textTarget = { y: lerp(0, topY, morphValue), opacity: 1 };
       } else {
-        textTarget = { y: 0, opacity: 1 };
+        // Phone: centred inside the ring, then lifted clear as the collage
+        // settles, otherwise the heading ends up sitting on top of the cards.
+        textTarget = { y: lerp(0, -(H / 2) + 58, collageValue), opacity: 1 };
       }
       textCur.y += (textTarget.y - textCur.y) * EASE;
       textCur.opacity += (textTarget.opacity - textCur.opacity) * EASE;
