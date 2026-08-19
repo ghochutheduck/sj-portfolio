@@ -61,6 +61,28 @@ a{color:inherit}
 
 .wrap{max-width:var(--page-max);margin:0 auto;padding:0 var(--pad)}
 
+/* Every responsive image is wrapped in <picture>, which would otherwise add a
+   box between the image and its container. Sitewide the sizing rules target
+   the image itself (`.hero-photo{width:100%}`, `.phone .screen img`,
+   `.mosaic .t img`), so that extra box became the percentage's reference and
+   shrink-to-fit sized it to the image's intrinsic width: a 2000px photo laid
+   out at 2000px inside a 345px card, with the clipping containers showing
+   only its top-left corner. `display:contents` removes the wrapper's box so
+   the image lays out as a direct child again, exactly as before, while the
+   <source> elements keep doing their job. D-134. */
+picture{display:contents}
+
+/* Images now carry width and height attributes, so their intrinsic size is
+   known before the file loads. That is what stops the page jumping, but it
+   also means a `1fr` grid track sizes its automatic minimum to the image's
+   full pixel width: measured, a 1200px merch photo dragged the page to
+   1248px inside a 375px viewport, and every tile on it inherited the blowout.
+   A percentage width makes that contribution zero. Deliberately the weakest
+   possible selector, so every existing rule that sizes an image (.hero-photo,
+   .mosaic .t img, .a-doodle, .origin img, .sam-cursor) still wins on
+   specificity and nothing that was sized on purpose changes. D-134. */
+picture img{width:100%;height:auto}
+
 /* ---------- nav ----------
    Fixed pill, same visual language as the case studies' own pagenav, so
    there's always a way back to the top of the page or to another page,
