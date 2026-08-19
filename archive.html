@@ -312,12 +312,18 @@
     });
   }
 
-  // ---- mode: arc (desktop) / circle (phone) / mosaic (reduced motion) ----
+  // ---- mode: arc (desktop) / mosaic (phone and reduced motion) ----
+  // D-45 tested this at 375px and found 36 of 153 card pairs overlapping in
+  // the ring, so the arc was dropped below 640px in favour of the mosaic.
+  // D-50 then left a circle-only intro on phones, which is what shipped: a
+  // ring wider than the screen, cropped both sides, sitting still because the
+  // scroll payoff it exists to set up never arrives on that device. Reverting
+  // to what D-45 concluded, the mosaic, which is already built below and was
+  // only ever wired to reduced motion. D-135.
   var reduceMQ = window.matchMedia('(prefers-reduced-motion: reduce)');
   var mode = 'arc';
   function applyMode(){
-    if (reduceMQ.matches) mode = 'mosaic';
-    else if (window.innerWidth < 640) mode = 'circle';
+    if (reduceMQ.matches || window.innerWidth < 640) mode = 'mosaic';
     else mode = 'arc';
     document.body.classList.remove('mode-arc','mode-circle','mode-mosaic');
     document.body.classList.add('mode-' + mode);
