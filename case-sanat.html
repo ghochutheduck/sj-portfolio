@@ -236,6 +236,28 @@
     backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   }
   body.nav-compact .pagenav .links a{padding:6px 12px}
+  /* The pill already scrolls horizontally (`overflow-x:auto` above), which is
+     the right answer for five section links on a phone: measured 379px of
+     links inside a 292px pill at 375px wide, and even 11px type still
+     overflows, so no size that fits is legible. What made it read as broken
+     was the scrollbar, a grey strip ruled under the pill, and a word cut in
+     half at the right edge with nothing to say it could be swiped. Scrollbar
+     hidden; the scroll-spy keeps the active chip in view instead. D-129. */
+  .pagenav .links{scrollbar-width:none;-ms-overflow-style:none}
+  .pagenav .links::-webkit-scrollbar{display:none}
+
+  /* The header's wordmark plus its four links need 388px at 375px wide, so the
+     row wrapped and its second line ran under the pagenav pill fixed above it:
+     "Shambhavi" butted straight into "Work", "Jaipuriar" sat behind the pill.
+     Dropping the wordmark leaves the links needing 210px, which fits every
+     phone, and matches what the shared nav does at this width. The pagenav's
+     back arrow still returns to the work index. D-129. */
+  @media(max-width:600px){
+    header .name{display:none}
+    header nav{gap:12px}
+    header nav a{font-size:12px}
+  }
+
   @media(max-width:640px){
     .pagenav .links a{padding:7px 12px;font-size:12px}
     /* below this width the plain header's name+links and the centred pagenav
@@ -255,6 +277,15 @@
      every act, per D-64. ---------- */
   [id^="sec-"]:not(#sec-overview){transform-origin:bottom left;will-change:transform}
   @media(prefers-reduced-motion:reduce){ [id^="sec-"]{transform:none!important} }
+  /* No tilt on phones. The rotation is about the bottom-left corner, so how
+     far it throws an act sideways scales with that act's height: on a desktop
+     the acts are wide and short and 30deg reads as a gentle reveal, but at
+     375px they stack to 2,800px tall and the same 30deg swings their top edge
+     roughly 1,500px off the side of the screen. Measured on this page: body
+     copy left the viewport mid-sentence and the acts read as long blank gaps
+     with slanted, clipped text. `!important` because the scroll handler
+     writes an inline transform. D-129. */
+  @media(max-width:860px){ [id^="sec-"]{transform:none!important} }
 
   /* ---------- artisan carousel: stacked cards, ported from a pasted
      React/shadcn/Motion component (structural donor only, per CLAUDE.md --
@@ -792,8 +823,9 @@
   
   // ---------- tilt-in acts on scroll, real scroll only, no pinning ----------
   (function(){
-    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) return;
+    // Phones opt out entirely, see the max-width:860px rule in the stylesheet.
+    var noTilt = window.matchMedia("(prefers-reduced-motion: reduce), (max-width: 860px)").matches;
+    if (noTilt) return;
     var sections = [].slice.call(document.querySelectorAll(String.raw`[id^="sec-"]`)).slice(1);
     var ticking = false;
     function update(){
@@ -829,7 +861,17 @@
         if (entry.isIntersecting) {
           navLinks.forEach(a => a.classList.remove('active'));
           const link = byId[entry.target.id];
-          if (link) link.classList.add('active');
+          if (link) {
+            link.classList.add('active');
+            // The pill scrolls on narrow screens, so the active chip is not
+            // necessarily on screen. Centre it, measured off rects rather than
+            // offsetLeft since the strip is not the offset parent.
+            const strip = link.parentElement;
+            if (strip.scrollWidth > strip.clientWidth) {
+              const lr = link.getBoundingClientRect(), sr = strip.getBoundingClientRect();
+              strip.scrollBy({ left: (lr.left + lr.width/2) - (sr.left + sr.width/2), behavior: 'smooth' });
+            }
+          }
         }
       });
     }, { rootMargin: '-35% 0px -55% 0px', threshold: 0 });
