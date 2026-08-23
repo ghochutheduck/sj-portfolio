@@ -56,18 +56,48 @@
   .mosaic .t img{width:100%;height:100%;object-fit:cover;display:block}
   .mosaic .t.fit img{object-fit:contain}
 
-  .facts{display:flex;gap:22px 40px;padding-top:28px;flex-wrap:wrap}
-  .facts>div{display:flex;flex-direction:column;gap:5px;min-width:150px}
-  .facts .lbl{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:.06em}
-  .facts .val{font-size:14px;max-width:280px}
+  /* Reference strip: the media images the project is arguing with. Held to a
+     smaller measure than the case-study mosaics and set on the stage grey, so
+     they read as evidence being cited rather than as work being shown. D-131. */
+  .refs{display:grid;grid-template-columns:1fr 1fr;gap:24px var(--gut);margin-top:28px;max-width:960px}
+  .refs figure{margin:0}
+  .refs .t{background:var(--stage);aspect-ratio:3/2;overflow:hidden}
+  .refs .t img{width:100%;height:100%;object-fit:cover;display:block}
+  @media(max-width:700px){ .refs{grid-template-columns:1fr} }
+
+  /* The flip-through. Muted, looping and inline, so it behaves like a moving
+     image rather than a player; controls appear only under reduced-motion,
+     where it is paused instead. D-132. */
+  .film{margin-top:40px}
+  .film video{display:block;width:100%;height:auto;background:var(--stage)}
+
+  .ref-olive{aspect-ratio:1620/595}
+  .sheet{aspect-ratio:9/5}
+
+  .mark{max-width:280px;margin-top:34px}
+  .mark img{display:block;width:100%;height:auto}
+
+  /* Numeral highlight, same shape as the case studies' own .stats/.stat (a big
+     bold number over a small label) but in the project's berry accent rather
+     than plain ink, since these two figures are the argument for the whole
+     project and are meant to land rather than blend into the surrounding
+     prose. D-143. */
+  .stats{display:flex;gap:28px 40px;padding-top:28px;flex-wrap:wrap}
+  .stat{display:flex;flex-direction:column;gap:6px;min-width:150px}
+  .stat .n{font-family:var(--display);font-weight:400;font-stretch:62.5%;font-size:clamp(32px,4vw,48px);color:var(--pw-berry);letter-spacing:-.01em;line-height:1}
+  .stat .l{font-size:13px;color:var(--muted);line-height:1.4;max-width:220px}
 
   .voice{display:flex;gap:10px;margin-top:24px;flex-wrap:wrap}
   .voice span{font-size:14px;font-weight:700;letter-spacing:.03em;padding:9px 20px;border:1px solid var(--rule);border-radius:100px}
 
-  .bars{display:flex;flex-direction:column;gap:var(--gut);margin-top:var(--gut)}
-  .bar{display:flex;justify-content:space-between;align-items:center;padding:13px 18px;border-radius:3px;font-size:14px;font-weight:700;color:#fff}
-  .bar.light{color:var(--ink)}
-  .bar .hex{font-weight:500;letter-spacing:.04em;opacity:.92}
+  /* Small square swatches, chip-and-label rather than full-width colour bars:
+     four colours don't need a bar's worth of width to read, and a swatch is
+     the more legible convention for a small palette. D-135. */
+  .swatches{display:flex;flex-wrap:wrap;gap:20px 28px;margin-top:12px}
+  .sw{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+  .sw .chip{width:40px;height:40px;border-radius:6px;display:block}
+  .sw .nm{font-size:13px;font-weight:700;letter-spacing:-.005em}
+  .sw .rl{font-size:11px;color:var(--muted);letter-spacing:.04em}
 
   /* the note: cream card, set apart from the rest of the case-study rhythm */
   .origin{
@@ -78,10 +108,6 @@
   .origin p{font-size:16px;line-height:1.65;color:var(--ink)}
   @media(max-width:640px){ .origin{grid-template-columns:1fr;text-align:left} .origin img{height:120px} }
 
-  .asset-note{
-    margin-top:20px;padding:16px 18px;border:1px dashed var(--rule);border-radius:3px;
-    font-size:12px;color:var(--muted);max-width:64ch;
-  }
 
   /* Lavender ground for the merch mosaic: sampled from the pin and tote
      mockups themselves rather than invented, so the section reads as the
@@ -93,9 +119,14 @@
   }
   .merch .micro{color:#4A3A4E}
   .merch figcaption{color:#4A3A4E}
-  .merch-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--gut)}
-  .merch-grid .t{aspect-ratio:4/5}
-  @media(max-width:1000px){ .merch{padding:24px} .merch-grid{grid-template-columns:1fr} .merch-grid .t{aspect-ratio:4/3} }
+  /* The tote photo is a 3:2 crop and the pin/wrap photos are 4:3; forcing all
+     three into equal 4:5 columns cropped the tote down to a sliver of its
+     middle. The tote leads, full width at its own ratio, with pins and wrap
+     paired underneath at theirs. D-136. */
+  .merch-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--gut)}
+  .merch-grid .wide{grid-column:1 / -1;aspect-ratio:1360/900}
+  .merch-grid .t{aspect-ratio:4/3}
+  @media(max-width:1000px){ .merch{padding:24px} .merch-grid{grid-template-columns:1fr} .merch-grid .wide{aspect-ratio:4/3} }
 
   figcaption{font-size:12px;color:var(--muted);padding-top:10px;max-width:760px}
 
@@ -104,32 +135,82 @@
     .split,.split.rev{grid-template-columns:1fr;gap:28px}
     .act{padding-top:64px}
   }
+
+  /* Project pagenav, same pattern as the four case studies: a fixed pill with
+     a back arrow, scoped to this project's own sections rather than the
+     sitewide site-nav pill this page used before. D-142. */
+  .pagenav{position:fixed;top:22px;left:50%;transform:translateX(-50%);z-index:100;
+           display:flex;align-items:center;gap:10px;max-width:calc(100% - 32px);
+           transition:top .35s cubic-bezier(.4,0,.2,1)}
+  .pagenav .back{width:40px;height:40px;border-radius:50%;background:#fff;border:1px solid var(--rule);
+                 display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--ink);
+                 font-size:16px;box-shadow:0 6px 20px rgba(0,0,0,.10);flex-shrink:0}
+  .pagenav .back:hover{background:var(--stage)}
+  .pagenav .links{display:flex;gap:2px;background:#fff;border:1px solid var(--rule);border-radius:100px;
+                  padding:6px;box-shadow:0 6px 20px rgba(0,0,0,.10);overflow-x:auto;max-width:100%;
+                  transition:padding .35s cubic-bezier(.4,0,.2,1),background-color .35s ease,
+                             backdrop-filter .35s ease,box-shadow .35s ease}
+  .pagenav .links a{font-family:'Inter Tight',sans-serif;font-size:12px;font-weight:500;color:var(--muted);
+                    text-decoration:none;padding:8px 16px;border-radius:100px;white-space:nowrap;
+                    transition:color .2s,background .2s;flex-shrink:0}
+  .pagenav .links a:hover{color:var(--ink)}
+  .pagenav .links a.active{color:var(--ink);background:var(--stage);font-weight:600}
+  body.nav-compact .pagenav{top:14px}
+  body.nav-compact .pagenav .links{
+    padding:3px;
+    background:color-mix(in srgb, #fff 72%, transparent);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  }
+  body.nav-compact .pagenav .links a{padding:6px 12px}
+  .pagenav .links{scrollbar-width:none;-ms-overflow-style:none}
+  .pagenav .links::-webkit-scrollbar{display:none}
+  .pagenav::before,.pagenav::after{
+    content:'';position:absolute;top:3px;bottom:3px;width:34px;
+    pointer-events:none;opacity:0;transition:opacity .2s ease;
+  }
+  .pagenav::before{left:50px;border-radius:100px 0 0 100px;
+    background:linear-gradient(to right,#fff,rgba(255,255,255,0))}
+  .pagenav::after{right:0;border-radius:0 100px 100px 0;
+    background:linear-gradient(to left,#fff,rgba(255,255,255,0))}
+  .pagenav.can-prev::before{opacity:1}
+  .pagenav.can-next::after{opacity:1}
+  body.nav-compact .pagenav::before{
+    background:linear-gradient(to right,color-mix(in srgb,#fff 72%,transparent),rgba(255,255,255,0))}
+  body.nav-compact .pagenav::after{
+    background:linear-gradient(to left,color-mix(in srgb,#fff 72%,transparent),rgba(255,255,255,0))}
+  /* No header wordmark on this page to collide with (unlike the case studies),
+     so the pagenav keeps its top:22px at every width; only the link padding
+     tightens for five chips on a phone. */
+  @media(max-width:640px){
+    .pagenav .links a{padding:7px 12px;font-size:12px}
+  }
 </style>
 </head>
 <body>
 
-<header class="site-nav">
-  <div class="name"><a href="index.html">Shambhavi Jaipuriar</a></div>
-  <nav>
-    <a href="index.html#work">Work</a>
-    <a href="about.html">About</a>
-    <a href="archive.html">Archive</a>
-    <a href="#site-footer">Contact</a>
-  </nav>
-</header>
+<nav class="pagenav" aria-label="Section navigation">
+  <a class="back" href="index.html" aria-label="Back to work">&larr;</a>
+  <div class="links">
+    <a href="#sec-overview" data-target="sec-overview">Overview</a>
+    <a href="#sec-problem" data-target="sec-problem">Brief</a>
+    <a href="#sec-sam" data-target="sec-sam">Meet Sam</a>
+    <a href="#sec-book" data-target="sec-book">Activity Book</a>
+    <a href="#sec-origin" data-target="sec-origin">Origin</a>
+  </div>
+</nav>
 
-<div class="wrap">
+<div class="wrap" id="sec-overview">
   <h1>Pretty, What?</h1>
   <p class="tagline">Girls grow up being told they are pretty. The problem isn't the word. It's that it's the whole sentence.</p>
   <div class="meta">
-    <div><span class="lbl">ROLE</span><span class="val">Research + Strategy · Campaign Concept · Character Design · Publication Design</span></div>
+    <div><span class="lbl">ROLE</span><span class="val">Research + Strategy · Character Design · Publication Design</span></div>
     <div><span class="lbl">WHEN &amp; WHERE</span><span class="val">Semester 3 · World University of Design · 2023</span></div>
     <div><span class="lbl">AGE GROUP</span><span class="val">Girls aged 9–15, and their caregivers</span></div>
   </div>
 </div>
 
 <div class="hero reveal">
-  <picture><source type="image/avif" srcset="Assets/PrettyWhat/book-spread-intro-360.avif 360w, Assets/PrettyWhat/book-spread-intro-720.avif 720w, Assets/PrettyWhat/book-spread-intro-985.avif 985w, Assets/PrettyWhat/book-spread-intro-1425.avif 1425w, Assets/PrettyWhat/book-spread-intro-1920.avif 1920w" sizes="(max-width: 700px) 360px, (max-width: 1200px) 985px, 1425px"><source type="image/webp" srcset="Assets/PrettyWhat/book-spread-intro-360.webp 360w, Assets/PrettyWhat/book-spread-intro-720.webp 720w, Assets/PrettyWhat/book-spread-intro-985.webp 985w, Assets/PrettyWhat/book-spread-intro-1425.webp 1425w, Assets/PrettyWhat/book-spread-intro-1920.webp 1920w" sizes="(max-width: 700px) 360px, (max-width: 1200px) 985px, 1425px"><img src="Assets/PrettyWhat/book-spread-intro.jpg" alt="Sam Says: Pretty What? activity book cover beside its introduction spread" width="1920" height="1080" decoding="async" fetchpriority="high"></picture>
+  <picture><source type="image/avif" srcset="Assets/PrettyWhat/book-cover-card-355.avif 355w, Assets/PrettyWhat/book-cover-card-636.avif 636w, Assets/PrettyWhat/book-cover-card-937.avif 937w, Assets/PrettyWhat/book-cover-card-1272.avif 1272w" sizes="(max-width: 700px) 355px, (max-width: 1200px) 937px, 1272px"><source type="image/webp" srcset="Assets/PrettyWhat/book-cover-card-355.webp 355w, Assets/PrettyWhat/book-cover-card-636.webp 636w, Assets/PrettyWhat/book-cover-card-937.webp 937w, Assets/PrettyWhat/book-cover-card-1272.webp 1272w" sizes="(max-width: 700px) 355px, (max-width: 1200px) 937px, 1272px"><img src="Assets/PrettyWhat/book-cover-card.jpg" alt="The Sam Says: Pretty What? activity book standing open on a desk, with pencils and crayons" width="1400" height="1050" decoding="async" fetchpriority="high"></picture>
 </div>
 
 <!-- ============ 01 THE BRIEF ============ -->
@@ -145,17 +226,34 @@
         <p>It had to work across schools, NGOs and social media, without a formal facilitator to deliver it.</p>
       </div>
     </div>
-    <figure>
-      <div class="mosaic" style="grid-template-columns:1fr">
-        <div class="t" style="aspect-ratio:4/3"><picture><source type="image/avif" srcset="Assets/PrettyWhat/book-pages-colouring-312.avif 312w, Assets/PrettyWhat/book-pages-colouring-624.avif 624w, Assets/PrettyWhat/book-pages-colouring-937.avif 937w, Assets/PrettyWhat/book-pages-colouring-1332.avif 1332w, Assets/PrettyWhat/book-pages-colouring-1874.avif 1874w" sizes="(max-width: 700px) 312px, (max-width: 1200px) 937px, 666px"><source type="image/webp" srcset="Assets/PrettyWhat/book-pages-colouring-312.webp 312w, Assets/PrettyWhat/book-pages-colouring-624.webp 624w, Assets/PrettyWhat/book-pages-colouring-937.webp 937w, Assets/PrettyWhat/book-pages-colouring-1332.webp 1332w, Assets/PrettyWhat/book-pages-colouring-1874.webp 1874w" sizes="(max-width: 700px) 312px, (max-width: 1200px) 937px, 666px"><img src="Assets/PrettyWhat/book-pages-colouring.jpg" alt="Two colouring pages from the activity book, Sam is pretty brave, Sam is pretty kind" width="1920" height="1080" decoding="async" loading="lazy"></picture></div>
+    <div>
+      <div class="say">
+        <p>Sexualisation is so embedded in our media that many times, we may not even recognise it when it comes in front of us. A teenager or young adult is dressed in a way to make her appear younger. She may be wearing a cheerleader uniform, a school-girl uniform, and she is often posed in a sexual fashion.</p>
       </div>
-      <figcaption>Two pages from the activity book. Sam getting a vaccine, and Sam looking out for a younger kid.</figcaption>
-    </figure>
+      <div class="stats">
+        <div class="stat"><span class="n">1 in 6</span><span class="l">Girls is sexually assaulted by the time she turns 18</span></div>
+        <div class="stat"><span class="n">1 in 4</span><span class="l">Experience sexual violence by a family member or older man they know</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reveal">
+    <p class="micro" style="padding-top:44px">Portrayal of underage girls in media, from the research.</p>
+    <div class="refs">
+      <figure>
+        <div class="t"><picture><source type="image/avif" srcset="Assets/PrettyWhat/media-britney-312.avif 312w, Assets/PrettyWhat/media-britney-624.avif 624w, Assets/PrettyWhat/media-britney-937.avif 937w, Assets/PrettyWhat/media-britney-1248.avif 1158w" sizes="(max-width: 700px) 312px, (max-width: 1200px) 468px, 624px"><source type="image/webp" srcset="Assets/PrettyWhat/media-britney-312.webp 312w, Assets/PrettyWhat/media-britney-624.webp 624w, Assets/PrettyWhat/media-britney-937.webp 937w, Assets/PrettyWhat/media-britney-1248.webp 1158w" sizes="(max-width: 700px) 312px, (max-width: 1200px) 468px, 624px"><img src="Assets/PrettyWhat/media-britney.jpg" alt="Still from the Baby One More Time music video, a school corridor lined with lockers" width="1158" height="772" decoding="async" loading="lazy"></picture></div>
+        <figcaption>Britney Spears, <em>Baby One More Time</em>. The then seventeen-year-old donned a little school girl uniform complete with pigtails. That uniform blouse was tied up to reveal her mid-drift and her skirt was cut short.</figcaption>
+      </figure>
+      <figure>
+        <div class="t"><picture><source type="image/avif" srcset="Assets/PrettyWhat/media-lolita-312.avif 312w, Assets/PrettyWhat/media-lolita-624.avif 624w, Assets/PrettyWhat/media-lolita-688.avif 688w" sizes="(max-width: 700px) 312px, (max-width: 1200px) 468px, 624px"><source type="image/webp" srcset="Assets/PrettyWhat/media-lolita-312.webp 312w, Assets/PrettyWhat/media-lolita-624.webp 624w, Assets/PrettyWhat/media-lolita-688.webp 688w" sizes="(max-width: 700px) 312px, (max-width: 1200px) 468px, 624px"><img src="Assets/PrettyWhat/media-lolita.jpg" alt="Still from Adrian Lyne's Lolita, the title character in a school shirt and plaits" width="688" height="481" decoding="async" loading="lazy"></picture></div>
+        <figcaption>Adrian Lyne's <em>Lolita</em>, 1997. She clearly feels trapped by her arrangement with Humbert, but, being a young female, she is powerless to extricate herself.</figcaption>
+      </figure>
+    </div>
   </div>
 </div>
 
 <!-- ============ 02 MEET SAM ============ -->
-<div class="wrap">
+<div class="wrap" id="sec-sam">
   <div class="act reveal"><span class="num">02</span><h2>Meet Sam</h2></div>
 
   <div class="split rev reveal">
@@ -169,23 +267,61 @@
     <div>
       <p class="big">Sam is 12. Her favourite colour is yellow. Every time someone calls her pretty, she asks: Pretty, what?</p>
       <div class="say" style="padding-top:20px">
-        <p>Sam is the campaign mascot: a curious, chatty twelve-year-old, completely comfortable in her own world. She's modelled in part on Olive from <em>Little Miss Sunshine</em>, a child with no interest in being anyone else's idea of pretty.</p>
+        <p>Sam is the campaign mascot: a curious girl who enjoys learning about new things, wears round golden-rimmed glasses and the weirdest clothes, and is very friendly and chatty.</p>
         <p>Not aspirational in the conventional sense. Achievable. Already enough.</p>
       </div>
+      <div class="mark">
+        <picture><source type="image/avif" srcset="Assets/PrettyWhat/pw-wordmark-180.avif 180w, Assets/PrettyWhat/pw-wordmark-360.avif 360w, Assets/PrettyWhat/pw-wordmark-590.avif 590w" sizes="280px"><source type="image/webp" srcset="Assets/PrettyWhat/pw-wordmark-180.webp 180w, Assets/PrettyWhat/pw-wordmark-360.webp 360w, Assets/PrettyWhat/pw-wordmark-590.webp 590w" sizes="280px"><img src="Assets/PrettyWhat/pw-wordmark.jpg" alt="The pretty WHAT? wordmark, pretty in yellow script above WHAT? in red" width="590" height="370" decoding="async" loading="lazy"></picture>
+      </div>
       <p class="micro" style="padding-top:26px">Palette.</p>
-      <div class="bars">
-        <div class="bar" style="background:var(--pw-yellow);color:var(--ink)">Sunshine Yellow<span class="hex">Primary</span></div>
-        <div class="bar" style="background:var(--pw-berry)">Deep Red / Berry<span class="hex">Accent</span></div>
-        <div class="bar light" style="background:#fff;border:1px solid var(--rule)">Off White<span class="hex">Background</span></div>
-        <div class="bar light" style="background:var(--pw-lavender)">Soft Lavender<span class="hex">Merch</span></div>
+      <div class="swatches">
+        <div class="sw"><span class="chip" style="background:var(--pw-yellow)"></span><span class="nm">Sunshine Yellow</span><span class="rl">Primary</span></div>
+        <div class="sw"><span class="chip" style="background:var(--pw-berry)"></span><span class="nm">Deep Red / Berry</span><span class="rl">Accent</span></div>
+        <div class="sw"><span class="chip" style="background:#fff;border:1px solid var(--rule)"></span><span class="nm">Off White</span><span class="rl">Background</span></div>
+        <div class="sw"><span class="chip" style="background:var(--pw-lavender)"></span><span class="nm">Soft Lavender</span><span class="rl">Merch</span></div>
       </div>
       <div class="voice"><span>Curious</span><span>Unbothered</span><span>Kind</span><span>Brave</span></div>
     </div>
   </div>
+
+  <div class="split reveal">
+    <figure>
+      <div class="mosaic" style="grid-template-columns:1fr">
+        <!-- Full moodboard at every width, per her correction to D-134: the
+             close-up crop dropped two-thirds of the reference board. D-138. -->
+        <div class="t fit ref-olive" style="background:#fff"><picture>
+          <source type="image/avif" srcset="Assets/PrettyWhat/sam-olive-refs-360.avif 360w, Assets/PrettyWhat/sam-olive-refs-720.avif 720w, Assets/PrettyWhat/sam-olive-refs-1080.avif 1080w, Assets/PrettyWhat/sam-olive-refs-1620.avif 1620w" sizes="(max-width: 1000px) 100vw, 640px">
+          <source type="image/webp" srcset="Assets/PrettyWhat/sam-olive-refs-360.webp 360w, Assets/PrettyWhat/sam-olive-refs-720.webp 720w, Assets/PrettyWhat/sam-olive-refs-1080.webp 1080w, Assets/PrettyWhat/sam-olive-refs-1620.webp 1620w" sizes="(max-width: 1000px) 100vw, 640px">
+          <img src="Assets/PrettyWhat/sam-olive-refs.jpg" alt="Three reference stills of Olive from Little Miss Sunshine, in a red vest outside a shop, close up in oversized glasses, and laughing at a telephone" width="1620" height="595" decoding="async" loading="lazy">
+        </picture></div>
+      </div>
+      <figcaption>The reference board Sam was drawn against.</figcaption>
+    </figure>
+    <div>
+      <p class="micro">Major inspiration.</p>
+      <div class="say" style="padding-top:14px">
+        <p>Sam is modelled in part on Olive from <em>Little Miss Sunshine</em>, a child who exists fully in her own world, with no interest in being anyone else's idea of pretty. Her family spends the film arguing about whether she belongs in a beauty pageant. Her mother settles it: you've got to let Olive be Olive.</p>
+      </div>
+    </div>
+  </div>
+
+  <figure class="reveal" style="margin-top:56px">
+    <div class="mosaic" style="grid-template-columns:1fr">
+      <!-- Full sheet at every width, working and handwriting included, per her
+           request: the mobile-only tight crop D-134 introduced dropped the very
+           thing this figure exists to show. D-137. -->
+      <div class="t fit sheet" style="background:#fff"><picture>
+        <source type="image/avif" srcset="Assets/PrettyWhat/sam-sketch-360.avif 360w, Assets/PrettyWhat/sam-sketch-720.avif 720w, Assets/PrettyWhat/sam-sketch-1080.avif 1080w, Assets/PrettyWhat/sam-sketch-1800.avif 1800w" sizes="(max-width: 1200px) 100vw, 1296px">
+        <source type="image/webp" srcset="Assets/PrettyWhat/sam-sketch-360.webp 360w, Assets/PrettyWhat/sam-sketch-720.webp 720w, Assets/PrettyWhat/sam-sketch-1080.webp 1080w, Assets/PrettyWhat/sam-sketch-1800.webp 1800w" sizes="(max-width: 1200px) 100vw, 1296px">
+        <img src="Assets/PrettyWhat/sam-sketch.jpg" alt="Hand-drawn character sheet for Sam in red pen, with notes on who she is and a three-phase plan for her Instagram page" width="1800" height="1000" decoding="async" loading="lazy">
+      </picture></div>
+    </div>
+    <figcaption>Working out who she is, and where she goes next. Phase I, introduce Sam, school, plays, everyday routine. Phase II, Sam encounters people, people call her pretty, she always asks innocently, pretty, what? Phase III, Sam goes to different cities and introduces the NGOs of that city.</figcaption>
+  </figure>
 </div>
 
 <!-- ============ 03 THE ACTIVITY BOOK ============ -->
-<div class="wrap">
+<div class="wrap" id="sec-book">
   <div class="act reveal"><span class="num">03</span><h2>The Activity Book</h2></div>
 
   <div class="split reveal">
@@ -193,32 +329,39 @@
       <p class="big">A book a ten-year-old would actually want to pick up.</p>
       <div class="say" style="padding-top:20px">
         <p>Sam Says: Pretty What? is a colouring and activity book built around one question, asked a dozen different ways. Sam is pretty brave. Sam is pretty kind. Sam is pretty curious. Pretty, what, is left for the reader to decide about themselves.</p>
-        <p>Colouring pages sit alongside activities designed for a classroom or a kitchen table, without an adult trained to run them.</p>
       </div>
     </div>
-    <figure>
-      <div class="mosaic" style="grid-template-columns:1fr">
-        <div class="t" style="aspect-ratio:4/3"><picture><source type="image/avif" srcset="Assets/PrettyWhat/book-cover-alt-312.avif 312w, Assets/PrettyWhat/book-cover-alt-624.avif 624w, Assets/PrettyWhat/book-cover-alt-937.avif 937w, Assets/PrettyWhat/book-cover-alt-1332.avif 1332w, Assets/PrettyWhat/book-cover-alt-1874.avif 1874w" sizes="(max-width: 700px) 312px, (max-width: 1200px) 937px, 666px"><source type="image/webp" srcset="Assets/PrettyWhat/book-cover-alt-312.webp 312w, Assets/PrettyWhat/book-cover-alt-624.webp 624w, Assets/PrettyWhat/book-cover-alt-937.webp 937w, Assets/PrettyWhat/book-cover-alt-1332.webp 1332w, Assets/PrettyWhat/book-cover-alt-1874.webp 1874w" sizes="(max-width: 700px) 312px, (max-width: 1200px) 937px, 666px"><img src="Assets/PrettyWhat/book-cover-alt.jpg" alt="Sam Says: Pretty What? activity book cover and its stated contents" width="1920" height="1080" decoding="async" loading="lazy"></picture></div>
+    <div>
+      <div class="say">
+        <p>Colouring pages show Sam being curious, messy, clever and ridiculous, never decorative. Activity pages build vocabulary around identity and self-worth in language that feels playful rather than instructional.</p>
+        <p>The goal: a girl who picks it up because it looks fun, and puts it down knowing something she didn't before.</p>
       </div>
-      <figcaption>The cover, and what the book sets out to do.</figcaption>
-    </figure>
+    </div>
   </div>
+
+  <figure class="film reveal">
+    <video autoplay muted loop playsinline preload="metadata" width="1920" height="1080"
+           poster="Assets/PrettyWhat/book-poster.jpg"
+           aria-label="A flip-through of the Sam Says: Pretty What? activity book, spread by spread">
+      <source src="Assets/PrettyWhat/book-flipthrough.mp4" type="video/mp4">
+    </video>
+    <figcaption>The book, spread by spread. Sam is pretty creative, pretty adventurous, pretty musical, pretty helpful, one page at a time.</figcaption>
+  </figure>
 
   <div class="merch reveal">
     <p class="micro">Sam, out in the world.</p>
     <div class="merch-grid">
-      <div class="t"><picture><source type="image/avif" srcset="Assets/PrettyWhat/merch-pins-264.avif 264w, Assets/PrettyWhat/merch-pins-394.avif 394w, Assets/PrettyWhat/merch-pins-528.avif 528w, Assets/PrettyWhat/merch-pins-788.avif 788w, Assets/PrettyWhat/merch-pins-1200.avif 1200w" sizes="(max-width: 700px) 264px, (max-width: 1200px) 889px, 394px"><source type="image/webp" srcset="Assets/PrettyWhat/merch-pins-264.webp 264w, Assets/PrettyWhat/merch-pins-394.webp 394w, Assets/PrettyWhat/merch-pins-528.webp 528w, Assets/PrettyWhat/merch-pins-788.webp 788w, Assets/PrettyWhat/merch-pins-1200.webp 1200w" sizes="(max-width: 700px) 264px, (max-width: 1200px) 889px, 394px"><img src="Assets/PrettyWhat/merch-pins.jpg" alt="Sam enamel pins, on the rocking horse and as the pretty WHAT? wordmark, on a lavender backpack" width="1200" height="900" decoding="async" loading="lazy"></picture></div>
-      <div class="t"><picture><source type="image/avif" srcset="Assets/PrettyWhat/merch-tote-264.avif 264w, Assets/PrettyWhat/merch-tote-394.avif 394w, Assets/PrettyWhat/merch-tote-528.avif 528w, Assets/PrettyWhat/merch-tote-788.avif 788w, Assets/PrettyWhat/merch-tote-1600.avif 1600w" sizes="(max-width: 700px) 264px, (max-width: 1200px) 889px, 394px"><source type="image/webp" srcset="Assets/PrettyWhat/merch-tote-264.webp 264w, Assets/PrettyWhat/merch-tote-394.webp 394w, Assets/PrettyWhat/merch-tote-528.webp 528w, Assets/PrettyWhat/merch-tote-788.webp 788w, Assets/PrettyWhat/merch-tote-1600.webp 1600w" sizes="(max-width: 700px) 264px, (max-width: 1200px) 889px, 394px"><img src="Assets/PrettyWhat/merch-tote.jpg" alt="Three schoolgirls, one carrying a tote bag printed with Sam and the pretty WHAT? wordmark" width="1600" height="900" decoding="async" loading="lazy"></picture></div>
-      <div class="t"><picture><source type="image/avif" srcset="Assets/PrettyWhat/merch-wrap-264.avif 264w, Assets/PrettyWhat/merch-wrap-394.avif 394w, Assets/PrettyWhat/merch-wrap-528.avif 528w, Assets/PrettyWhat/merch-wrap-788.avif 788w, Assets/PrettyWhat/merch-wrap-1200.avif 1200w" sizes="(max-width: 700px) 264px, (max-width: 1200px) 889px, 394px"><source type="image/webp" srcset="Assets/PrettyWhat/merch-wrap-264.webp 264w, Assets/PrettyWhat/merch-wrap-394.webp 394w, Assets/PrettyWhat/merch-wrap-528.webp 528w, Assets/PrettyWhat/merch-wrap-788.webp 788w, Assets/PrettyWhat/merch-wrap-1200.webp 1200w" sizes="(max-width: 700px) 264px, (max-width: 1200px) 889px, 394px"><img src="Assets/PrettyWhat/merch-wrap.jpg" alt="The activity book in its gift wrap, with a personalised name label reading Diya Sharma, Class 4-B" width="1200" height="900" decoding="async" loading="lazy"></picture></div>
+      <div class="t wide"><picture><source type="image/avif" srcset="Assets/PrettyWhat/merch-tote-crop-312.avif 312w, Assets/PrettyWhat/merch-tote-crop-624.avif 624w, Assets/PrettyWhat/merch-tote-crop-937.avif 937w, Assets/PrettyWhat/merch-tote-crop-1360.avif 1360w" sizes="(max-width: 1000px) 100vw, 900px"><source type="image/webp" srcset="Assets/PrettyWhat/merch-tote-crop-312.webp 312w, Assets/PrettyWhat/merch-tote-crop-624.webp 624w, Assets/PrettyWhat/merch-tote-crop-937.webp 937w, Assets/PrettyWhat/merch-tote-crop-1360.webp 1360w" sizes="(max-width: 1000px) 100vw, 900px"><img src="Assets/PrettyWhat/merch-tote-crop.jpg" alt="Three schoolgirls, one carrying a tote bag printed with Sam and the pretty WHAT? wordmark" width="1360" height="900" decoding="async" loading="lazy"></picture></div>
+      <div class="t"><picture><source type="image/avif" srcset="Assets/PrettyWhat/merch-pins-264.avif 264w, Assets/PrettyWhat/merch-pins-394.avif 394w, Assets/PrettyWhat/merch-pins-528.avif 528w, Assets/PrettyWhat/merch-pins-788.avif 788w, Assets/PrettyWhat/merch-pins-1200.avif 1200w" sizes="(max-width: 700px) 50vw, 445px"><source type="image/webp" srcset="Assets/PrettyWhat/merch-pins-264.webp 264w, Assets/PrettyWhat/merch-pins-394.webp 394w, Assets/PrettyWhat/merch-pins-528.webp 528w, Assets/PrettyWhat/merch-pins-788.webp 788w, Assets/PrettyWhat/merch-pins-1200.webp 1200w" sizes="(max-width: 700px) 50vw, 445px"><img src="Assets/PrettyWhat/merch-pins.jpg" alt="Sam enamel pins, on the rocking horse and as the pretty WHAT? wordmark, on a lavender backpack" width="1200" height="900" decoding="async" loading="lazy"></picture></div>
+      <div class="t"><picture><source type="image/avif" srcset="Assets/PrettyWhat/merch-wrap-264.avif 264w, Assets/PrettyWhat/merch-wrap-394.avif 394w, Assets/PrettyWhat/merch-wrap-528.avif 528w, Assets/PrettyWhat/merch-wrap-788.avif 788w, Assets/PrettyWhat/merch-wrap-1200.avif 1200w" sizes="(max-width: 700px) 50vw, 445px"><source type="image/webp" srcset="Assets/PrettyWhat/merch-wrap-264.webp 264w, Assets/PrettyWhat/merch-wrap-394.webp 394w, Assets/PrettyWhat/merch-wrap-528.webp 528w, Assets/PrettyWhat/merch-wrap-788.webp 788w, Assets/PrettyWhat/merch-wrap-1200.webp 1200w" sizes="(max-width: 700px) 50vw, 445px"><img src="Assets/PrettyWhat/merch-wrap.jpg" alt="The activity book in its gift wrap, with a personalised name label reading Diya Sharma, Class 4-B" width="1200" height="900" decoding="async" loading="lazy"></picture></div>
     </div>
     <figcaption>Pins, a tote, and the book's own wrap. Merchandise concepts built to carry Sam past the book itself.</figcaption>
   </div>
 
-  <div class="asset-note reveal">More interior pages from the book still to come. This page is built to take them as they arrive.</div>
 </div>
 
 <!-- ============ 04 WHERE THIS STARTED ============ -->
-<div class="wrap">
+<div class="wrap" id="sec-origin">
   <div class="act reveal"><span class="num">04</span><h2>Where This Started</h2></div>
 
   <div class="origin reveal">
@@ -247,9 +390,78 @@
     es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
   },{threshold:.12});
   document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // Autoplay is an attribute, not a style, so reduced-motion has to be handled
+  // here: the flip-through holds on its poster frame and gets controls, so it
+  // is still watchable on purpose rather than moving without being asked.
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('.film video').forEach(v=>{
+      v.autoplay = false; v.loop = false; v.controls = true; v.pause();
+    });
+  }
+
+  // section nav scroll-spy: same pattern as the case studies' pagenav
+  (function(){
+    const navLinks = document.querySelectorAll('.pagenav .links a');
+    const byId = {};
+    navLinks.forEach(a => byId[a.dataset.target] = a);
+    const sections = [...navLinks].map(a => document.getElementById(a.dataset.target)).filter(Boolean);
+    const spy = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(a => a.classList.remove('active'));
+          const link = byId[entry.target.id];
+          if (link) {
+            link.classList.add('active');
+            const strip = link.parentElement;
+            if (strip.scrollWidth > strip.clientWidth) {
+              const lr = link.getBoundingClientRect(), sr = strip.getBoundingClientRect();
+              strip.scrollBy({ left: (lr.left + lr.width/2) - (sr.left + sr.width/2), behavior: 'smooth' });
+            }
+          }
+        }
+      });
+    }, { rootMargin: '-35% 0px -55% 0px', threshold: 0 });
+    sections.forEach(s => spy.observe(s));
+  })();
+
+  // Fade whichever edge of the pagenav pill still has chips beyond it.
+  (function(){
+    var pn = document.querySelector('.pagenav');
+    if (!pn) return;
+    var strip = pn.querySelector('.links');
+    if (!strip) return;
+    function update(){
+      var max = strip.scrollWidth - strip.clientWidth;
+      pn.classList.toggle('can-prev', strip.scrollLeft > 1);
+      pn.classList.toggle('can-next', max - strip.scrollLeft > 1);
+    }
+    strip.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  })();
+
+  (function () {
+    var lastY = window.scrollY, ticking = false;
+    var THRESH = 6, TOP_BUFFER = 40;
+    function update() {
+      var y = window.scrollY;
+      var delta = y - lastY;
+      if (Math.abs(delta) > THRESH) {
+        if (y < TOP_BUFFER) document.body.classList.remove('nav-compact');
+        else if (delta > 0) document.body.classList.add('nav-compact');
+        else document.body.classList.remove('nav-compact');
+        lastY = y;
+      }
+      ticking = false;
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { requestAnimationFrame(update); ticking = true; }
+    }, { passive: true });
+  })();
 </script>
 
-<script src="nav-scroll.js"></script>
+<script src="lightbox.js"></script>
 
 </body>
 </html>

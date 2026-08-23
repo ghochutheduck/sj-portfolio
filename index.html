@@ -69,7 +69,13 @@
   /* ---------- project grid: symmetric 2x2, D-58 (reverses D-26/35/38) ---------- */
   .work-heading{padding-top:var(--sp-xl);border-top:1px solid var(--rule)}
   .project-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--gut);margin-top:var(--sp-m)}
-  .tile-link{display:block;text-decoration:none;color:inherit}
+  /* min-width:0: a grid item defaults to min-width:auto, which floors its
+     shrink at its content's own minimum width rather than the grid track. The
+     nowrap caption below ("Brand Identity · Campaign · Character · 2024")
+     has a min-content width of about 355px, wider than the single-column
+     track (327px) below 1000px, so every tile was blown out 28px past its
+     column and the grid 4px past the viewport at 375px. D-144. */
+  .tile-link{display:block;text-decoration:none;color:inherit;min-width:0}
   .tile{
     position:relative; overflow:hidden; background:var(--stage);
     border-radius:var(--radius); cursor:pointer; aspect-ratio:4/3;
@@ -148,6 +154,11 @@
 
   @media(max-width:1000px){
     .project-grid{grid-template-columns:1fr}
+    /* Single column means the tile has room again, but the caption's meta
+       line stays too wide to fit beside its title on a phone; let it wrap
+       to a second line instead of relying on the row to shrink it. */
+    .tile-caption{flex-wrap:wrap}
+    .tile-caption span{white-space:normal;text-align:right}
     .tile.is-expanding{width:92vw;height:auto;aspect-ratio:4/3}
   }
 

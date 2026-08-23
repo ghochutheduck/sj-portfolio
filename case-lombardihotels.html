@@ -116,19 +116,18 @@
   .dia .ann{font-size:15px}
   .dia .cap{font-size:12px;fill:var(--muted);letter-spacing:.06em}
   .dia .lead{stroke:#9A9A9A;stroke-width:1;fill:none}
-  .dia .arrow{stroke:#9A9A9A;stroke-width:1.6;fill:none}
-  /* stacked fallback for narrow screens */
-  .dia-list{display:none;margin-top:20px;flex-direction:column;gap:14px}
-  .dia-list .row{display:flex;gap:12px;font-size:14px;line-height:1.5}
-  .dia-list .row b{flex:0 0 auto;font-weight:700}
-  /* The diagram scales as one unit, labels included, so by 700px its 15px
-     annotations are down to about 6px and its leader lines run into the
-     wordmark they point at. `.dia-list` was written as the narrow-screen
-     equivalent but was never switched on, so the unreadable SVG shipped at
-     every width. Below 700px the diagram gives way to the list. D-128. */
+  .dia .arrow,.dia-m .arrow{stroke:#9A9A9A;stroke-width:1.6;fill:none}
+  /* Narrow screens keep the marks and drop the words. D-128 replaced the whole
+     diagram with a text list below 700px, which threw away the one thing the
+     block exists to show: the old mark, the arrow, and what it became. What
+     was actually unreadable at that width was the 15px annotation layer, not
+     the artwork, so `.dia-m` carries the same two images and the same curved
+     arrow in a viewBox cropped to them, with no labels and no leader lines.
+     D-133, reverting D-128's narrow-screen treatment. */
+  .dia-m{display:none;width:100%}
   @media(max-width:700px){
     .dia{display:none}
-    .dia-list{display:flex}
+    .dia-m{display:block}
   }
 
   /* ---------- colour bars: the swatch is its own label ---------- */
@@ -161,7 +160,7 @@
 
   /* campaign panels — transparent cut-outs on brand colour */
   .panels{display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--gut);margin-top:var(--gut)}
-  .panel{aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;padding:14px;border-radius:3px}
+  .panel{aspect-ratio:4/3;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:14px;border-radius:3px}
   .panel img{width:100%;height:100%;object-fit:contain;display:block}
 
   figcaption{font-size:12px;color:var(--muted);padding-top:10px;max-width:760px}
@@ -172,7 +171,21 @@
     :root{--pad:24px}
     .split,.split.rev{grid-template-columns:1fr;gap:28px}
     .collage{aspect-ratio:4/3}
-    .core,.tiers,.panels{grid-template-columns:1fr}
+    .core,.tiers{grid-template-columns:1fr}
+    /* !important: the Alice campaign panels carry an inline
+       style="grid-template-columns:1fr 1fr" (needed to hold two columns on
+       desktop instead of the default three), and an inline style always wins
+       over a class rule regardless of media query. Without !important here,
+       that inline style kept forcing two columns at every width, squeezing
+       both square illustrations to about 159px on a 375px phone. D-139. */
+    .panels{grid-template-columns:1fr !important}
+    /* The wide third panel also carries its own inline grid-column:1 / span 2,
+       which spans two column tracks that no longer exist once the template
+       above is one column, so the grid quietly generated an implicit second
+       (auto-sized) track just to satisfy it. That implicit track is what was
+       actually squeezing panels one and two apart unevenly (151px/166px),
+       not the template itself. Forcing grid-column back to auto closes it. */
+    .panels .panel{grid-column:auto !important}
     .act{padding-top:80px}
     /* The founder grid holds a fixed 300px portrait against a fluid column, so
        below about 700px the quote beside it was down to roughly 35px of
@@ -447,13 +460,20 @@
         <text class="ann" x="210" y="441" font-weight="700">you are, and how it feels to be there.</text>
       </svg>
 
-      <!-- narrow-screen equivalent -->
-      <div class="dia-list">
-        <div class="row"><b>Constraint</b><span>Client wanted the same mark, redesigned with meaning.</span></div>
-        <div class="row"><b>Arc</b><span>A brushstroke sun, for summer.</span></div>
-        <div class="row"><b>Wave</b><span>The Adriatic, minutes from every property.</span></div>
-        <div class="row"><b>Type</b><span>Brother 1816 Book, geometric and open, never competing with the mark.</span></div>
-      </div>
+      <!-- Narrow-screen equivalent: the same two marks and the same arrow, in a
+           viewBox cropped to them so they fill the width at 375px. -->
+      <svg class="dia-m" viewBox="0 0 560 300" role="img"
+           aria-label="The previous Lombardi Hotels logo, an arrow, and the redesigned mark it became.">
+        <rect x="0" y="75" width="170" height="170" fill="#111"/>
+        <image href="Assets/Lombardi/Untitled%20design.png" xlink:href="Assets/Lombardi/Untitled%20design.png" x="17" y="109" width="136" height="102"/>
+        <defs>
+          <marker id="ahm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#9A9A9A"/>
+          </marker>
+        </defs>
+        <path class="arrow" d="M182,158 C196,148 206,144 216,146" marker-end="url(#ahm)"/>
+        <image href="Assets/Lombardi/Master%20Logo.png" xlink:href="Assets/Lombardi/Master%20Logo.png" x="228" y="26" width="330" height="248"/>
+      </svg>
     </div>
 
     <!-- applications + palette, packed tight -->
@@ -531,11 +551,12 @@
         <text class="cap" x="350" y="394" text-anchor="middle">ALICE · 102 · GABICCE MARE</text>
       </svg>
 
-      <div class="dia-list">
-        <div class="row"><b>Flowers</b><span>From the admirers she has all over town.</span></div>
-        <div class="row"><b>Bike</b><span>How she gets everywhere.</span></div>
-        <div class="row"><b>Eyes</b><span>Kind, childlike, unbothered by the rest of the world.</span></div>
-      </div>
+      <!-- Same treatment as the identity diagram: on narrow screens Alice keeps
+           her artwork and loses the annotation layer. -->
+      <svg class="dia-m" viewBox="0 0 448 336" role="img"
+           aria-label="Alice, the campaign mascot, cycling along the seafront with flowers on her handlebars.">
+        <image href="Assets/Lombardi/20.png" xlink:href="Assets/Lombardi/20.png" x="0" y="0" width="448" height="336"/>
+      </svg>
     </div>
 
     <div>
@@ -733,6 +754,8 @@
     }, { passive: true });
   })();
 </script>
+
+<script src="lightbox.js"></script>
 
 </body>
 </html>

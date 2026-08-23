@@ -10,7 +10,7 @@ const MIME = {
   // Without these two the browser gets application/octet-stream and silently
   // refuses the modern formats, so a <picture> looks broken locally while
   // being fine in production.
-  '.avif': 'image/avif', '.webp': 'image/webp', '.pdf': 'application/pdf'
+  '.avif': 'image/avif', '.webp': 'image/webp', '.pdf': 'application/pdf', '.mp4': 'video/mp4'
 };
 
 const root = __dirname;
