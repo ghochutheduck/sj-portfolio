@@ -207,8 +207,47 @@ footer.site-footer{
   margin-top:var(--sp-xl);border-top:1px solid var(--rule);
   background:rgba(217,46,21,.22);
   --muted:#5C3D33;
+  overflow:hidden;
 }
-.footer-content{max-width:var(--page-max);margin:0 auto;padding:var(--sp-l) var(--pad) var(--sp-m)}
+/* footer-content holds ordinary block flow again (the two-column grid this
+   comment used to describe is gone, D-146): the receiver is positioned
+   absolutely instead, so its size can double without the pink footer ground
+   growing a pixel to accommodate it. Absolutely positioned elements are
+   removed from layout flow entirely and contribute nothing to their
+   container's height. */
+.footer-content{
+  max-width:var(--page-max);margin:0 auto;padding:var(--sp-l) var(--pad) var(--sp-m);
+  position:relative;
+}
+/* The phone body sits on the footer's own top edge, cord and receiver
+   hanging down into the pink ground below it. `top`/`right` for an absolutely
+   positioned element resolve against the containing block's padding box, i.e.
+   footer-content's own outer edge before its top padding is applied — so
+   `top:0` lands the image flush with the footer's top border, not 56px above
+   it (padding only ever affects where static content flows, never this
+   reference point; got this backwards on the first pass and had the phone
+   floating over the section above the footer instead of sitting on it).
+   `right:0` lines up flush with the same right margin the text already uses.
+   Checked against every page's actual footer height (shortest is 649px at
+   1440px desktop) with room to spare below the image at every size, so nothing
+   here can spill past the pink ground onto the paper below it. D-146. */
+.footer-receiver{
+  position:absolute;top:0;right:0;
+  width:400px;pointer-events:none;
+}
+.footer-receiver img{display:block;width:100%;height:auto}
+.footer-receiver .fr-static{display:none}
+/* Animated WebP has no CSS hook for prefers-reduced-motion (unlike a CSS
+   animation or a <video>), so reduced-motion swaps to the resting-phone frame
+   by toggling which of the two stacked images is visible. No JS: this is the
+   same two-image-stack technique, decided once here rather than duplicated as
+   a script on all nine pages. */
+@media(prefers-reduced-motion:reduce){
+  .footer-receiver .fr-anim{display:none}
+  .footer-receiver .fr-static{display:block}
+}
+@media(max-width:860px){ .footer-receiver{width:280px} }
+@media(max-width:480px){ .footer-receiver{width:192px} }
 .footer-content .eyebrow{padding-bottom:8px}
 .footer-content h2{
   font-family:var(--display);font-weight:400;font-stretch:62.5%;text-transform:uppercase;
@@ -217,7 +256,7 @@ footer.site-footer{
 .footer-open{font-size:16px;line-height:1.6;color:var(--ink);max-width:56ch;padding-top:14px}
 .footer-grid{display:grid;grid-template-columns:repeat(4,auto);gap:32px 48px;margin-top:var(--sp-m);flex-wrap:wrap}
 .footer-item .fact-label{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:block;padding-bottom:6px}
-.footer-item .val{font-size:16px;font-weight:600;letter-spacing:-.005em}
+.footer-item .val{font-size:16px;font-weight:600;letter-spacing:-.005em;overflow-wrap:anywhere}
 .footer-item a.val{color:var(--ink);text-decoration:none;border-bottom:1px solid transparent;transition:color .2s,border-color .2s}
 .footer-item a.val:hover{color:var(--red);border-color:var(--red)}
 .footer-item .val.plain{font-weight:500;font-size:14px;color:var(--ink)}

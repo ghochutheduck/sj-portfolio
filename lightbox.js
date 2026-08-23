@@ -16,7 +16,8 @@
     '.sw-icons',    // About page software tool icons
     '.chip-icon',   // SANAT competitor-logo chips
     '.mark',        // Pretty What wordmark
-    '.origin'       // Pretty What closing note's small Sam icon
+    '.origin',      // Pretty What closing note's small Sam icon
+    '.footer-receiver'  // sitewide falling-receiver footer loop, D-145
   ].join(', ');
 
   var overlay, overlayImg, overlayCap;
