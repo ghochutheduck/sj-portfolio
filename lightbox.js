@@ -17,7 +17,12 @@
     '.chip-icon',   // SANAT competitor-logo chips
     '.mark',        // Pretty What wordmark
     '.origin',      // Pretty What closing note's small Sam icon
-    '.footer-receiver'  // sitewide falling-receiver footer loop, D-145
+    '.footer-receiver',  // sitewide falling-receiver footer loop, D-145
+    '.a-card'       // Archive ring cards: a tap already reveals the card's own
+                    // caption, and enlarging a card that is mid-rotation reads
+                    // as a bug rather than a feature. The gallery below the
+                    // ring holds every one of the same images at full size,
+                    // where the lightbox does work. D-150.
   ].join(', ');
 
   var overlay, overlayImg, overlayCap;

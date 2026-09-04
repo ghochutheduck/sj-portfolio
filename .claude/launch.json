@@ -4,15 +4,28 @@
     {
       "name": "portfolio",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["_server.js"],
+      "runtimeArgs": [
+        "_server.js"
+      ],
       "url": "http://localhost:8790",
       "port": 8790
     },
     {
       "name": "portfolio-verify",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["_server.js"],
+      "runtimeArgs": [
+        "_server.js"
+      ],
       "port": 8791,
+      "autoPort": true
+    },
+    {
+      "name": "hc-supplement",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "D:/old portfolio pictures/HarperCollins supplement/_server.js"
+      ],
+      "port": 8795,
       "autoPort": true
     }
   ]

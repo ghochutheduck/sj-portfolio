@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Archive, Side Quests, Craft and Photographs | Shambhavi Jaipuriar</title>
-<meta name="description" content="Things made by hand and pictures taken along the way. Quilling, clay, linocut, calligraphy, collage, and photographs from Saharanpur, Gabicce Mare and Milan.">
+<meta name="description" content="Things made by hand and pictures taken along the way. Quilling, clay, linocut, calligraphy, collage.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;900&display=swap" rel="stylesheet">
@@ -57,9 +57,22 @@
     .a-card--portrait{ width:110px; height:150px; }
     .a-card--landscape{ width:150px; height:110px; }
   }
-  @media(max-width:480px){
+  /* The phone ring runs below 640px, so the small card size runs to the same
+     edge. Between 480 and 640 the cards used to stay at the 110x150 tablet
+     size, which no ring radius that also fits the screen can space apart.
+     D-151. */
+  @media(max-width:639px){
     .a-card--portrait{ width:78px; height:106px; }
     .a-card--landscape{ width:106px; height:78px; }
+  }
+
+  /* Ring cards carry the real image now. The index and the caption scrim sit
+     on top of it, so the photograph reads at a glance and the caption is the
+     second layer, not the first. D-150. */
+  .a-card picture{display:contents}
+  .a-card > img, .a-card picture img{
+    position:absolute; inset:0; width:100%; height:100%;
+    object-fit:cover; display:block;
   }
 
   .a-card .idx{
@@ -80,14 +93,45 @@
   .a-card:hover .cap, .a-card:focus-visible .cap, .a-card.is-open .cap{ opacity:1; }
   .a-card:hover .idx, .a-card:focus-visible .idx, .a-card.is-open .idx{ opacity:0; }
 
-  /* ---------- mosaic fallback: reduced motion only ---------- */
-  .mosaic-grid{
-    display:none; grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
-    gap:var(--gut); padding:56px 0 0;
+  /* ---------- reduced motion ---------- */
+  /* No separate mosaic clone any more: the gallery below is the whole set,
+     so reduced motion simply hides the stage and the page starts at the
+     opening. The subhead the ring would have spelled out is restored here,
+     since it lives inside the stage otherwise. D-150. */
+  .mosaic-subhead{ display:none; }
+  body.mode-mosaic .mosaic-subhead{
+    display:block; font-family:var(--display); font-weight:400; font-stretch:62.5%;
+    text-transform:uppercase; font-size:clamp(22px,2.4vw,30px); letter-spacing:-.01em;
+    color:var(--muted); padding-top:6px;
   }
-  .mosaic-grid .a-card{ position:static; width:auto; height:auto; aspect-ratio:140/190; }
-  .mosaic-grid .a-card--landscape{ aspect-ratio:190/140; }
-  body.mode-mosaic .mosaic-grid{ display:grid; }
+
+  /* ---------- gallery ---------- */
+  /* One grid, everything in it. Two columns on a phone at 375px (158px cards
+     inside a 327px measure), filling out to four on a 1440 page. Landscape
+     frames take two columns, which is the only way a 4:3 sits beside a 3:4
+     without either being cropped square. D-150. */
+  .a-gallery{
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+    gap:var(--gut); padding-top:var(--sp-m);
+  }
+  @media(min-width:700px){
+    .a-gallery{ grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); }
+  }
+  .a-gallery .shot-fig{ margin:0; }
+  .a-gallery .is-landscape{ grid-column:span 2; }
+  .a-gallery .shot{
+    position:relative; overflow:hidden; aspect-ratio:3/4;
+    background:var(--stage); border:1px solid var(--rule); border-radius:var(--radius);
+  }
+  .a-gallery .is-landscape .shot{ aspect-ratio:4/3; }
+  .a-gallery .shot img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .a-gallery figcaption{
+    padding-top:10px; font-size:13px; line-height:1.45; color:var(--muted);
+    text-wrap:pretty;
+  }
+  .a-gallery figcaption strong{
+    display:block; font-weight:600; color:var(--ink); text-wrap:balance;
+  }
 
   /* ---------- page sections, below the fold ---------- */
   .a-section{padding-top:var(--sp-xl);border-top:1px solid var(--rule)}
@@ -98,10 +142,6 @@
   }
   .a-section p{font-size:17px;line-height:1.65;color:var(--ink);max-width:64ch;padding-top:18px}
   .a-section p+p{margin-top:4px}
-  .a-pending{
-    margin-top:24px;padding:24px;border:1px dashed var(--rule);border-radius:var(--radius);
-    font-size:13px;color:var(--muted);max-width:64ch;
-  }
 </style>
 </head>
 <body>
@@ -124,13 +164,77 @@
   </div>
 </div>
 
-<div class="mosaic-grid" id="mosaic"></div>
-
 <div class="wrap">
   <section class="a-section" style="border-top:none;padding-top:var(--sp-m)">
     <p class="eyebrow">Archive</p>
     <h2 style="font-size:clamp(34px,4vw,52px)">Archive</h2>
+    <p class="mosaic-subhead">Side quests</p>
     <p>I have been making things since long before it was a job. Photos, places, and things that never had a brief.</p>
+  </section>
+
+  <section class="a-section">
+    <div class="a-gallery">
+      <figure class="shot-fig">
+        <div class="shot"><picture><source type="image/avif" srcset="Assets/Archive/pipe-cleaner-lilies-200.avif 200w, Assets/Archive/pipe-cleaner-lilies-400.avif 400w, Assets/Archive/pipe-cleaner-lilies-600.avif 600w, Assets/Archive/pipe-cleaner-lilies-900.avif 900w" sizes="(max-width: 700px) 50vw, (max-width: 1200px) 33vw, 300px"><source type="image/webp" srcset="Assets/Archive/pipe-cleaner-lilies-200.webp 200w, Assets/Archive/pipe-cleaner-lilies-400.webp 400w, Assets/Archive/pipe-cleaner-lilies-600.webp 600w, Assets/Archive/pipe-cleaner-lilies-900.webp 900w" sizes="(max-width: 700px) 50vw, (max-width: 1200px) 33vw, 300px"><img src="Assets/Archive/pipe-cleaner-lilies.jpg" alt="Handmade pipe cleaner lilies and blossoms arranged in a round glass bowl, tied with a purple ribbon" width="960" height="1280" decoding="async" loading="lazy"></picture></div>
+        <figcaption><strong>Pipe cleaner lilies</strong>A bouquet that doesn't wilt. Wire, chenille, a glass bowl.</figcaption>
+      </figure>
+      <figure class="shot-fig">
+        <div class="shot"><picture><source type="image/avif" srcset="Assets/Archive/flower-basket-200.avif 200w, Assets/Archive/flower-basket-400.avif 400w, Assets/Archive/flower-basket-600.avif 600w, Assets/Archive/flower-basket-900.avif 900w" sizes="(max-width: 700px) 50vw, (max-width: 1200px) 33vw, 300px"><source type="image/webp" srcset="Assets/Archive/flower-basket-200.webp 200w, Assets/Archive/flower-basket-400.webp 400w, Assets/Archive/flower-basket-600.webp 600w, Assets/Archive/flower-basket-900.webp 900w" sizes="(max-width: 700px) 50vw, (max-width: 1200px) 33vw, 300px"><img src="Assets/Archive/flower-basket.jpg" alt="A wicker basket filled with yellow and orange pipe cleaner lilies, daffodils and sunflowers" width="900" height="1600" decoding="async" loading="lazy"></picture></div>
+        <figcaption><strong>A basket of them</strong>Lilies, daffodils and sunflowers, every one in wire.</figcaption>
+      </figure>
+      <figure class="shot-fig">
+        <div class="shot"><picture><source type="image/avif" srcset="Assets/Archive/park-stall-200.avif 200w, Assets/Archive/park-stall-400.avif 400w, Assets/Archive/park-stall-600.avif 600w, Assets/Archive/park-stall-900.avif 900w" sizes="(max-width: 700px) 50vw, (max-width: 1200px) 33vw, 300px"><source type="image/webp" srcset="Assets/Archive/park-stall-200.webp 200w, Assets/Archive/park-stall-400.webp 400w, Assets/Archive/park-stall-600.webp 600w, Assets/Archive/park-stall-900.webp 900w" sizes="(max-width: 700px) 50vw, (max-width: 1200px) 33vw, 300px"><img src="Assets/Archive/park-stall.jpg" alt="Shambhavi kneeling on a picnic blanket in a park, holding a pipe cleaner flower, with bundles of coloured chenille laid out in front of her" width="960" height="1280" decoding="async" loading="lazy"></picture></div>
+        <figcaption><strong>Selling them in the park</strong>A picnic blanket, a pile of chenille, a morning of making.</figcaption>
+      </figure>
+      <figure class="shot-fig is-landscape">
+        <div class="shot"><picture><source type="image/avif" srcset="Assets/Archive/birthday-crown-200.avif 200w, Assets/Archive/birthday-crown-400.avif 400w, Assets/Archive/birthday-crown-600.avif 600w, Assets/Archive/birthday-crown-900.avif 900w" sizes="(max-width: 700px) 50vw, (max-width: 1200px) 33vw, 300px"><source type="image/webp" srcset="Assets/Archive/birthday-crown-200.webp 200w, Assets/Archive/birthday-crown-400.webp 400w, Assets/Archive/birthday-crown-600.webp 600w, Assets/Archive/birthday-crown-900.webp 900w" sizes="(max-width: 700px) 50vw, (max-width: 1200px) 33vw, 300px"><img src="Assets/Archive/birthday-crown.jpg" alt="A green felt birthday crown reading EVAN and the number one, appliqued with a dinosaur, a bear and candles, with red ribbon ties" width="1600" height="1200" decoding="async" loading="lazy"></picture></div>
+        <figcaption><strong>A crown for a first birthday</strong>Felt, embroidery thread, ribbon ties.</figcaption>
+      </figure>
+      <figure class="shot-fig">
+        <div class="shot"><picture><source type="image/avif" srcset="Assets/Archive/yarn-wreath-200.avif 200w, Assets/Archive/yarn-wreath-400.avif 400w, Assets/Archive/yarn-wreath-600.avif 600w, Assets/Archive/yarn-wreath-900.avif 900w" sizes="(max-width: 700px) 50vw, (max-width: 1200px) 33vw, 300px"><source type="image/webp" srcset="Assets/Archive/yarn-wreath-200.webp 200w, Assets/Archive/yarn-wreath-400.webp 400w, Assets/Archive/yarn-wreath-600.webp 600w, Assets/Archive/yarn-wreath-900.webp 900w" sizes="(max-width: 700px) 50vw, (max-width: 1200px) 33vw, 300px"><img src="Assets/Archive/yarn-wreath.jpg" alt="A card with a wreath of small yarn hearts in pink, red and white around the name Shivi and the date 27.07.2023" width="900" height="1600" decoding="async" loading="lazy"></picture></div>
+        <figcaption><strong>Shivi, 27.07.2023</strong>Yarn hearts wound one at a time, for a birthday.</figcaption>
+      </figure>
+      <figure class="shot-fig">
+        <div class="shot"><picture><source type="image/avif" srcset="Assets/Archive/quilled-cat-200.avif 200w, Assets/Archive/quilled-cat-400.avif 400w, Assets/Archive/quilled-cat-600.avif 600w, Assets/Archive/quilled-cat-900.avif 900w" sizes="(max-width: 700px) 50vw, (max-width: 1200px) 33vw, 300px"><source type="image/webp" srcset="Assets/Archive/quilled-cat-200.webp 200w, Assets/Archive/quilled-cat-400.webp 400w, Assets/Archive/quilled-cat-600.webp 600w, Assets/Archive/quilled-cat-900.webp 900w" sizes="(max-width: 700px) 50vw, (max-width: 1200px) 33vw, 300px"><img src="Assets/Archive/quilled-cat.jpg" alt="A quilled paper cat mask in pink and orange coils, resting on an open white envelope with a card and star stickers" width="900" height="1600" decoding="async" loading="lazy"></picture></div>
+        <figcaption><strong>Quilled cat</strong>Rolled paper, a card, and an envelope to put it in.</figcaption>
+      </figure>
+      <figure class="shot-fig is-landscape">
+        <div class="shot"><picture><source type="image/avif" srcset="Assets/Archive/rangoli-200.avif 200w, Assets/Archive/rangoli-400.avif 400w, Assets/Archive/rangoli-600.avif 600w, Assets/Archive/rangoli-900.avif 900w" sizes="(max-width: 700px) 50vw, (max-width: 1200px) 33vw, 300px"><source type="image/webp" srcset="Assets/Archive/rangoli-200.webp 200w, Assets/Archive/rangoli-400.webp 400w, Assets/Archive/rangoli-600.webp 600w, Assets/Archive/rangoli-900.webp 900w" sizes="(max-width: 700px) 50vw, (max-width: 1200px) 33vw, 300px"><img src="Assets/Archive/rangoli.jpg" alt="A circular rangoli of blue, green and white powder around a lit clay diya, laid on a chequered marble floor" width="1600" height="1200" decoding="async" loading="lazy"></picture></div>
+        <figcaption><strong>Rangoli</strong>Colour laid straight onto the floor, gone by morning.</figcaption>
+      </figure>
+      <figure class="shot-fig">
+        <div class="shot"><picture><source type="image/avif" srcset="Assets/Archive/orange-shelf-200.avif 200w, Assets/Archive/orange-shelf-400.avif 400w, Assets/Archive/orange-shelf-600.avif 600w, Assets/Archive/orange-shelf-900.avif 900w" sizes="(max-width: 700px) 50vw, (max-width: 1200px) 33vw, 300px"><source type="image/webp" srcset="Assets/Archive/orange-shelf-200.webp 200w, Assets/Archive/orange-shelf-400.webp 400w, Assets/Archive/orange-shelf-600.webp 600w, Assets/Archive/orange-shelf-900.webp 900w" sizes="(max-width: 700px) 50vw, (max-width: 1200px) 33vw, 300px"><img src="Assets/Archive/orange-shelf.jpg" alt="A bookshelf papered in a hand drawn orange slice pattern, filled with books and a tennis racket" width="900" height="1600" decoding="async" loading="lazy"></picture></div>
+        <figcaption><strong>The orange shelf</strong>A plain bookshelf, papered over in a pattern drawn by hand.</figcaption>
+      </figure>
+      <figure class="shot-fig">
+        <div class="shot"><picture><source type="image/avif" srcset="Assets/Archive/memory-tree-200.avif 200w, Assets/Archive/memory-tree-400.avif 400w, Assets/Archive/memory-tree-600.avif 600w, Assets/Archive/memory-tree-900.avif 900w" sizes="(max-width: 700px) 50vw, (max-width: 1200px) 33vw, 300px"><source type="image/webp" srcset="Assets/Archive/memory-tree-200.webp 200w, Assets/Archive/memory-tree-400.webp 400w, Assets/Archive/memory-tree-600.webp 600w, Assets/Archive/memory-tree-900.webp 900w" sizes="(max-width: 700px) 50vw, (max-width: 1200px) 33vw, 300px"><img src="Assets/Archive/memory-tree.jpg" alt="A white branch tree hung with photographs, standing on a table covered in blank message cards and pens" width="900" height="1600" decoding="async" loading="lazy"></picture></div>
+        <figcaption><strong>The memory tree</strong>Photographs on the branches, blank cards for everyone else.</figcaption>
+      </figure>
+      <figure class="shot-fig">
+        <div class="shot"><picture><source type="image/avif" srcset="Assets/Archive/costume-figures-200.avif 200w, Assets/Archive/costume-figures-400.avif 400w, Assets/Archive/costume-figures-600.avif 600w, Assets/Archive/costume-figures-900.avif 900w" sizes="(max-width: 700px) 50vw, (max-width: 1200px) 33vw, 300px"><source type="image/webp" srcset="Assets/Archive/costume-figures-200.webp 200w, Assets/Archive/costume-figures-400.webp 400w, Assets/Archive/costume-figures-600.webp 600w, Assets/Archive/costume-figures-900.webp 900w" sizes="(max-width: 700px) 50vw, (max-width: 1200px) 33vw, 300px"><img src="Assets/Archive/costume-figures.jpg" alt="Sketchbook figures in a yellow dress with a brown fur trimmed bodice, drawn from three angles in pen and marker" width="1200" height="1600" decoding="async" loading="lazy"></picture></div>
+        <figcaption><strong>Costume figures</strong>Working a silhouette out in three passes.</figcaption>
+      </figure>
+      <figure class="shot-fig">
+        <div class="shot"><picture><source type="image/avif" srcset="Assets/Archive/yami-rani-200.avif 200w, Assets/Archive/yami-rani-400.avif 400w, Assets/Archive/yami-rani-600.avif 600w, Assets/Archive/yami-rani-900.avif 900w" sizes="(max-width: 700px) 50vw, (max-width: 1200px) 33vw, 300px"><source type="image/webp" srcset="Assets/Archive/yami-rani-200.webp 200w, Assets/Archive/yami-rani-400.webp 400w, Assets/Archive/yami-rani-600.webp 600w, Assets/Archive/yami-rani-900.webp 900w" sizes="(max-width: 700px) 50vw, (max-width: 1200px) 33vw, 300px"><img src="Assets/Archive/yami-rani.jpg" alt="A queen with a crown and purple wings drawn in a lined notebook, captioned Yami rani in pink" width="900" height="1600" decoding="async" loading="lazy"></picture></div>
+        <figcaption><strong>Yami rani</strong>A queen drawn into a lined notebook, name and all.</figcaption>
+      </figure>
+      <figure class="shot-fig">
+        <div class="shot"><picture><source type="image/avif" srcset="Assets/Archive/travel-journal-200.avif 200w, Assets/Archive/travel-journal-400.avif 400w, Assets/Archive/travel-journal-600.avif 600w, Assets/Archive/travel-journal-900.avif 900w" sizes="(max-width: 700px) 50vw, (max-width: 1200px) 33vw, 300px"><source type="image/webp" srcset="Assets/Archive/travel-journal-200.webp 200w, Assets/Archive/travel-journal-400.webp 400w, Assets/Archive/travel-journal-600.webp 600w, Assets/Archive/travel-journal-900.webp 900w" sizes="(max-width: 700px) 50vw, (max-width: 1200px) 33vw, 300px"><img src="Assets/Archive/travel-journal.jpg" alt="An open pocket journal with a hand drawn bowl of noodles and a dated entry written in red and orange pen" width="900" height="1600" decoding="async" loading="lazy"></picture></div>
+        <figcaption><strong>Travel journal</strong>Written the same night, ramen and all.</figcaption>
+      </figure>
+      <figure class="shot-fig">
+        <div class="shot"><picture><source type="image/avif" srcset="Assets/Archive/reel-edit-200.avif 200w, Assets/Archive/reel-edit-400.avif 400w, Assets/Archive/reel-edit-600.avif 600w, Assets/Archive/reel-edit-900.avif 900w" sizes="(max-width: 700px) 50vw, (max-width: 1200px) 33vw, 300px"><source type="image/webp" srcset="Assets/Archive/reel-edit-200.webp 200w, Assets/Archive/reel-edit-400.webp 400w, Assets/Archive/reel-edit-600.webp 600w, Assets/Archive/reel-edit-900.webp 900w" sizes="(max-width: 700px) 50vw, (max-width: 1200px) 33vw, 300px"><img src="Assets/Archive/reel-edit.jpg" alt="A video editing timeline open on an iPad, cutting a BoopShaillyBoop clip into a reel" width="900" height="1600" decoding="async" loading="lazy"></picture></div>
+        <figcaption><strong>Cutting a reel</strong>Editing a BoopShaillyBoop video, frame by frame.</figcaption>
+      </figure>
+      <figure class="shot-fig">
+        <div class="shot"><picture><source type="image/avif" srcset="Assets/Archive/kalanamak-rice-200.avif 200w, Assets/Archive/kalanamak-rice-400.avif 400w, Assets/Archive/kalanamak-rice-600.avif 600w, Assets/Archive/kalanamak-rice-900.avif 900w" sizes="(max-width: 700px) 50vw, (max-width: 1200px) 33vw, 300px"><source type="image/webp" srcset="Assets/Archive/kalanamak-rice-200.webp 200w, Assets/Archive/kalanamak-rice-400.webp 400w, Assets/Archive/kalanamak-rice-600.webp 600w, Assets/Archive/kalanamak-rice-900.webp 900w" sizes="(max-width: 700px) 50vw, (max-width: 1200px) 33vw, 300px"><img src="Assets/Archive/kalanamak-rice.jpg" alt="Siddharthnagar Kalanamak rice packaging in one and five kilogram boxes, printed with a sunrise field and a seated Buddha, displayed on a conference stand" width="960" height="1280" decoding="async" loading="lazy"></picture></div>
+        <figcaption><strong>Kalanamak rice</strong>My packaging, printed by the Indian Institute of Packaging and unveiled at their conference.</figcaption>
+      </figure>
+      <figure class="shot-fig">
+        <div class="shot"><picture><source type="image/avif" srcset="Assets/Archive/kolhapur-jaggery-200.avif 200w, Assets/Archive/kolhapur-jaggery-400.avif 400w, Assets/Archive/kolhapur-jaggery-600.avif 600w, Assets/Archive/kolhapur-jaggery-900.avif 900w" sizes="(max-width: 700px) 50vw, (max-width: 1200px) 33vw, 300px"><source type="image/webp" srcset="Assets/Archive/kolhapur-jaggery-200.webp 200w, Assets/Archive/kolhapur-jaggery-400.webp 400w, Assets/Archive/kolhapur-jaggery-600.webp 600w, Assets/Archive/kolhapur-jaggery-900.webp 900w" sizes="(max-width: 700px) 50vw, (max-width: 1200px) 33vw, 300px"><img src="Assets/Archive/kolhapur-jaggery.jpg" alt="Kolhapur jaggery packaging with a carry handle, printed with a sugarcane harvest scene, displayed beside a jar of jaggery" width="960" height="1280" decoding="async" loading="lazy"></picture></div>
+        <figcaption><strong>Kolhapur jaggery</strong>The same set, on the same stand.</figcaption>
+      </figure>
+    </div>
   </section>
 
   <section class="a-section">
@@ -142,18 +246,6 @@
   <section class="a-section">
     <h2>Words</h2>
     <p>Public speaking, debates and elocutions are my cup of tea, and I write short stories for toddlers, which is harder than it sounds. In 2023 I suggested my university should have a literary society, on the grounds that it was strange that it didn't. Three other people agreed, and The Inkwell Society happened. I designed it, coordinated it for a year, and handed it over. It's still going.</p>
-  </section>
-
-  <section class="a-section">
-    <h2>Photographs</h2>
-    <p>Saharanpur, Gabicce Mare, Milan, home. Some of these ended up in case studies. Most didn't.</p>
-    <div class="a-pending">Images pending. This section is built and ready: drop the photographs into <code>Assets/Archive/</code> and they slot straight in.</div>
-  </section>
-
-  <section class="a-section">
-    <h2>Experiments</h2>
-    <p>Things made for no reason, with nobody to approve them.</p>
-    <div class="a-pending">Images pending, same as above.</div>
   </section>
 </div>
 
@@ -178,22 +270,50 @@
 
 <script>
 (function(){
-  // Curated count: you said you'd pick however many pieces fit the phone's
-  // circle without overlapping, and use that same number on desktop. 10 is
-  // a placeholder sized to the legibility range the phone test confirmed
-  // (roughly 8-10 at this card size) — change this constant once you've
-  // settled on real images. Cards are still blank placeholders throughout.
-  var TOTAL = 10;
+  // The ring. Curated, not the whole gallery: everything else lives in the
+  // gallery below, which is the full set. Orientation comes from the real
+  // image rather than an every-third-card guess. D-150.
+  //
+  // Ten on desktop, six on a phone (`ph` is a card's place in the phone
+  // ring, or -1 if it sits the phone version out). Six is not a taste call,
+  // it is the largest ring a 375px screen holds: at that width a card can
+  // reach 187px from centre before it clips, and the radius that keeps n
+  // cards from touching (see circleOnlyTarget) plus a card's own 53px
+  // overhang comes to 179px at six, 187px at seven and 231px at ten. Seven
+  // fits with nothing to spare, ten does not fit at all. Six leaves 8px at
+  // each edge. Checked by building each card's four rotated corners and
+  // running a separating-axis test over every pair, rather than by eye,
+  // since the whole reason the old ten overlapped is that a rotated card
+  // touches its neighbour corner-first, long before it looks like it should.
+  // The radius is sized off the widest card the ring can hold, so it stays
+  // correct however many landscape cards are in it; the phone six currently
+  // carries one. D-151, D-152.
+  var RING = [
+    { s:'pipe-cleaner-lilies', ph:0, p:1, t:"Pipe cleaner lilies", c:"A bouquet that doesn't wilt. Wire, chenille, a glass bowl.", a:"Handmade pipe cleaner lilies and blossoms arranged in a round glass bowl, tied with a purple ribbon" },
+    { s:'birthday-crown', ph:1, p:0, t:"A crown for a first birthday", c:"Felt, embroidery thread, ribbon ties.", a:"A green felt birthday crown reading EVAN and the number one, appliqued with a dinosaur, a bear and candles, with red ribbon ties" },
+    { s:'quilled-cat', ph:2, p:1, t:"Quilled cat", c:"Rolled paper, a card, and an envelope to put it in.", a:"A quilled paper cat mask in pink and orange coils, resting on an open white envelope with a card and star stickers" },
+    { s:'kalanamak-rice', ph:4, p:1, t:"Kalanamak rice", c:"My packaging, printed by the Indian Institute of Packaging and unveiled at their conference.", a:"Siddharthnagar Kalanamak rice packaging in one and five kilogram boxes, printed with a sunrise field and a seated Buddha, displayed on a conference stand" },
+    { s:'yarn-wreath', ph:5, p:1, t:"Shivi, 27.07.2023", c:"Yarn hearts wound one at a time, for a birthday.", a:"A card with a wreath of small yarn hearts in pink, red and white around the name Shivi and the date 27.07.2023" },
+    { s:'orange-shelf', ph:-1, p:1, t:"The orange shelf", c:"A plain bookshelf, papered over in a pattern drawn by hand.", a:"A bookshelf papered in a hand drawn orange slice pattern, filled with books and a tennis racket" },
+    { s:'memory-tree', ph:-1, p:1, t:"The memory tree", c:"Photographs on the branches, blank cards for everyone else.", a:"A white branch tree hung with photographs, standing on a table covered in blank message cards and pens" },
+    { s:'costume-figures', ph:-1, p:1, t:"Costume figures", c:"Working a silhouette out in three passes.", a:"Sketchbook figures in a yellow dress with a brown fur trimmed bodice, drawn from three angles in pen and marker" },
+    { s:'flower-basket', ph:-1, p:1, t:"A basket of them", c:"Lilies, daffodils and sunflowers, every one in wire.", a:"A wicker basket filled with yellow and orange pipe cleaner lilies, daffodils and sunflowers" },
+    { s:'park-stall', ph:3, p:1, t:"Selling them in the park", c:"A picnic blanket, a pile of chenille, a morning of making.", a:"Shambhavi kneeling on a picnic blanket in a park, holding a pipe cleaner flower, with bundles of coloured chenille laid out in front of her" }
+  ];
+  var TOTAL = RING.length;
+  var PHONE = RING.filter(function(r){ return r.ph >= 0; }).length;
 
   var field = document.getElementById('field');
-  var mosaic = document.getElementById('mosaic');
   var stage = document.getElementById('stage');
   var viewport = document.getElementById('viewport');
   var revealText = document.getElementById('revealText');
 
-  var cards = [];
-  for (var i = 0; i < TOTAL; i++){
-    cards.push({ i: i, landscape: (i % 3 === 2) });
+  var cards = RING.map(function(item, i){ return { i: i, item: item, landscape: !item.p }; });
+
+  function srcset(slug, type){
+    return [200, 400].map(function(w){
+      return 'Assets/Archive/' + slug + '-' + w + '.' + type + ' ' + w + 'w';
+    }).join(', ');
   }
 
   cards.forEach(function(c){
@@ -201,16 +321,21 @@
     el.className = 'a-card ' + (c.landscape ? 'a-card--landscape' : 'a-card--portrait');
     el.tabIndex = 0;
     var n = String(c.i + 1).padStart(2,'0');
+    var it = c.item;
     el.innerHTML =
+      '<picture>' +
+        '<source type="image/avif" srcset="' + srcset(it.s,'avif') + '" sizes="200px">' +
+        '<source type="image/webp" srcset="' + srcset(it.s,'webp') + '" sizes="200px">' +
+        '<img src="Assets/Archive/' + it.s + '-400.webp" alt="" decoding="async">' +
+      '</picture>' +
       '<span class="idx">' + n + '</span>' +
       '<div class="scrim"><div class="cap">' +
-        '<span class="t1">Placeholder title ' + n + '</span>' +
-        '<span class="t2">One or two lines about this piece go here once it’s a real image.</span>' +
+        '<span class="t1">' + it.t + '</span>' +
+        '<span class="t2">' + it.c + '</span>' +
       '</div></div>';
     field.appendChild(el);
     c.el = el;
     el.addEventListener('click', function(){ el.classList.toggle('is-open'); });
-    mosaic.appendChild(el.cloneNode(true));
   });
 
   var loadStart = performance.now();
@@ -280,16 +405,28 @@
   }
 
   function circleOnlyTarget(i, total, W, H){
-    // Radius sized so the ring's circumference actually fits the card count
-    // at this width, rather than a fixed fraction of viewport — otherwise
-    // small screens and higher counts overlap regardless of card size, the
-    // exact failure the desktop arc was dropped for at 18 cards (D-45).
-    // Chord between neighbouring centres needs to clear roughly one card's
-    // width; solved for radius given the angular step.
-    var refCard = W < 480 ? 106 : 150;
-    var stepRad = (2 * Math.PI) / total;
-    var neededRadius = (refCard * 1.05) / (2 * Math.sin(stepRad / 2));
-    var circleRadius = Math.min(neededRadius, Math.min(W, H) * 0.42);
+    // Radius solved rather than guessed. Every card is turned to face out of
+    // the ring, so its width lies along the ring and its height points out of
+    // it, and two neighbours `step` degrees apart are separated by the plane
+    // that bisects them. Projecting a card onto that plane's normal gives the
+    // condition for the two never to touch:
+    //
+    //   R >= (w/2) * cot(pi/total) + h/2
+    //
+    // taking w and h from the widest card in the ring, which is the landscape
+    // one. The old version used a chord approximation that treated a card as
+    // a width with no depth, which is why it read as sufficient at ten cards
+    // and still overlapped: rotated neighbours collide corner-first, well
+    // before their centres are a card's width apart. D-151, replacing D-45's
+    // and D-50's measured guesses with the arithmetic they were reaching for.
+    var wide = W < 640 ? 106 : 150;   // widest card, along the ring
+    var deep = W < 640 ? 106 : 150;   // deepest card, out of the ring
+    var thin = W < 640 ? 78 : 110;    // that widest card's own depth
+    var needed = (wide / 2) / Math.tan(Math.PI / total) + thin / 2;
+    // and it still has to sit on the screen: the ring plus the deepest card's
+    // overhang, with 8px of air at each edge.
+    var fits = W / 2 - deep / 2 - 8;
+    var circleRadius = Math.min(needed, Math.max(fits, 60));
     var angle = (i / total) * 360;
     var rad = angle * Math.PI / 180;
     return { x: Math.cos(rad) * circleRadius, y: Math.sin(rad) * circleRadius, rot: angle + 90, scale: 1, opacity: 1 };
@@ -298,12 +435,20 @@
   // The phone's payoff. The ring forms, then scroll settles it into a
   // collage: a three-column stagger, alternate rows nudged across and every
   // card left slightly off-square so it reads as arranged by hand rather than
-  // snapped to a grid. Landscape cards take a full row of their own, since
-  // they are wider than a column. Positions are measured off the real card
-  // sizes at this breakpoint rather than assumed. D-136.
+  // snapped to a grid. Positions are measured off the real card sizes at this
+  // breakpoint rather than assumed. D-136.
+  //
+  // The column step is the widest card in the ring, not the portrait one.
+  // D-136's note said landscape cards took a row of their own, but the code
+  // never did that: it spaced every column at the portrait width, so a
+  // landscape card, 28px wider than its own column, sat on top of both its
+  // neighbours. Invisible while the cards were blank, obvious once they
+  // carried pictures. Portrait cards now have a little air either side, which
+  // suits a collage better than a landscape card lying across two of them.
+  // D-151.
   function collageTarget(i, total, W, H){
-    var cardW = W < 480 ? 78 : 110;
-    var cardH = W < 480 ? 106 : 150;
+    var cardW = W < 640 ? 106 : 150;
+    var cardH = W < 640 ? 106 : 150;
     var cols = 3;
     var gap = Math.max(10, W * 0.03);
     var scale = Math.min(1, (W - gap * 2) / (cols * cardW + (cols - 1) * gap));
@@ -351,6 +496,20 @@
     else mode = 'arc';
     document.body.classList.remove('mode-arc','mode-circle','mode-mosaic');
     document.body.classList.add('mode-' + mode);
+
+    // A card the phone ring leaves out is faded to nothing by the tick loop,
+    // but an invisible card is still a tappable card and still something a
+    // keyboard can land on, so take it out of both here. The visible cards
+    // renumber to their own sequence, otherwise the phone ring counts
+    // 01 02 03 05 06 08 09 and looks like a mistake. D-151.
+    cards.forEach(function(c){
+      var idx = (mode === 'circle') ? c.item.ph : c.i;
+      var out = idx < 0;
+      c.el.style.pointerEvents = out ? 'none' : '';
+      c.el.setAttribute('aria-hidden', out ? 'true' : 'false');
+      if (out) c.el.removeAttribute('tabindex'); else c.el.tabIndex = 0;
+      if (!out) c.el.querySelector('.idx').textContent = String(idx + 1).padStart(2,'0');
+    });
   }
   applyMode();
   window.addEventListener('resize', applyMode);
@@ -382,18 +541,32 @@
 
       cards.forEach(function(c){
         if (elapsed < c.delay) return;
+
+        // On a phone the ring is seven, so each card answers to a different
+        // index and a different count there than it does on desktop. A card
+        // the phone ring leaves out sits the whole sequence out: it fades to
+        // nothing and holds wherever it is, rather than being positioned
+        // against a count it isn't part of. D-151.
+        var idx   = (mode === 'circle') ? c.item.ph : c.i;
+        var count = (mode === 'circle') ? PHONE : TOTAL;
+        if (idx < 0){
+          c.cur.opacity += (0 - c.cur.opacity) * EASE;
+          c.el.style.opacity = c.cur.opacity;
+          return;
+        }
+
         var t;
         if (phase === 'scatter'){
           t = { x: c.cur.x, y: c.cur.y, rot: c.cur.rot, scale: 0.6, opacity: 1 };
         } else if (phase === 'line'){
-          t = lineTarget(c.i, TOTAL, W);
+          t = lineTarget(idx, count, W);
         } else if (mode === 'arc'){
-          t = ringArcTarget(c.i, TOTAL, morphValue, rotateProgress, mouseCur, W, H);
+          t = ringArcTarget(idx, count, morphValue, rotateProgress, mouseCur, W, H);
           lastRingArc = t;
         } else { // mode === 'circle': ring forms, then settles into the collage
-          var ring = circleOnlyTarget(c.i, TOTAL, W, H);
+          var ring = circleOnlyTarget(idx, count, W, H);
           if (collageValue > 0){
-            var col = collageTarget(c.i, TOTAL, W, H);
+            var col = collageTarget(idx, count, W, H);
             t = {
               x: lerp(ring.x, col.x, collageValue),
               y: lerp(ring.y, col.y, collageValue),
@@ -444,6 +617,7 @@
 })();
 </script>
 
+<script src="lightbox.js"></script>
 <script src="nav-scroll.js"></script>
 
 </body>

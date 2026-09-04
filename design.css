@@ -233,7 +233,8 @@ footer.site-footer{
    here can spill past the pink ground onto the paper below it. D-146. */
 .footer-receiver{
   position:absolute;top:0;right:0;
-  width:400px;pointer-events:none;
+  /* Desktop 20% down from D-146's 400px. D-155. */
+  width:320px;pointer-events:none;
 }
 .footer-receiver img{display:block;width:100%;height:auto}
 .footer-receiver .fr-static{display:none}
@@ -246,8 +247,18 @@ footer.site-footer{
   .footer-receiver .fr-anim{display:none}
   .footer-receiver .fr-static{display:block}
 }
-@media(max-width:860px){ .footer-receiver{width:280px} }
-@media(max-width:480px){ .footer-receiver{width:192px} }
+/* Same treatment from 860px down, not just on phones: the footer text runs
+   nearly the full measure at these widths too, and 280px at right:0 put the
+   cord straight through the contact paragraph. 30% smaller and cornered, on
+   the same reasoning as the phone rule below. D-154. */
+@media(max-width:860px){ .footer-receiver{width:196px;right:-50px} }
+/* Phone: 30% smaller, and pushed into the corner. The artwork only occupies
+   the middle 30.3% to 68.3% of its own canvas, measured across all 42 frames,
+   so at right:0 nearly a third of the image is empty air holding the phone
+   away from the edge and over the text. The negative offset hangs that dead
+   margin off the right edge (the footer clips it, per D-146) and brings the
+   silhouette itself to the corner. D-153. */
+@media(max-width:480px){ .footer-receiver{width:134px;right:-32px} }
 .footer-content .eyebrow{padding-bottom:8px}
 .footer-content h2{
   font-family:var(--display);font-weight:400;font-stretch:62.5%;text-transform:uppercase;
